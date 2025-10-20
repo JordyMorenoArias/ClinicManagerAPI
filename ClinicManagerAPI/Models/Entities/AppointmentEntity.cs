@@ -9,12 +9,12 @@ namespace ClinicManagerAPI.Models.Entities
         [Key]
         public int Id { get; set; }
 
-        [Required]
+        [Required, ForeignKey("Patient")]
         public int PatientId { get; set; }
         public PatientEntity Patient { get; set; } = null!;
 
         [Required, ForeignKey("User")]
-        public int CreatedById { get; set; }  // Who recorded the appointment (Assistant o Doctor)
+        public int? CreatedById { get; set; }  // Who recorded the appointment (Assistant o Doctor)
         public UserEntity CreatedBy { get; set; } = null!;
 
         [Required, ForeignKey("User")]

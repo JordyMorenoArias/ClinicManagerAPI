@@ -1,5 +1,6 @@
 ﻿using ClinicManagerAPI.Constants;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClinicManagerAPI.Models.Entities
 {
@@ -26,9 +27,16 @@ namespace ClinicManagerAPI.Models.Entities
         [Required]
         public UserRole Role { get; set; }
 
+        public bool IsActive { get; set; } = true;
+
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
+        [InverseProperty("CreatedBy")]
         public ICollection<AppointmentEntity> CreatedAppointments { get; set; } = new List<AppointmentEntity>();
+
+        [InverseProperty("Doctor")]
+        public ICollection<AppointmentEntity> DoctorAppointments { get; set; } = new List<AppointmentEntity>();
+
         public ICollection<MedicalRecordEntity> MedicalRecords { get; set; } = new List<MedicalRecordEntity>();
     }
 }
