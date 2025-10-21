@@ -55,6 +55,12 @@ namespace ClinicManagerAPI.Repositories.Interfaces
         Task<PagedResult<UserEntity>> GetUsers(QueryUserParameters parameters);
 
         /// <summary>
+        /// Retrieves a user along with their associated appointments.
+        /// </summary>
+        /// <param name="id"></param>
+        Task<UserEntity?> GetUserWithAppointments(int id);
+
+        /// <summary>
         /// Updates an existing user's data in the data store.
         /// </summary>
         /// <param name="user"></param>

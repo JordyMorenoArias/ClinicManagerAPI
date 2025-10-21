@@ -1,10 +1,14 @@
-using AutoMapper;
 using ClinicManagerAPI.AutoMapper;
 using ClinicManagerAPI.Data;
+using ClinicManagerAPI.Models.Entities;
+using ClinicManagerAPI.Repositories.Interfaces;
+using ClinicManagerAPI.Services.Security;
+using ClinicManagerAPI.Services.Security.Interfaces;
+using ClinicManagerAPI.Services.User;
+using ClinicManagerAPI.Services.User.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -20,7 +24,15 @@ builder.Services.AddAutoMapper(cfg =>
     cfg.AddProfile<AutoMapping>();
 });
 
-// Add services to the container.
+// Repositories
+builder.Services.AddScoped<IUserRepository, IUserRepository>();
+
+// Services
+builder.Services.AddScoped<IUserService, UserService>();
+
+// Infrastructure Services
+builder.Services.AddSingleton<IJwtService, JwtService>();
+builder.Services.AddScoped<IPasswordHasher<UserEntity>, PasswordHasher<UserEntity>>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

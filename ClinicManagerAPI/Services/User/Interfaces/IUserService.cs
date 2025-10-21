@@ -42,6 +42,13 @@ namespace ClinicManagerAPI.Services.User.Interfaces
         Task<PagedResult<UserDto>> GetUsers(UserRole role, QueryUserParameters parameters);
 
         /// <summary>
+        /// Retrieves a user along with their associated appointments by user ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>A <see cref="UserDto"/> representing the user with their appointments.</returns>
+        Task<UserDto> GetUserWithAppointments(int id);
+
+        /// <summary>
         /// Updates the data of an existing user.
         /// </summary>
         /// <param name="userDto">The updated user data.</param>
