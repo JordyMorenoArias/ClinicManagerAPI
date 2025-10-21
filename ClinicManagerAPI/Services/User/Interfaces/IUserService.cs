@@ -10,12 +10,14 @@ namespace ClinicManagerAPI.Services.User.Interfaces
     public interface IUserService
     {
         /// <summary>
-        /// Deletes a user by ID.
+        /// Deletes a user by their ID. Only accessible by admin users.
         /// </summary>
-        /// <param name="id">The ID of the user to delete.</param>
+        /// <param name="requesterRole"></param>
+        /// <param name="id"></param>
         /// <returns><c>true</c> if deletion was successful; otherwise, <c>false</c>.</returns>
-        /// <exception cref="KeyNotFoundException">Thrown when the user is not found.</exception>
-        Task<bool> DeleteUser(int id);
+        /// <exception cref="UnauthorizedAccessException"></exception>
+        /// <exception cref="KeyNotFoundException"></exception>
+        Task<bool> DeleteUser(UserRole requesterRole, int id);
 
         /// <summary>
         /// Retrieves the authenticated user's details from the HTTP context.

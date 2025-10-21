@@ -132,13 +132,18 @@ namespace ClinicManagerAPI.Services.User
         }
 
         /// <summary>
-        /// Deletes a user by ID.
+        /// Deletes a user by their ID. Only accessible by admin users.
         /// </summary>
-        /// <param name="id">The ID of the user to delete.</param>
+        /// <param name="requesterRole"></param>
+        /// <param name="id"></param>
         /// <returns><c>true</c> if deletion was successful; otherwise, <c>false</c>.</returns>
-        /// <exception cref="KeyNotFoundException">Thrown when the user is not found.</exception>
-        public async Task<bool> DeleteUser(int id)
+        /// <exception cref="UnauthorizedAccessException"></exception>
+        /// <exception cref="KeyNotFoundException"></exception>
+        public async Task<bool> DeleteUser(UserRole requesterRole, int id)
         {
+            if (requesterRole != UserRole.admin)
+                throw new UnauthorizedAccessException("Only admins can delete users.");
+
             var user = await _userRepository.GetUserById(id);
 
             if (user == null)
