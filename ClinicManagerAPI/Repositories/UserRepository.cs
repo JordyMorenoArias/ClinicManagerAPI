@@ -38,7 +38,7 @@ namespace ClinicManagerAPI.Repositories
         /// Retrieves a user by their username.
         /// </summary>
         /// <param name="username"></param>
-        /// <returns></returns>
+        /// <returns> A <see cref="UserEntity"/> object representing the user with the specified username, or <c>null</c> if no matching user is found. </returns>
         public async Task<UserEntity?> GetUserByUsername(string username)
         {
             return await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Username == username);
@@ -58,7 +58,10 @@ namespace ClinicManagerAPI.Repositories
         /// Retrieves a paginated list of users based on query parameters.
         /// </summary>
         /// <param name="parameters"></param>
-        /// <returns></returns>
+        /// <returns>
+        /// A <see cref="PagedResult{UserEntity}"/> object containing the list of users that match the 
+        /// query parameters, along with pagination metadata such as total items, current page, and page size.
+        /// </returns>
         public async Task<PagedResult<UserEntity>> GetUsers(QueryUserParameters parameters)
         {
             var query = _context.Users.AsQueryable();
@@ -110,6 +113,17 @@ namespace ClinicManagerAPI.Repositories
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
             return user;
+        }
+
+        /// <summary>
+        /// Deletes a user from the database.
+        /// </summary>
+        /// <param name="user">The user entity to delete.</param>
+        /// <returns>A task representing the asynchronous operation. The task result indicates whether the deletion was successful.</returns>
+        public async Task<bool> DeleteUser(UserEntity user)
+        {
+            _context.Users.Remove(user);
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }
