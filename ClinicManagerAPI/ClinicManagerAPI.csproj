@@ -26,7 +26,6 @@
     <Folder Include="Middlewares\" />
     <Folder Include="Migrations\" />
     <Folder Include="Filters\" />
-    <Folder Include="Repositories\" />
   </ItemGroup>
 
 </Project>
