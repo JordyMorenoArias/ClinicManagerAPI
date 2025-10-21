@@ -35,19 +35,6 @@ namespace ClinicManagerAPI.Repositories
         }
 
         /// <summary>
-        /// Retrieves a user along with their associated appointments.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns>A <see cref="UserEntity"/> object representing the user with their appointments, or <c>null</c> if no matching user is found.</returns>
-        public async Task<UserEntity?> GetUserWithAppointments(int id)
-        {
-            return await _context.Users
-                .Include(u => u.CreatedAppointments)
-                .Include(u => u.DoctorAppointments)
-                .FirstOrDefaultAsync(u => u.Id == id);
-        }
-
-        /// <summary>
         /// Retrieves a user by their username.
         /// </summary>
         /// <param name="username"></param>

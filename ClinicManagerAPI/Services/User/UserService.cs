@@ -64,22 +64,6 @@ namespace ClinicManagerAPI.Services.User
         }
 
         /// <summary>
-        /// Retrieves a user along with their associated appointments by user ID.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns>A <see cref="UserDto"/> representing the user with their appointments.</returns>
-        /// <exception cref="KeyNotFoundException"></exception>
-        public async Task<UserDto> GetUserWithAppointments(int id)
-        {
-            var user = await _userRepository.GetUserWithAppointments(id);
-
-            if (user == null)
-                throw new KeyNotFoundException("User not found.");
-
-            return _mapper.Map<UserDto>(user);
-        }
-
-        /// <summary>
         /// Gets a paginated list of users. Only accessible by admin users.
         /// </summary>
         /// <param name="role">The role of the current user. Must be Admin to access this method.</param>
