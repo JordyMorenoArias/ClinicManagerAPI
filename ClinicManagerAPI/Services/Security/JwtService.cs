@@ -1,4 +1,5 @@
 ﻿using ClinicManagerAPI.Configurations;
+using ClinicManagerAPI.Models.DTOs;
 using ClinicManagerAPI.Services.Security.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

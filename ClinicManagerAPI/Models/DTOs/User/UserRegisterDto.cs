@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace EcommerceAPI.Models.DTOs.User
+namespace ClinicManagerAPI.Models.DTOs.User
 {
     public class UserRegisterDto
     {

@@ -1,4 +1,6 @@
-﻿namespace ClinicManagerAPI.Services.Security.Interfaces
+﻿using ClinicManagerAPI.Models.DTOs;
+
+namespace ClinicManagerAPI.Services.Security.Interfaces
 {
     /// <summary>
     /// Interface for JWT (JSON Web Token) generation service.
