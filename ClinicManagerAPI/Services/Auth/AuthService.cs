@@ -2,6 +2,7 @@
 using ClinicManagerAPI.Models.DTOs;
 using ClinicManagerAPI.Models.DTOs.Auth;
 using ClinicManagerAPI.Models.DTOs.Generic;
+using ClinicManagerAPI.Models.DTOs.Patient;
 using ClinicManagerAPI.Models.DTOs.User;
 using ClinicManagerAPI.Models.Entities;
 using ClinicManagerAPI.Repositories.Interfaces;
@@ -94,12 +95,12 @@ namespace ClinicManagerAPI.Services.Auth
         /// <exception cref="InvalidOperationException">User with this email already exists</exception>
         public async Task<OperationResult> Register(UserRegisterDto userRegister)
         {
-            var user = await _userRepository.GetUserByEmail(userRegister.Email);
+            var user = await _userRepository.GetUserByUsername(userRegister.Username);
 
             if (user != null)
             {
-                _logger.LogWarning("User with email {Email} already exists", userRegister.Email);
-                throw new InvalidOperationException("User with this email already exists");
+                _logger.LogWarning("User with username {Username} already exists", userRegister.Username);
+                throw new InvalidOperationException("User with this username already exists");
             }
 
             var passwordHash = _passwordHasher.HashPassword(new UserEntity(), userRegister.Password);

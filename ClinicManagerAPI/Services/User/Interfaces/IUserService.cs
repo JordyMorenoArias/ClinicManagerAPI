@@ -23,14 +23,15 @@ namespace ClinicManagerAPI.Services.User.Interfaces
         /// <param name="httpContext">The HTTP context containing the user's claims.</param>
         /// <returns>The authenticated user's ID, email, and role.</returns>
         UserAuthenticatedDto GetAuthenticatedUser(HttpContext httpContext);
-
+        
         /// <summary>
-        /// Retrieves a user by their unique ID.
+        /// Retrieves a user by their ID.
         /// </summary>
-        /// <param name="id">The ID of the user to retrieve.</param>
+        /// <param name="requestRole"></param>
+        /// <param name="id"></param>
         /// <returns>A <see cref="UserDto"/> representing the user.</returns>
-        /// <exception cref="KeyNotFoundException">Thrown when the user is not found.</exception>
-        Task<UserDto> GetUserById(int id);
+        /// <exception cref="KeyNotFoundException"></exception>
+        Task<UserDto> GetUserById(int requestId, UserRole requestRole, int id);
 
         /// <summary>
         /// Gets a paginated list of users. Only accessible by admin users.

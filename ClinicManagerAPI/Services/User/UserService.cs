@@ -48,13 +48,20 @@ namespace ClinicManagerAPI.Services.User
         }
 
         /// <summary>
-        /// Retrieves a user by their unique ID.
+        /// Retrieves a user by their ID.
         /// </summary>
-        /// <param name="id">The ID of the user to retrieve.</param>
+        /// <param name="requestRole"></param>
+        /// <param name="id"></param>
         /// <returns>A <see cref="UserDto"/> representing the user.</returns>
-        /// <exception cref="KeyNotFoundException">Thrown when the user is not found.</exception>
-        public async Task<UserDto> GetUserById(int id)
+        /// <exception cref="KeyNotFoundException"></exception>
+        public async Task<UserDto> GetUserById(int requestId, UserRole requestRole, int id)
         {
+            var isRequestingSelf = requestId == id;
+            var isAdmin = requestRole == UserRole.admin;
+
+            if (!isAdmin && !isRequestingSelf)
+                throw new UnauthorizedAccessException("You can only access your own account.");
+
             var user = await _userRepository.GetUserById(id);
 
             if (user == null)
@@ -66,13 +73,13 @@ namespace ClinicManagerAPI.Services.User
         /// <summary>
         /// Gets a paginated list of users. Only accessible by admin users.
         /// </summary>
-        /// <param name="role">The role of the current user. Must be Admin to access this method.</param>
+        /// <param name="requesterRole">The role of the current user. Must be Admin to access this method.</param>
         /// <param name="parameters">The parameters used to filter and paginate the user list.</param>
         /// <returns>A paged result containing user data as <see cref="UserDto"/> objects.</returns>
         /// <exception cref="System.UnauthorizedAccessException">Thrown when the role is not Admin.</exception>
-        public async Task<PagedResult<UserDto>> GetUsers(UserRole role, QueryUserParameters parameters)
+        public async Task<PagedResult<UserDto>> GetUsers(UserRole requesterRole, QueryUserParameters parameters)
         {
-            if (role != UserRole.admin)
+            if (requesterRole != UserRole.admin)
                 throw new UnauthorizedAccessException("Only admins can retrieve all users.");
 
             var users = await _userRepository.GetUsers(parameters);
@@ -95,15 +102,21 @@ namespace ClinicManagerAPI.Services.User
         /// <returns>The updated <see cref="UserDto"/>.</returns>
         /// <exception cref="KeyNotFoundException">Thrown when the user is not found.</exception>
         /// <exception cref="Exception">Thrown when the update operation fails.</exception>
-        public async Task<UserDto> UpdateUser(int id, UserRole role, UserUpdateDto userUpdateDto)
+        public async Task<UserDto> UpdateUser(int requestId, UserRole requesterRole, UserUpdateDto userUpdateDto)
         {
-            var user = await _userRepository.GetUserById(id);
+            var user = await _userRepository.GetUserById(requestId);
 
             if (user == null)
                 throw new KeyNotFoundException("User not found.");
 
-            if (id != user.Id && role != UserRole.admin)
-                throw new UnauthorizedAccessException("You do not have permission to update this user.");
+            bool isUpdatingSelf = requestId == user.Id;
+            bool isAdmin = requesterRole == UserRole.admin;
+
+            if (!isAdmin && !isUpdatingSelf)
+                throw new UnauthorizedAccessException("You can only update your own account.");
+
+            if (!isAdmin && user.Role != userUpdateDto.Role)
+                throw new UnauthorizedAccessException("You cannot change your role.");
 
             _mapper.Map(userUpdateDto, user);
 

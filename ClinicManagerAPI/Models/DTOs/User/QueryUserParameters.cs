@@ -6,6 +6,5 @@
         public int PageSize { get; set; } = 10;
         public bool? IsActive { get; set; }
         public string? Role { get; set; }
-        public string? FullName { get; set; }
     }
 }
