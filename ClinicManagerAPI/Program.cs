@@ -1,6 +1,8 @@
 using ClinicManagerAPI.AutoMapper;
 using ClinicManagerAPI.Data;
+using ClinicManagerAPI.Middlewares;
 using ClinicManagerAPI.Models.Entities;
+using ClinicManagerAPI.Repositories;
 using ClinicManagerAPI.Repositories.Interfaces;
 using ClinicManagerAPI.Services.Security;
 using ClinicManagerAPI.Services.Security.Interfaces;
@@ -25,7 +27,7 @@ builder.Services.AddAutoMapper(cfg =>
 });
 
 // Repositories
-builder.Services.AddScoped<IUserRepository, IUserRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // Services
 builder.Services.AddScoped<IUserService, UserService>();
@@ -112,5 +114,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseMiddleware<ErrorHandlerMiddleware>();
 
 app.Run();
