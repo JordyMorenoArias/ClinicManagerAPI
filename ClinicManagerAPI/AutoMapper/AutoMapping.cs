@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
+using ClinicManagerAPI.Models.DTOs;
 using ClinicManagerAPI.Models.DTOs.Appointment;
 using ClinicManagerAPI.Models.DTOs.MedicalRecord;
 using ClinicManagerAPI.Models.DTOs.Patient;
 using ClinicManagerAPI.Models.DTOs.User;
 using ClinicManagerAPI.Models.Entities;
-using EcommerceAPI.Models.DTOs.User;
 
 namespace ClinicManagerAPI.AutoMapper
 {
@@ -16,6 +16,7 @@ namespace ClinicManagerAPI.AutoMapper
             CreateMap<UserEntity, UserDto>().ReverseMap();
             CreateMap<UserEntity, UserRegisterDto>().ReverseMap();
             CreateMap<UserEntity, UserUpdateDto>().ReverseMap();
+            CreateMap<UserEntity, UserGenerateTokenDto>().ReverseMap();
 
             // Patient mappings
             CreateMap<PatientEntity, PatientDto>().ReverseMap();

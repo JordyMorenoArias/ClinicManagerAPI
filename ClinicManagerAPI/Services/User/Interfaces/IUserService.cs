@@ -1,7 +1,6 @@
 ﻿using ClinicManagerAPI.Constants;
 using ClinicManagerAPI.Models.DTOs.Generic;
 using ClinicManagerAPI.Models.DTOs.User;
-using EcommerceAPI.Models.DTOs.User;
 
 namespace ClinicManagerAPI.Services.User.Interfaces
 {
@@ -17,6 +16,13 @@ namespace ClinicManagerAPI.Services.User.Interfaces
         /// <returns><c>true</c> if deletion was successful; otherwise, <c>false</c>.</returns>
         /// <exception cref="KeyNotFoundException">Thrown when the user is not found.</exception>
         Task<bool> DeleteUser(int id);
+
+        /// <summary>
+        /// Retrieves the authenticated user's details from the HTTP context.
+        /// </summary>
+        /// <param name="httpContext">The HTTP context containing the user's claims.</param>
+        /// <returns>The authenticated user's ID, email, and role.</returns>
+        UserAuthenticatedDto GetAuthenticatedUser(HttpContext httpContext);
 
         /// <summary>
         /// Retrieves a user by their unique ID.

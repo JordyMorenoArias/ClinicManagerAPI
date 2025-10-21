@@ -1,9 +1,9 @@
 ﻿using ClinicManagerAPI.Constants;
 using ClinicManagerAPI.Data;
 using ClinicManagerAPI.Models.DTOs.Generic;
+using ClinicManagerAPI.Models.DTOs.User;
 using ClinicManagerAPI.Models.Entities;
 using ClinicManagerAPI.Repositories.Interfaces;
-using EcommerceAPI.Models.DTOs.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClinicManagerAPI.Repositories

@@ -1,6 +1,6 @@
 ﻿using ClinicManagerAPI.Models.DTOs.Generic;
+using ClinicManagerAPI.Models.DTOs.User;
 using ClinicManagerAPI.Models.Entities;
-using EcommerceAPI.Models.DTOs.User;
 
 namespace ClinicManagerAPI.Repositories.Interfaces
 {

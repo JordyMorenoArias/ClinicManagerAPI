@@ -26,7 +26,6 @@
     <Folder Include="Controllers\" />
     <Folder Include="Middlewares\" />
     <Folder Include="Migrations\" />
-    <Folder Include="Filters\" />
   </ItemGroup>
 
 </Project>
