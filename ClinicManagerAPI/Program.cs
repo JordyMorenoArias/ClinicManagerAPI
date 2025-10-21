@@ -7,8 +7,12 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configure DbContext with SQL Server
 builder.Services.AddDbContext<ClinicManagerContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.")));
+
+// Configure AutoMapper
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // Add services to the container.
 
