@@ -104,7 +104,7 @@ namespace ClinicManagerAPI.Services.User
         /// <exception cref="Exception">Thrown when the update operation fails.</exception>
         public async Task<UserDto> UpdateUser(int requestId, UserRole requesterRole, UserUpdateDto userUpdateDto)
         {
-            var user = await _userRepository.GetUserById(requestId);
+            var user = await _userRepository.GetUserById(userUpdateDto.Id);
 
             if (user == null)
                 throw new KeyNotFoundException("User not found.");
@@ -117,6 +117,9 @@ namespace ClinicManagerAPI.Services.User
 
             if (!isAdmin && user.Role != userUpdateDto.Role)
                 throw new UnauthorizedAccessException("You cannot change your role.");
+
+            if (!isAdmin && user.IsActive != userUpdateDto.IsActive)
+                throw new UnauthorizedAccessException("You cannot change your active status.");
 
             _mapper.Map(userUpdateDto, user);
 
