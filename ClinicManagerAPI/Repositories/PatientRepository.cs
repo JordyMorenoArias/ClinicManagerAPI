@@ -34,7 +34,7 @@ namespace ClinicManagerAPI.Repositories
         /// </summary>
         /// <param name="identification"></param>
         /// <returns>A <see cref="PatientEntity"/> object representing the patient with the specified identification number, or <c>null</c> if no matching patient is found.</returns>
-        public async Task<PatientEntity?> GetPatientByIdentificacion(string identification)
+        public async Task<PatientEntity?> GetPatientByIdentification(string identification)
         {
             return await _context.Patients
                 .AsNoTracking()

@@ -7,6 +7,5 @@
         public int PageSize { get; set; } = 10;
 
         public DateTime? DateOfBirth { get; set; }
-
     }
 }
