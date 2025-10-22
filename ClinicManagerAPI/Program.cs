@@ -4,6 +4,8 @@ using ClinicManagerAPI.Middlewares;
 using ClinicManagerAPI.Models.Entities;
 using ClinicManagerAPI.Repositories;
 using ClinicManagerAPI.Repositories.Interfaces;
+using ClinicManagerAPI.Services.Auth;
+using ClinicManagerAPI.Services.Auth.Interfaces;
 using ClinicManagerAPI.Services.Security;
 using ClinicManagerAPI.Services.Security.Interfaces;
 using ClinicManagerAPI.Services.User;
@@ -31,6 +33,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // Services
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 // Infrastructure Services
 builder.Services.AddSingleton<IJwtService, JwtService>();

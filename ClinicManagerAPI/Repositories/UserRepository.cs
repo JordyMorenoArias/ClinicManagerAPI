@@ -72,9 +72,6 @@ namespace ClinicManagerAPI.Repositories
             if (!string.IsNullOrEmpty(parameters.Role))
                 query = query.Where(u => u.Role.ToString() == parameters.Role);
 
-            if (!string.IsNullOrEmpty(parameters.FullName))
-                query = query.Where(u => u.FullName.Contains(parameters.FullName));
-
             var totalItems = await query.CountAsync();
             var users = await query
                 .Skip((parameters.Page - 1) * parameters.PageSize)
