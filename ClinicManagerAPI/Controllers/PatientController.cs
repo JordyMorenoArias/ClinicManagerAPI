@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicManagerAPI.Controllers
 {
+    /// <summary>
+    /// Controller for managing patients.
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class PatientController : Controller
@@ -18,8 +21,11 @@ namespace ClinicManagerAPI.Controllers
         /// <summary>
         /// Retrieves a patient by their ID.
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">The unique identifier of the patient.</param>
+        /// <returns>
+        /// Returns an <see cref="IActionResult"/> containing a <see cref="PatientDto"/> 
+        /// with the patient's information if found, or a <c>404 Not Found</c> response if the patient does not exist.
+        /// </returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPatientById([FromRoute] int id)
         {
@@ -30,8 +36,11 @@ namespace ClinicManagerAPI.Controllers
         /// <summary>
         /// Retrieves a patient by their identification number.
         /// </summary>
-        /// <param name="identification"></param>
-        /// <returns></returns>
+        /// <param name="identification">The identification number of the patient (e.g., national ID).</param>
+        /// <returns>
+        /// Returns an <see cref="IActionResult"/> containing a <see cref="PatientDto"/> 
+        /// with the patient's details if found, or a <c>404 Not Found</c> response if no match is found.
+        /// </returns>
         [HttpGet("by-identification/{identification}")]
         public async Task<IActionResult> GetPatientByIdentification([FromRoute] string identification)
         {
@@ -42,8 +51,12 @@ namespace ClinicManagerAPI.Controllers
         /// <summary>
         /// Retrieves a paged list of patients based on query parameters.
         /// </summary>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
+        /// <param name="parameters">The query parameters for pagination and filtering.</param>
+        /// <returns>
+        /// Returns an <see cref="IActionResult"/> containing a paged list of patients 
+        /// as a <see cref="PagedResult{PatientDto}"/> object. 
+        /// Returns an empty list if no patients match the specified filters.
+        /// </returns>
         [HttpGet("Patients")]
         public async Task<IActionResult> GetPatientsPagedAsync([FromQuery] QueryPatientParameters parameters)
         {
@@ -54,8 +67,11 @@ namespace ClinicManagerAPI.Controllers
         /// <summary>
         /// Adds a new patient to the system.
         /// </summary>
-        /// <param name="addPatientDto"></param>
-        /// <returns></returns>
+        /// <param name="addPatientDto">The data required to create a new patient record.</param>
+        /// <returns>
+        /// Returns an <see cref="IActionResult"/> containing the newly created <see cref="PatientDto"/> 
+        /// if the operation succeeds, or a <c>400 Bad Request</c> response if validation fails or a duplicate exists.
+        /// </returns>
         [HttpPost("add")]
         public async Task<IActionResult> AddPatient([FromBody] AddPatientDto addPatientDto)
         {
@@ -66,8 +82,11 @@ namespace ClinicManagerAPI.Controllers
         /// <summary>
         /// Updates an existing patient's information.
         /// </summary>
-        /// <param name="updatePatientDto"></param>
-        /// <returns></returns>
+        /// <param name="updatePatientDto">The data to update the patient's record.</param>
+        /// <returns>
+        /// Returns an <see cref="IActionResult"/> containing the updated <see cref="PatientDto"/> 
+        /// if the update is successful, or a <c>404 Not Found</c> response if the patient does not exist.
+        /// </returns>
         [HttpPost("update")]
         public async Task<IActionResult> UpdatePatient([FromBody] UpdatePatientDto updatePatientDto)
         {
