@@ -41,7 +41,9 @@ namespace ClinicManagerAPI.Repositories
         /// <returns> A <see cref="UserEntity"/> object representing the user with the specified username, or <c>null</c> if no matching user is found. </returns>
         public async Task<UserEntity?> GetUserByUsername(string username)
         {
-            return await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Username == username);
+            return await _context.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Username == username);
         }
 
         /// <summary>
@@ -51,7 +53,9 @@ namespace ClinicManagerAPI.Repositories
         /// <returns>A task representing the asynchronous operation. The task result contains the user if found; otherwise, <c>null</c>.</returns>
         public async Task<UserEntity?> GetUserByEmail(string email)
         {
-            return await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email);
+            return await _context.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Email == email);
         }
 
         /// <summary>
