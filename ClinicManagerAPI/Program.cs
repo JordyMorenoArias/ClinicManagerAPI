@@ -1,16 +1,43 @@
+using ClinicManagerAPI.AutoMapper;
 using ClinicManagerAPI.Data;
+using ClinicManagerAPI.Middlewares;
+using ClinicManagerAPI.Models.Entities;
+using ClinicManagerAPI.Repositories;
+using ClinicManagerAPI.Repositories.Interfaces;
+using ClinicManagerAPI.Services.Auth;
+using ClinicManagerAPI.Services.Auth.Interfaces;
+using ClinicManagerAPI.Services.Security;
+using ClinicManagerAPI.Services.Security.Interfaces;
+using ClinicManagerAPI.Services.User;
+using ClinicManagerAPI.Services.User.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configure DbContext with SQL Server
 builder.Services.AddDbContext<ClinicManagerContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.")));
 
-// Add services to the container.
+// Configure AutoMapper
+builder.Services.AddAutoMapper(cfg =>
+{
+    cfg.AddProfile<AutoMapping>();
+});
+
+// Repositories
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+// Services
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+// Infrastructure Services
+builder.Services.AddSingleton<IJwtService, JwtService>();
+builder.Services.AddScoped<IPasswordHasher<UserEntity>, PasswordHasher<UserEntity>>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -90,5 +117,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseMiddleware<ErrorHandlerMiddleware>();
 
 app.Run();
