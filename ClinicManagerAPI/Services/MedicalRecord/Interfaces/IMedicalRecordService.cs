@@ -4,6 +4,9 @@ using ClinicManagerAPI.Models.DTOs.MedicalRecord;
 
 namespace ClinicManagerAPI.Services.MedicalRecord.Interfaces
 {
+    /// <summary>
+    /// Service for managing medical record operations.
+    /// </summary>
     public interface IMedicalRecordService
     {
         /// <summary>
