@@ -2,7 +2,7 @@
 using ClinicManagerAPI.Constants;
 using ClinicManagerAPI.Models.DTOs.Generic;
 using ClinicManagerAPI.Models.DTOs.MedicalRecord;
-using ClinicManagerAPI.Repositories;
+using ClinicManagerAPI.Repositories.Interfaces;
 using ClinicManagerAPI.Services.MedicalRecord.Interfaces;
 
 namespace ClinicManagerAPI.Services.MedicalRecord
@@ -12,10 +12,10 @@ namespace ClinicManagerAPI.Services.MedicalRecord
     /// </summary>
     public class MedicalRecordService : IMedicalRecordService
     {
-        private readonly MedicalRecordRepository _medicalRecordRepository;
+        private readonly IMedicalRecordRepository _medicalRecordRepository;
         private readonly IMapper _mapper;
 
-        public MedicalRecordService(MedicalRecordRepository medicalRecordRepository, IMapper mapper)
+        public MedicalRecordService(IMedicalRecordRepository medicalRecordRepository, IMapper mapper)
         {
             this._medicalRecordRepository = medicalRecordRepository;
             this._mapper = mapper;

@@ -10,7 +10,8 @@ namespace ClinicManagerAPI.Services.Appointment.Interfaces
         /// </summary>
         /// <param name="appointmentDto"></param>
         /// <returns>The created <see cref="AppointmentDto"/>.</returns>
-        Task<AppointmentDto> AddAppointment(AddAppointmentDto appointmentDto);
+        /// <exception cref="KeyNotFoundException"></exception>
+        Task<AppointmentDto> AddAppointment(int requestId, AddAppointmentDto appointmentDto);
 
         /// <summary>
         /// Deletes an appointment by its unique identifier.
@@ -36,8 +37,9 @@ namespace ClinicManagerAPI.Services.Appointment.Interfaces
         /// <summary>
         /// Updates an existing appointment.
         /// </summary>
+        /// <param name="requestId"></param>
         /// <param name="appointmentDto"></param>
         /// <returns>The updated <see cref="AppointmentDto"/>.</returns>
-        Task<AppointmentDto> UpdateAppointment(UpdateAppointmentDto appointmentDto);
+        Task<AppointmentDto> UpdateAppointment(int requestId, UpdateAppointmentDto appointmentDto);
     }
 }

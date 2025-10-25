@@ -68,7 +68,7 @@ namespace ClinicManagerAPI.Services.Appointment
         /// <param name="appointmentDto"></param>
         /// <returns>The created <see cref="AppointmentDto"/>.</returns>
         /// <exception cref="KeyNotFoundException"></exception>
-        public async Task<AppointmentDto> AddAppointment(AddAppointmentDto appointmentDto)
+        public async Task<AppointmentDto> AddAppointment(int requestId, AddAppointmentDto appointmentDto)
         {
             var patient = await _patientService.GetPatientById(appointmentDto.PatientId);
 
@@ -81,6 +81,7 @@ namespace ClinicManagerAPI.Services.Appointment
                 throw new KeyNotFoundException($"Doctor with ID {appointmentDto.DoctorId} not found.");
 
             var appointmentEntity = _mapper.Map<Models.Entities.AppointmentEntity>(appointmentDto);
+            appointmentEntity.CreatedById = requestId;
             var createdAppointment = await _appointmentRepository.AddAppointment(appointmentEntity);
             return _mapper.Map<AppointmentDto>(createdAppointment);
         }
@@ -88,10 +89,11 @@ namespace ClinicManagerAPI.Services.Appointment
         /// <summary>
         /// Updates an existing appointment.
         /// </summary>
+        /// <param name="requestId"></param>
         /// <param name="appointmentDto"></param>
         /// <returns>The updated <see cref="AppointmentDto"/>.</returns>
         /// <exception cref="KeyNotFoundException"></exception>
-        public async Task<AppointmentDto> UpdateAppointment(UpdateAppointmentDto appointmentDto)
+        public async Task<AppointmentDto> UpdateAppointment(int requestId, UpdateAppointmentDto appointmentDto)
         {
             var existingAppointment = await _appointmentRepository.GetAppointmentById(appointmentDto.Id);
 
@@ -115,6 +117,7 @@ namespace ClinicManagerAPI.Services.Appointment
             }
 
             _mapper.Map(appointmentDto, existingAppointment);
+            existingAppointment.LastModifiedById = requestId;
             var updatedAppointment = await _appointmentRepository.UpdateAppointment(existingAppointment);
             return _mapper.Map<AppointmentDto>(updatedAppointment);
         }
