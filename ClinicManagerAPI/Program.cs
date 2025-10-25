@@ -4,8 +4,14 @@ using ClinicManagerAPI.Middlewares;
 using ClinicManagerAPI.Models.Entities;
 using ClinicManagerAPI.Repositories;
 using ClinicManagerAPI.Repositories.Interfaces;
+using ClinicManagerAPI.Services.Appointment;
+using ClinicManagerAPI.Services.Appointment.Interfaces;
 using ClinicManagerAPI.Services.Auth;
 using ClinicManagerAPI.Services.Auth.Interfaces;
+using ClinicManagerAPI.Services.MedicalRecord;
+using ClinicManagerAPI.Services.MedicalRecord.Interfaces;
+using ClinicManagerAPI.Services.Patient;
+using ClinicManagerAPI.Services.Patient.Interfaces;
 using ClinicManagerAPI.Services.Security;
 using ClinicManagerAPI.Services.Security.Interfaces;
 using ClinicManagerAPI.Services.User;
@@ -30,10 +36,16 @@ builder.Services.AddAutoMapper(cfg =>
 
 // Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+builder.Services.AddScoped<IMedicalRecordRepository, MedicalRecordRepository>();
+builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 
 // Services
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IPatientService, PatientService>();
+builder.Services.AddScoped<IMedicalRecordService, MedicalRecordService>();
+builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 
 // Infrastructure Services
 builder.Services.AddSingleton<IJwtService, JwtService>();

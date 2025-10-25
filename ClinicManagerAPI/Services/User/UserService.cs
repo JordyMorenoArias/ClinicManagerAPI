@@ -50,17 +50,11 @@ namespace ClinicManagerAPI.Services.User
         /// <summary>
         /// Retrieves a user by their ID.
         /// </summary>
-        /// <param name="requestRole"></param>
         /// <param name="id"></param>
         /// <returns>A <see cref="UserDto"/> representing the user.</returns>
         /// <exception cref="KeyNotFoundException"></exception>
-        public async Task<UserDto> GetUserById(int requestId, UserRole requestRole, int id)
+        public async Task<UserDto> GetUserById(int id)
         {
-            var isRequestingSelf = requestId == id;
-            var isAdmin = requestRole == UserRole.admin;
-
-            if (!isAdmin && !isRequestingSelf)
-                throw new UnauthorizedAccessException("You can only access your own account.");
 
             var user = await _userRepository.GetUserById(id);
 
