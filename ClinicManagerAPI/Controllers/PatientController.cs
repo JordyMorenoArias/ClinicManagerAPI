@@ -1,4 +1,6 @@
-﻿using ClinicManagerAPI.Models.DTOs.Patient;
+﻿using ClinicManagerAPI.Constants;
+using ClinicManagerAPI.Filters;
+using ClinicManagerAPI.Models.DTOs.Patient;
 using ClinicManagerAPI.Services.Patient.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +11,7 @@ namespace ClinicManagerAPI.Controllers
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
+    [AuthorizeRole(UserRole.admin, UserRole.doctor, UserRole.assistant)]
     public class PatientController : Controller
     {
         private readonly IPatientService _patientService;
