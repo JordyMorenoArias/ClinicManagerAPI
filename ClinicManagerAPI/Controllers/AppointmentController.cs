@@ -25,10 +25,13 @@ namespace ClinicManagerAPI.Controllers
         }
 
         /// <summary>
-        /// Retrieves an appointment by its ID.
+        /// Retrieves an appointment by its unique identifier.
         /// </summary>
-        /// <param name="appointmentId"></param>
-        /// <returns></returns>
+        /// <param name="appointmentId">The ID of the appointment to retrieve.</param>
+        /// <returns>
+        /// Returns an <see cref="IActionResult"/> containing the appointment details 
+        /// if found, or a 404 Not Found response if the appointment does not exist.
+        /// </returns>
         [HttpGet("{appointmentId}")]
         public async Task<IActionResult> GetAppointmentById(int appointmentId)
         {
@@ -37,10 +40,13 @@ namespace ClinicManagerAPI.Controllers
         }
 
         /// <summary>
-        /// Retrieves a paged list of appointments based on query parameters.
+        /// Retrieves a paginated list of appointments based on query parameters.
         /// </summary>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
+        /// <param name="parameters">Filtering, sorting, and pagination options for the appointments query.</param>
+        /// <returns>
+        /// Returns an <see cref="IActionResult"/> containing a paged list of appointments 
+        /// that match the specified query parameters.
+        /// </returns>
         [HttpGet]
         public async Task<IActionResult> GetAppointments([FromQuery] QueryAppointmentParameters parameters)
         {
@@ -49,10 +55,13 @@ namespace ClinicManagerAPI.Controllers
         }
 
         /// <summary>
-        /// Adds a new appointment.
+        /// Creates a new appointment record.
         /// </summary>
-        /// <param name="newAppointment"></param>
-        /// <returns></returns>
+        /// <param name="newAppointment">The data for the new appointment to be created.</param>
+        /// <returns>
+        /// Returns a <see cref="CreatedAtActionResult"/> containing the newly created appointment 
+        /// and a 201 Created HTTP status code.
+        /// </returns>
         [HttpPost]
         public async Task<IActionResult> AddAppointment([FromBody] AddAppointmentDto newAppointment)
         {
@@ -62,10 +71,13 @@ namespace ClinicManagerAPI.Controllers
         }
 
         /// <summary>
-        /// Updates an existing appointment.
+        /// Updates the details of an existing appointment.
         /// </summary>
-        /// <param name="updatedAppointment"></param>
-        /// <returns></returns>
+        /// <param name="updatedAppointment">The updated appointment information.</param>
+        /// <returns>
+        /// Returns an <see cref="IActionResult"/> containing the updated appointment data 
+        /// if the operation succeeds, or a 404 Not Found response if the appointment does not exist.
+        /// </returns>
         [HttpPut]
         public async Task<IActionResult> UpdateAppointment([FromBody] UpdateAppointmentDto updatedAppointment)
         {
@@ -75,10 +87,13 @@ namespace ClinicManagerAPI.Controllers
         }
 
         /// <summary>
-        /// Deletes an appointment by its ID.
+        /// Deletes an appointment by its unique identifier.
         /// </summary>
-        /// <param name="appointmentId"></param>
-        /// <returns></returns>
+        /// <param name="appointmentId">The ID of the appointment to delete.</param>
+        /// <returns>
+        /// Returns an <see cref="IActionResult"/> indicating the result of the delete operation, 
+        /// typically a 200 OK response with a confirmation message.
+        /// </returns>
         [HttpDelete]
         public async Task<IActionResult> DeleteAppointment([FromQuery] int appointmentId)
         {
