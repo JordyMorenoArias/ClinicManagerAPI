@@ -13,15 +13,15 @@ namespace ClinicManagerAPI.Repositories.Interfaces
         /// Adds a new appointment.
         /// </summary>
         /// <param name="appointment"></param>
-        /// <returns> A task representing the asynchronous operation.</returns>
-        Task AddAppointment(AppointmentEntity appointment);
+        /// <returns> The added appointment entity.</returns>
+        Task<AppointmentEntity> AddAppointment(AppointmentEntity appointment);
 
         /// <summary>
         /// Deletes an appointment.
         /// </summary>
         /// <param name="appointment"></param>
-        /// <returns> A task representing the asynchronous operation.</returns>
-        Task DeleteAppointment(AppointmentEntity appointment);
+        /// <returns> True if deletion was successful.</returns>
+        Task<bool> DeleteAppointment(AppointmentEntity appointment);
 
         /// <summary>
         /// Gets an appointment by its ID.
@@ -41,7 +41,7 @@ namespace ClinicManagerAPI.Repositories.Interfaces
         /// Updates an existing appointment.
         /// </summary>
         /// <param name="appointment"></param>
-        /// <returns> A task representing the asynchronous operation.</returns>
-        Task UpdateAppointment(AppointmentEntity appointment);
+        /// <returns> The updated appointment entity.</returns>
+        Task<AppointmentEntity> UpdateAppointment(AppointmentEntity appointment);
     }
 }

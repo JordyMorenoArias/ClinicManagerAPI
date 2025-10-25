@@ -82,33 +82,36 @@ namespace ClinicManagerAPI.Repositories
         /// Adds a new appointment.
         /// </summary>
         /// <param name="appointment"></param>
-        /// <returns> A task representing the asynchronous operation.</returns>
-        public async Task AddAppointment(AppointmentEntity appointment)
+        /// <returns> The added appointment entity.</returns>
+        public async Task<AppointmentEntity> AddAppointment(AppointmentEntity appointment)
         {
             await _context.Appointments.AddAsync(appointment);
             await _context.SaveChangesAsync();
+            return appointment;
         }
 
         /// <summary>
         /// Updates an existing appointment.
         /// </summary>
         /// <param name="appointment"></param>
-        /// <returns> A task representing the asynchronous operation.</returns>
-        public async Task UpdateAppointment(AppointmentEntity appointment)
+        /// <returns> The updated appointment entity.</returns>
+        public async Task<AppointmentEntity> UpdateAppointment(AppointmentEntity appointment)
         {
             _context.Appointments.Update(appointment);
             await _context.SaveChangesAsync();
+            return appointment;
         }
 
         /// <summary>
         /// Deletes an appointment.
         /// </summary>
         /// <param name="appointment"></param>
-        /// <returns> A task representing the asynchronous operation.</returns>
-        public async Task DeleteAppointment(AppointmentEntity appointment)
+        /// <returns> True if deletion was successful.</returns>
+        public async Task<bool> DeleteAppointment(AppointmentEntity appointment)
         {
             _context.Appointments.Remove(appointment);
             await _context.SaveChangesAsync();
+            return true;
         }
     }
 }
