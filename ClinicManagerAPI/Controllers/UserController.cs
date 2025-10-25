@@ -29,7 +29,7 @@ namespace ClinicManagerAPI.Controllers
         public async Task<IActionResult> GetUserById([FromRoute] int id)
         {
             var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);
-            var user = await _userService.GetUserById(userAuthenticated.Id, userAuthenticated.Role, id);
+            var user = await _userService.GetUserById(id);
             return Ok(user);
         }
 
