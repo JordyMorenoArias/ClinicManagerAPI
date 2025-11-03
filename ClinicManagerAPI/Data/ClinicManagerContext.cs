@@ -14,5 +14,6 @@ namespace ClinicManagerAPI.Data
         public DbSet<AppointmentEntity> Appointments { get; set; } = null!;
         public DbSet<PatientEntity> Patients { get; set; } = null!;
         public DbSet<MedicalRecordEntity> MedicalRecords { get; set; } = null!;
+        public DbSet<DoctorProfileEntity> DoctorProfiles { get; set; } = null!;
     }
 }

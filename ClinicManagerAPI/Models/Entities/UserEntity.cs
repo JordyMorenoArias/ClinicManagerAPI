@@ -38,5 +38,8 @@ namespace ClinicManagerAPI.Models.Entities
         public ICollection<AppointmentEntity> DoctorAppointments { get; set; } = new List<AppointmentEntity>();
 
         public ICollection<MedicalRecordEntity> MedicalRecords { get; set; } = new List<MedicalRecordEntity>();
+
+        [InverseProperty("Doctor")]
+        public ICollection<DoctorProfileEntity> DoctorProfiles { get; set; } = new List<DoctorProfileEntity>();
     }
 }
