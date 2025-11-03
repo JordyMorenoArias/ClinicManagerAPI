@@ -51,8 +51,18 @@ namespace ClinicManagerAPI.Repositories
             var query = _context.Patients.AsNoTracking();
 
             if (parameters.DateOfBirth.HasValue)
-            {
                 query = query.Where(p => p.DateOfBirth.Date == parameters.DateOfBirth.Value.Date);
+
+            if (parameters.StartDateFilter.HasValue)
+                query = query.Where(p => p.CreatedAt.Date >= parameters.StartDateFilter.Value.Date);
+
+            if (parameters.EndDateFilter.HasValue)
+                query = query.Where(p => p.CreatedAt.Date <= parameters.EndDateFilter.Value.Date);
+
+            if (!string.IsNullOrWhiteSpace(parameters.SearchTerm))
+            {
+                var filter = parameters.SearchTerm.Trim().ToLower();
+                query = query.Where(p => p.FullName.ToLower().Contains(filter));
             }
 
             var totalItems = await query.CountAsync();

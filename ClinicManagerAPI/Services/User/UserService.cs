@@ -73,9 +73,6 @@ namespace ClinicManagerAPI.Services.User
         /// <exception cref="System.UnauthorizedAccessException">Thrown when the role is not Admin.</exception>
         public async Task<PagedResult<UserDto>> GetUsers(UserRole requesterRole, QueryUserParameters parameters)
         {
-            if (requesterRole != UserRole.admin)
-                throw new UnauthorizedAccessException("Only admins can retrieve all users.");
-
             var users = await _userRepository.GetUsers(parameters);
 
             var userDtos = _mapper.Map<List<UserDto>>(users.Items);
