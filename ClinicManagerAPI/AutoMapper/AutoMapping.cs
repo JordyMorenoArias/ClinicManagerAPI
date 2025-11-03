@@ -20,12 +20,18 @@ namespace ClinicManagerAPI.AutoMapper
 
             // Patient mappings
             CreateMap<PatientEntity, PatientDto>().ReverseMap();
+            CreateMap<PatientEntity, AddPatientDto>().ReverseMap();
+            CreateMap<PatientEntity, UpdatePatientDto>().ReverseMap();
 
             // Appointment mappings
             CreateMap<AppointmentEntity, AppointmentDto>().ReverseMap();
+            CreateMap<AppointmentEntity, AddAppointmentDto>().ReverseMap();
+            CreateMap<AppointmentEntity, UpdateAppointmentDto>().ReverseMap();
 
             // Medical Record mappings
             CreateMap<MedicalRecordEntity, MedicalRecordDto>().ReverseMap();
+            CreateMap<MedicalRecordEntity, AddMedicalRecordDto>().ReverseMap();
+            CreateMap<MedicalRecordEntity, UpdateMedicalRecordDto>().ReverseMap();
         }
     }
 }
