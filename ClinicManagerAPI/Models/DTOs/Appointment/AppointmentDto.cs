@@ -10,15 +10,15 @@ namespace ClinicManagerAPI.Models.DTOs.Appointment
     {
         public int Id { get; set; }
 
-        [Required, ForeignKey("Patient")]
+        [Required]
         public int PatientId { get; set; }
         public PatientDto Patient { get; set; } = null!;
 
-        [Required, ForeignKey("User")]
+        [Required]
         public int? CreatedById { get; set; }  // Who recorded the appointment (Assistant o Doctor)
         public UserDto CreatedBy { get; set; } = null!;
 
-        [Required, ForeignKey("User")]
+        [Required]
         public int DoctorId { get; set; }
         public UserDto Doctor { get; set; } = null!;
 
