@@ -67,6 +67,8 @@ namespace ClinicManagerAPI.Repositories
             var items = await query
                 .Skip((parameters.Page - 1) * parameters.PageSize)
                 .Take(parameters.PageSize)
+                .Include(a => a.Patient)
+                .Include(a => a.Doctor)
                 .ToListAsync();
 
             return new PagedResult<AppointmentEntity>

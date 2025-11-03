@@ -35,11 +35,9 @@ namespace ClinicManagerAPI.Controllers
 
         /// <summary>
         /// Retrieves all users.
-        /// Only accessible by administrators.
         /// </summary>
         /// <returns>A list of all users.</returns>
-        [AuthorizeRole(UserRole.admin)]
-        [HttpGet("users")]
+        [HttpGet]
         public async Task<IActionResult> GetUsers([FromQuery] QueryUserParameters parameters)
         {
             var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);
@@ -53,7 +51,7 @@ namespace ClinicManagerAPI.Controllers
         /// <param name="userUpdateDto">The user data to update.</param>
         /// <returns>The updated user data.</returns>
         [AuthorizeRole(UserRole.admin, UserRole.doctor, UserRole.assistant)]
-        [HttpPost("update")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser([FromBody] UserUpdateDto userUpdateDto)
         {
             var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);

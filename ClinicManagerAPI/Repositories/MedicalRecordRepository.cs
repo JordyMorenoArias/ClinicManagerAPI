@@ -48,6 +48,8 @@ namespace ClinicManagerAPI.Repositories
             var medicalRecords = await query
                 .Skip((parameters.Page - 1) * parameters.PageSize)
                 .Take(parameters.PageSize)
+                .Include(m => m.Patient)
+                .Include(m => m.Doctor)
                 .ToListAsync();
 
             return new PagedResult<MedicalRecordEntity>

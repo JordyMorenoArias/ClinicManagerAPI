@@ -10,11 +10,11 @@ namespace ClinicManagerAPI.Models.Entities
 
         [Required, ForeignKey("User")]
         public int PatientId { get; set; }
-        public PatientEntity Patient { get; set; } = new PatientEntity();
+        public PatientEntity? Patient { get; set; }
 
         [Required, ForeignKey("User")]
         public int? DoctorId { get; set; }
-        public UserEntity Doctor { get; set; } = null!;
+        public UserEntity? Doctor { get; set; } = null!;
 
         [Required, MaxLength(500)]
         public string Diagnosis { get; set; } = string.Empty;

@@ -60,7 +60,7 @@ namespace ClinicManagerAPI.Controllers
         /// as a <see cref="PagedResult{PatientDto}"/> object. 
         /// Returns an empty list if no patients match the specified filters.
         /// </returns>
-        [HttpGet("Patients")]
+        [HttpGet]
         public async Task<IActionResult> GetPatientsPagedAsync([FromQuery] QueryPatientParameters parameters)
         {
             var patients = await _patientService.GetPatientsPagedAsync(parameters);
@@ -75,7 +75,7 @@ namespace ClinicManagerAPI.Controllers
         /// Returns an <see cref="IActionResult"/> containing the newly created <see cref="PatientDto"/> 
         /// if the operation succeeds, or a <c>400 Bad Request</c> response if validation fails or a duplicate exists.
         /// </returns>
-        [HttpPost("add")]
+        [HttpPost]
         public async Task<IActionResult> AddPatient([FromBody] AddPatientDto addPatientDto)
         {
             var patient = await _patientService.AddPatient(addPatientDto);
@@ -90,7 +90,7 @@ namespace ClinicManagerAPI.Controllers
         /// Returns an <see cref="IActionResult"/> containing the updated <see cref="PatientDto"/> 
         /// if the update is successful, or a <c>404 Not Found</c> response if the patient does not exist.
         /// </returns>
-        [HttpPost("update")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePatient([FromBody] UpdatePatientDto updatePatientDto)
         {
             var patient = await _patientService.UpdatePatient(updatePatientDto);

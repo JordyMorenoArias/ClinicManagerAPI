@@ -43,7 +43,7 @@ namespace ClinicManagerAPI.Controllers
         /// </summary>
         /// <param name="parameters">The filtering and pagination parameters for retrieving medical records.</param>
         /// <returns>Returns an <see cref="IActionResult"/> containing a paginated list of medical records.</returns>
-        [HttpGet("medical-records")]
+        [HttpGet]
         public async Task<IActionResult> GetMedicalRecords([FromQuery] QueryMedicalRecordParameters parameters)
         {
             var medicalRecords = await _medicalRecordService.GetMedicalRecords(parameters);
@@ -55,7 +55,7 @@ namespace ClinicManagerAPI.Controllers
         /// </summary>
         /// <param name="medicalRecordDto">The data for creating the medical record.</param>
         /// <returns>Returns an <see cref="IActionResult"/> containing the newly created medical record.</returns>
-        [HttpPost("add")]
+        [HttpPost]
         [AuthorizeRole(UserRole.admin, UserRole.doctor)]
         public async Task<IActionResult> AddMedicalRecord([FromBody] AddMedicalRecordDto medicalRecordDto)
         {
@@ -69,7 +69,7 @@ namespace ClinicManagerAPI.Controllers
         /// </summary>
         /// <param name="medicalRecordDto">The data used to update the medical record.</param>
         /// <returns>Returns an <see cref="IActionResult"/> containing the updated medical record.</returns>
-        [HttpPut("update")]
+        [HttpPut("{id}")]
         [AuthorizeRole(UserRole.admin, UserRole.doctor)]
         public async Task<IActionResult> UpdateMedicalRecord([FromBody] UpdateMedicalRecordDto medicalRecordDto)
         {
@@ -83,7 +83,7 @@ namespace ClinicManagerAPI.Controllers
         /// </summary>
         /// <param name="medicalRecordId">The unique identifier of the medical record to delete.</param>
         /// <returns>Returns an <see cref="IActionResult"/> indicating success or failure of the deletion operation.</returns>
-        [HttpDelete("{medicalRecordId}")]
+        [HttpDelete("{id}")]
         [AuthorizeRole(UserRole.admin, UserRole.doctor)]
         public async Task<IActionResult> DeleteMedicalRecord([FromRoute] int medicalRecordId)
         {
