@@ -12,6 +12,8 @@ using ClinicManagerAPI.Services.MedicalRecord;
 using ClinicManagerAPI.Services.MedicalRecord.Interfaces;
 using ClinicManagerAPI.Services.Patient;
 using ClinicManagerAPI.Services.Patient.Interfaces;
+using ClinicManagerAPI.Services.Report;
+using ClinicManagerAPI.Services.Report.Interfaces;
 using ClinicManagerAPI.Services.Security;
 using ClinicManagerAPI.Services.Security.Interfaces;
 using ClinicManagerAPI.Services.User;
@@ -46,6 +48,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IMedicalRecordService, MedicalRecordService>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddScoped<IReportService, ReportService>();
 
 // Infrastructure Services
 builder.Services.AddSingleton<IJwtService, JwtService>();

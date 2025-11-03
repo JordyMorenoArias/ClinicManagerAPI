@@ -31,7 +31,7 @@ namespace ClinicManagerAPI.Services.Patient.Interfaces
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns>A <see cref="PagedResult{PatientDto}"/> containing the paged list of patients.</returns>
-        Task<PagedResult<PatientDto>> GetPatientsPagedAsync(QueryPatientParameters parameters);
+        Task<PagedResult<PatientDto>> GetPatients(QueryPatientParameters parameters);
 
         /// <summary>
         /// Updates an existing patient's information.

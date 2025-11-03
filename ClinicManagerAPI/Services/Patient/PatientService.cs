@@ -58,9 +58,9 @@ namespace ClinicManagerAPI.Services.Patient
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns>A <see cref="PagedResult{PatientDto}"/> containing the paged list of patients.</returns>
-        public async Task<PagedResult<PatientDto>> GetPatientsPagedAsync(QueryPatientParameters parameters)
+        public async Task<PagedResult<PatientDto>> GetPatients(QueryPatientParameters parameters)
         {
-            var pagedPatients = await _patientRepository.GetPatientsPagedAsync(parameters);
+            var pagedPatients = await _patientRepository.GetPatients(parameters);
 
             var mappedPatients = pagedPatients.Items
                 .Select(patient => _mapper.Map<PatientDto>(patient))
