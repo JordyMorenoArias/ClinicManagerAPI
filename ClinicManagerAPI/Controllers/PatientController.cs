@@ -63,7 +63,7 @@ namespace ClinicManagerAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetPatientsPagedAsync([FromQuery] QueryPatientParameters parameters)
         {
-            var patients = await _patientService.GetPatientsPagedAsync(parameters);
+            var patients = await _patientService.GetPatients(parameters);
             return Ok(patients);
         }
 
