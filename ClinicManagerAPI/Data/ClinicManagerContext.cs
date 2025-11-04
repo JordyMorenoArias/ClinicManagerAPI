@@ -1,4 +1,5 @@
-﻿using ClinicManagerAPI.Models.Entities;
+﻿using ClinicManagerAPI.Models.DTOs.DoctorProfile;
+using ClinicManagerAPI.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClinicManagerAPI.Data
