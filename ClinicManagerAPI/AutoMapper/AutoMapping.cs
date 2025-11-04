@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ClinicManagerAPI.Models.DTOs;
 using ClinicManagerAPI.Models.DTOs.Appointment;
+using ClinicManagerAPI.Models.DTOs.DoctorProfile;
 using ClinicManagerAPI.Models.DTOs.MedicalRecord;
 using ClinicManagerAPI.Models.DTOs.Patient;
 using ClinicManagerAPI.Models.DTOs.User;
@@ -32,6 +33,11 @@ namespace ClinicManagerAPI.AutoMapper
             CreateMap<MedicalRecordEntity, MedicalRecordDto>().ReverseMap();
             CreateMap<MedicalRecordEntity, AddMedicalRecordDto>().ReverseMap();
             CreateMap<MedicalRecordEntity, UpdateMedicalRecordDto>().ReverseMap();
+
+            // Doctor Profile mappings
+            CreateMap<DoctorProfileEntity, DoctorProfileDto>().ReverseMap();
+            CreateMap<DoctorProfileEntity, AddDoctorProfileDto>().ReverseMap();
+            CreateMap<DoctorProfileEntity, UpdateDoctorProfileDto>().ReverseMap();
         }
     }
 }
