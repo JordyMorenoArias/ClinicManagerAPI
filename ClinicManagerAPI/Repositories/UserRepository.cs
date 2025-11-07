@@ -95,6 +95,7 @@ namespace ClinicManagerAPI.Repositories
             var users = await query
                 .Skip((parameters.Page - 1) * parameters.PageSize)
                 .Take(parameters.PageSize)
+                .Include(u => u.DoctorProfiles)
                 .AsNoTracking()
                 .ToListAsync();
 

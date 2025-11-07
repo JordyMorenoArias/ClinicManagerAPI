@@ -1,4 +1,5 @@
-﻿using ClinicManagerAPI.Models.DTOs.Generic;
+﻿using ClinicManagerAPI.Models.DTOs.DoctorProfile;
+using ClinicManagerAPI.Models.DTOs.Generic;
 using ClinicManagerAPI.Models.DTOs.MedicalRecord;
 using ClinicManagerAPI.Models.Entities;
 

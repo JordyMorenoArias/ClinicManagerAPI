@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using ClinicManagerAPI.Constants;
+using ClinicManagerAPI.Models.DTOs.DoctorProfile;
 using ClinicManagerAPI.Models.DTOs.Generic;
 using ClinicManagerAPI.Models.DTOs.MedicalRecord;
+using ClinicManagerAPI.Models.Entities;
 using ClinicManagerAPI.Repositories.Interfaces;
 using ClinicManagerAPI.Services.MedicalRecord.Interfaces;
 using ClinicManagerAPI.Services.Patient.Interfaces;
@@ -32,7 +34,7 @@ namespace ClinicManagerAPI.Services.MedicalRecord
         /// Retrieves a medical record by its unique identifier.
         /// </summary>
         /// <param name="id"></param>
-        /// <returns>A <see cref="MedicalRecordDto"/> object representing the medical record with the specified ID.</returns>
+        /// <returns>A <see cref="Models.DTOs.MedicalRecord.MedicalRecordDto"/> object representing the medical record with the specified ID.</returns>
         /// <exception cref="KeyNotFoundException"></exception>
         public async Task<MedicalRecordDto> GetMedicalRecordById(int id)
         {
@@ -70,9 +72,9 @@ namespace ClinicManagerAPI.Services.MedicalRecord
         /// <param name="requestId"></param>
         /// <param name="requestRole"></param>
         /// <param name="medicalRecordDto"></param>
-        /// <returns>The added <see cref="MedicalRecordDto"/>.</returns>
+        /// <returns>The added <see cref="Models.DTOs.MedicalRecord.MedicalRecordDto"/>.</returns>
         /// <exception cref="UnauthorizedAccessException"></exception>
-        public async Task<MedicalRecordDto> AddMedicalRecord(int requestId, UserRole requestRole, AddMedicalRecordDto medicalRecordDto)
+        public async Task<Models.DTOs.MedicalRecord.MedicalRecordDto> AddMedicalRecord(int requestId, UserRole requestRole, AddMedicalRecordDto medicalRecordDto)
         {
             if (requestRole != UserRole.doctor)
                 throw new UnauthorizedAccessException("Only doctors can create medical records.");
@@ -82,7 +84,7 @@ namespace ClinicManagerAPI.Services.MedicalRecord
             if (patient == null)
                 throw new KeyNotFoundException($"Patient with ID {medicalRecordDto.PatientId} not found.");
 
-            var medicalRecordEntity = _mapper.Map<Models.Entities.MedicalRecordEntity>(medicalRecordDto);
+            var medicalRecordEntity = _mapper.Map<MedicalRecordEntity>(medicalRecordDto);
             medicalRecordEntity.DoctorId = requestId;
 
             await _medicalRecordRepository.AddMedicalRecord(medicalRecordEntity);
@@ -95,7 +97,7 @@ namespace ClinicManagerAPI.Services.MedicalRecord
         /// <param name="requestId"></param>
         /// <param name="requestRole"></param>
         /// <param name="medicalRecordDto"></param>
-        /// <returns>The updated <see cref="MedicalRecordDto"/>.</returns>
+        /// <returns>The updated <see cref="Models.DTOs.MedicalRecord.MedicalRecordDto"/>.</returns>
         /// <exception cref="UnauthorizedAccessException"></exception>
         /// <exception cref="KeyNotFoundException"></exception>
         public async Task<MedicalRecordDto> UpdateMedicalRecord(int requestId, UserRole requestRole, UpdateMedicalRecordDto medicalRecordDto)

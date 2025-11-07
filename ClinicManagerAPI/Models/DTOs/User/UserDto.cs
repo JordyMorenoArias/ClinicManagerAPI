@@ -1,5 +1,6 @@
 ﻿using ClinicManagerAPI.Constants;
 using ClinicManagerAPI.Models.DTOs.Appointment;
+using ClinicManagerAPI.Models.DTOs.DoctorProfile;
 using ClinicManagerAPI.Models.DTOs.MedicalRecord;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -35,5 +36,7 @@ namespace ClinicManagerAPI.Models.DTOs.User
         public ICollection<AppointmentDto> DoctorAppointments { get; set; } = new List<AppointmentDto>();
 
         public ICollection<MedicalRecordDto> MedicalRecords { get; set; } = new List<MedicalRecordDto>();
+
+        public ICollection<DoctorProfileDto> DoctorProfiles { get; set; } = new List<DoctorProfileDto>();
     }
 }

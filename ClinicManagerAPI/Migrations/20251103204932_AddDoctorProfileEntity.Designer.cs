@@ -4,6 +4,7 @@ using ClinicManagerAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClinicManagerAPI.Migrations
 {
     [DbContext(typeof(ClinicManagerContext))]
-    partial class ClinicManagerContextModelSnapshot : ModelSnapshot
+    [Migration("20251103204932_AddDoctorProfileEntity")]
+    partial class AddDoctorProfileEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,7 +73,7 @@ namespace ClinicManagerAPI.Migrations
                     b.ToTable("Appointments");
                 });
 
-            modelBuilder.Entity("ClinicManagerAPI.Models.Entities.DoctorProfileEntity", b =>
+            modelBuilder.Entity("ClinicManagerAPI.Models.Entities.DoctorProfile", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -103,7 +106,7 @@ namespace ClinicManagerAPI.Migrations
 
                     b.HasIndex("DoctorId");
 
-                    b.ToTable("DoctorProfiles");
+                    b.ToTable("DoctorProfile");
                 });
 
             modelBuilder.Entity("ClinicManagerAPI.Models.Entities.MedicalRecordEntity", b =>
@@ -266,7 +269,7 @@ namespace ClinicManagerAPI.Migrations
                     b.Navigation("Patient");
                 });
 
-            modelBuilder.Entity("ClinicManagerAPI.Models.Entities.DoctorProfileEntity", b =>
+            modelBuilder.Entity("ClinicManagerAPI.Models.Entities.DoctorProfile", b =>
                 {
                     b.HasOne("ClinicManagerAPI.Models.Entities.UserEntity", "Doctor")
                         .WithMany("DoctorProfiles")
