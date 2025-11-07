@@ -55,7 +55,7 @@ namespace ClinicManagerAPI.Controllers
         /// </summary>
         /// <param name="addDoctorProfileDto"></param>
         /// <returns> The created doctor profile.</returns>
-        [HttpPost("{id}")]
+        [HttpPost]
         public async Task<IActionResult> AddDoctorProfile([FromBody] AddDoctorProfileDto addDoctorProfileDto)
         {
             var userAuthenticated = authService.GetAuthenticatedUser(HttpContext);

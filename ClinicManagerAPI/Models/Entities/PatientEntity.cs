@@ -28,5 +28,6 @@ namespace ClinicManagerAPI.Models.Entities
 
         public ICollection<AppointmentEntity> Appointments { get; set; } = new List<AppointmentEntity>();
         public ICollection<MedicalRecordEntity> MedicalRecords { get; set; } = new List<MedicalRecordEntity>();
+        public ICollection<PatientAllergyEntity> Allergies { get; set; } = new List<PatientAllergyEntity>();
     } 
 }
