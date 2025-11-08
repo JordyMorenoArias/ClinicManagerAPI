@@ -9,6 +9,5 @@
         public int? PatientId { get; set; }
 
         public int? AllergyId { get; set; }
-
     }
 }

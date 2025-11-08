@@ -14,7 +14,7 @@ namespace ClinicManagerAPI.Repositories.Interfaces
         /// </summary>
         /// <param name="patientAllergy"></param>
         /// <returns> The created PatientAllergy entity </returns>
-        Task<PatientAllergyEntity> CreatePatientAllergy(PatientAllergyEntity patientAllergy);
+        Task<PatientAllergyEntity> AddPatientAllergy(PatientAllergyEntity patientAllergy);
 
         /// <summary>
         /// Delete a PatientAllergy

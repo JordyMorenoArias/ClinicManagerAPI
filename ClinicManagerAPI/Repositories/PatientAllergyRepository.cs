@@ -70,7 +70,7 @@ namespace ClinicManagerAPI.Repositories
         /// </summary>
         /// <param name="patientAllergy"></param>
         /// <returns> The created PatientAllergy entity </returns>
-        public async Task<PatientAllergyEntity> CreatePatientAllergy(PatientAllergyEntity patientAllergy)
+        public async Task<PatientAllergyEntity> AddPatientAllergy(PatientAllergyEntity patientAllergy)
         {
             _context.PatientAllergies.Add(patientAllergy);
             await _context.SaveChangesAsync();
