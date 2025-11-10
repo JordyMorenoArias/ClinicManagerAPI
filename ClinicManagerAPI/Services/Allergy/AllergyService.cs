@@ -102,10 +102,10 @@ namespace ClinicManagerAPI.Services.Allergy
         /// </summary>
         /// <param name="requestRole"></param>
         /// <param name="id"></param>
-        /// <returns> a task that represents the asynchronous operation.</returns>
+        /// <returns>An <see cref="OperationResult"/> indicating the result of the deletion.</returns>
         /// <exception cref="UnauthorizedAccessException"></exception>
         /// <exception cref="KeyNotFoundException"></exception>
-        public async Task DeleteAllergy(UserRole requestRole, int id)
+        public async Task<OperationResult> DeleteAllergy(UserRole requestRole, int id)
         {
             if (requestRole != UserRole.admin)
                 throw new UnauthorizedAccessException("Only admins can delete allergies.");
@@ -115,7 +115,13 @@ namespace ClinicManagerAPI.Services.Allergy
             if (existingAllergy == null)
                 throw new KeyNotFoundException($"Allergy with ID {id} not found.");
 
-            await _allergyRepository.DeleteAllergy(existingAllergy);
+            var success = await _allergyRepository.DeleteAllergy(existingAllergy);
+
+            return new OperationResult
+            {
+                Success = success,
+                Message = "Allergy deleted successfully."
+            };
         }
     }
 }

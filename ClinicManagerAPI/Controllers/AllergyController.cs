@@ -91,8 +91,8 @@ namespace ClinicManagerAPI.Controllers
         public async Task<IActionResult> DeleteAllergy(int id)
         {
             var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);
-            await _allergyService.DeleteAllergy(userAuthenticated.Role, id);
-            return Ok("Allergy deleted successfully.");
+            var result = await _allergyService.DeleteAllergy(userAuthenticated.Role, id);
+            return Ok(result);
         }
     }
 }
