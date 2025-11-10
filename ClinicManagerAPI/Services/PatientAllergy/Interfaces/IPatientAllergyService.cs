@@ -23,8 +23,10 @@ namespace ClinicManagerAPI.Services.PatientAllergy.Interfaces
         /// </summary>
         /// <param name="requestRole"></param>
         /// <param name="id"></param>
-        /// <returns> A task that represents the asynchronous operation.</returns>
-        Task DeletePatientAllergy(UserRole requestRole, int id);
+        /// <returns>An <see cref="OperationResult"/> indicating the result of the deletion.</returns>
+        /// <exception cref="UnauthorizedAccessException"></exception>
+        /// <exception cref="KeyNotFoundException"></exception>
+        Task<OperationResult> DeletePatientAllergy(UserRole requestRole, int id);
 
         /// <summary>
         /// Get a paginated list of patient allergies based on query parameters.
