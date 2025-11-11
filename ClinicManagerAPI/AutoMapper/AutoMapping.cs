@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using ClinicManagerAPI.Models.DTOs;
+using ClinicManagerAPI.Models.DTOs.Allergy;
 using ClinicManagerAPI.Models.DTOs.Appointment;
 using ClinicManagerAPI.Models.DTOs.DoctorProfile;
 using ClinicManagerAPI.Models.DTOs.MedicalRecord;
 using ClinicManagerAPI.Models.DTOs.Patient;
+using ClinicManagerAPI.Models.DTOs.PatientAllergy;
 using ClinicManagerAPI.Models.DTOs.User;
 using ClinicManagerAPI.Models.Entities;
 
@@ -38,6 +40,16 @@ namespace ClinicManagerAPI.AutoMapper
             CreateMap<DoctorProfileEntity, DoctorProfileDto>().ReverseMap();
             CreateMap<DoctorProfileEntity, AddDoctorProfileDto>().ReverseMap();
             CreateMap<DoctorProfileEntity, UpdateDoctorProfileDto>().ReverseMap();
+
+            // Allergy Profile mappings
+            CreateMap<AllergyEntity, AllergyDto>().ReverseMap();
+            CreateMap<AllergyEntity, CreateAllergyDto>().ReverseMap();
+            CreateMap<AllergyEntity, UpdateAllergyDto>().ReverseMap();
+
+            // Patient Allergy mappings
+            CreateMap<PatientAllergyEntity, PatientAllergyDto>().ReverseMap();
+            CreateMap<PatientAllergyEntity, AddPatientAllergyDto>().ReverseMap();
+            CreateMap<PatientAllergyEntity, UpdatePatientAllergyDto>().ReverseMap();
         }
     }
 }

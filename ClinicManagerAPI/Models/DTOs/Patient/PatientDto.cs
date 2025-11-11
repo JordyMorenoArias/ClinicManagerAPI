@@ -1,5 +1,6 @@
 ﻿using ClinicManagerAPI.Models.DTOs.Appointment;
 using ClinicManagerAPI.Models.DTOs.MedicalRecord;
+using ClinicManagerAPI.Models.Entities;
 using System.ComponentModel.DataAnnotations;
 
 namespace ClinicManagerAPI.Models.DTOs.Patient
@@ -30,5 +31,6 @@ namespace ClinicManagerAPI.Models.DTOs.Patient
 
         public ICollection<AppointmentDto> Appointments { get; set; } = new List<AppointmentDto>();
         public ICollection<MedicalRecordDto> MedicalRecords { get; set; } = new List<MedicalRecordDto>();
+        public ICollection<PatientAllergyDto> Allergies { get; set; } = new List<PatientAllergyDto>();
     } 
 }

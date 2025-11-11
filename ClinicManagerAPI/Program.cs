@@ -4,6 +4,8 @@ using ClinicManagerAPI.Middlewares;
 using ClinicManagerAPI.Models.Entities;
 using ClinicManagerAPI.Repositories;
 using ClinicManagerAPI.Repositories.Interfaces;
+using ClinicManagerAPI.Services.Allergy;
+using ClinicManagerAPI.Services.Allergy.Interfaces;
 using ClinicManagerAPI.Services.Appointment;
 using ClinicManagerAPI.Services.Appointment.Interfaces;
 using ClinicManagerAPI.Services.Auth;
@@ -14,6 +16,8 @@ using ClinicManagerAPI.Services.MedicalRecord;
 using ClinicManagerAPI.Services.MedicalRecord.Interfaces;
 using ClinicManagerAPI.Services.Patient;
 using ClinicManagerAPI.Services.Patient.Interfaces;
+using ClinicManagerAPI.Services.PatientAllergy;
+using ClinicManagerAPI.Services.PatientAllergy.Interfaces;
 using ClinicManagerAPI.Services.Report;
 using ClinicManagerAPI.Services.Report.Interfaces;
 using ClinicManagerAPI.Services.Security;
@@ -44,6 +48,8 @@ builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IMedicalRecordRepository, MedicalRecordRepository>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IDoctorProfileRepository, DoctorProfileRepository>();
+builder.Services.AddScoped<IAllergyRepository, AllergyRepository>();
+builder.Services.AddScoped<IPatientAllergyRepository, PatientAllergyRepository>();
 
 // Services
 builder.Services.AddScoped<IUserService, UserService>();
@@ -53,6 +59,8 @@ builder.Services.AddScoped<IMedicalRecordService, MedicalRecordService>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IDoctorProfileService, DoctorProfileService>();
+builder.Services.AddScoped<IAllergyService, AllergyService>();
+builder.Services.AddScoped<IPatientAllergyService, PatientAllergyService>();
 
 // Infrastructure Services
 builder.Services.AddSingleton<IJwtService, JwtService>();
@@ -139,8 +147,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
