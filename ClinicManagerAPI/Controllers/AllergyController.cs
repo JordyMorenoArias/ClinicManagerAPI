@@ -15,7 +15,7 @@ namespace ClinicManagerAPI.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [AuthorizeRole(UserRole.admin, UserRole.doctor, UserRole.assistant)]
-    public class AllergyController : ControllerBase
+    public class AllergyController : Controller
     {
         private readonly IAllergyService _allergyService;
         private readonly IUserService _userService;

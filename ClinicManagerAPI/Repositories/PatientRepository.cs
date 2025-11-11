@@ -70,6 +70,8 @@ namespace ClinicManagerAPI.Repositories
             var patients = await query
                 .Skip((parameters.Page - 1) * parameters.PageSize)
                 .Take(parameters.PageSize)
+                .Include(p => p.Allergies)
+                .ThenInclude(pa => pa.Allergy)
                 .ToListAsync();
 
             return new PagedResult<PatientEntity>

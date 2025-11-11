@@ -6,6 +6,6 @@
 
         public int PageSize { get; set; } = 10;
 
-        public string? Name { get; set; }
+        public string? SearchTerm { get; set; }
     }
 }

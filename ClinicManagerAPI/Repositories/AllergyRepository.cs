@@ -38,9 +38,9 @@ namespace ClinicManagerAPI.Repositories
         {
             var query = _context.Allergies.AsQueryable();
 
-            if (!string.IsNullOrEmpty(parameters.Name))
+            if (!string.IsNullOrEmpty(parameters.SearchTerm))
             {
-                var filter = parameters.Name.Trim().ToLower();
+                var filter = parameters.SearchTerm.Trim().ToLower();
                 query = query.Where(a => a.Name.ToLower().Contains(filter));
             }
 
