@@ -59,6 +59,15 @@ namespace ClinicManagerAPI.Controllers
             return Ok(user);
         }
 
+        [AuthorizeRole(UserRole.admin)]
+        [HttpPut("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] UserChangePasswordDto userChangePasswordDto)
+        {
+            var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);
+            var user = await _userService.ChangePassword(userAuthenticated.Role, userChangePasswordDto);
+            return Ok(user);
+        }
+
         /// <summary>
         /// Deletes a user by ID.
         /// Only administrators or the user themselves can delete.
