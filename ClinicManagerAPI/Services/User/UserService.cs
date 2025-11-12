@@ -2,8 +2,10 @@
 using ClinicManagerAPI.Constants;
 using ClinicManagerAPI.Models.DTOs.Generic;
 using ClinicManagerAPI.Models.DTOs.User;
+using ClinicManagerAPI.Models.Entities;
 using ClinicManagerAPI.Repositories.Interfaces;
 using ClinicManagerAPI.Services.User.Interfaces;
+using Microsoft.AspNetCore.Identity;
 
 namespace ClinicManagerAPI.Services.User
 {
@@ -14,11 +16,13 @@ namespace ClinicManagerAPI.Services.User
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IPasswordHasher<UserEntity> _passwordHasher;
         private readonly IMapper _mapper;
 
-        public UserService(IUserRepository userRepository, IMapper mapper)
+        public UserService(IUserRepository userRepository, IPasswordHasher<UserEntity> passwordHasher, IMapper mapper)
         {
             this._userRepository = userRepository;
+            this._passwordHasher = passwordHasher;
             this._mapper = mapper;
         }
 
@@ -115,10 +119,29 @@ namespace ClinicManagerAPI.Services.User
             _mapper.Map(userUpdateDto, user);
 
             var userUpdated = await _userRepository.UpdateUser(user);
+            return _mapper.Map<UserDto>(userUpdated);
+        }
 
-            if (userUpdated is null)
-                throw new Exception("Failed to update user.");
+        /// <summary>
+        /// Changes a user's password. Only accessible by admin users.
+        /// </summary>
+        /// <param name="requesterRole"></param>
+        /// <param name="userChangePasswordDto"></param>
+        /// <returns> The updated <see cref="UserDto"/>.</returns>
+        /// <exception cref="UnauthorizedAccessException"></exception>
+        /// <exception cref="KeyNotFoundException"></exception>
+        public async Task<UserDto> ChangePassword(UserRole requesterRole, UserChangePasswordDto userChangePasswordDto)
+        {
+            if (requesterRole != UserRole.admin)
+                throw new UnauthorizedAccessException("Only admins can change user passwords.");
 
+            var user = await _userRepository.GetUserById(userChangePasswordDto.UserId);
+
+            if (user == null)
+                throw new KeyNotFoundException("User not found.");
+
+            user.PasswordHash = _passwordHasher.HashPassword(user, userChangePasswordDto.NewPassword);
+            var userUpdated = await _userRepository.UpdateUser(user);
             return _mapper.Map<UserDto>(userUpdated);
         }
 

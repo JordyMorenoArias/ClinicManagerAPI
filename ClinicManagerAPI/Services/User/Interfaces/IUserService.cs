@@ -10,6 +10,16 @@ namespace ClinicManagerAPI.Services.User.Interfaces
     public interface IUserService
     {
         /// <summary>
+        /// Changes a user's password. Only accessible by admin users.
+        /// </summary>
+        /// <param name="requesterRole"></param>
+        /// <param name="userChangePasswordDto"></param>
+        /// <returns> The updated <see cref="UserDto"/>.</returns>
+        /// <exception cref="UnauthorizedAccessException"></exception>
+        /// <exception cref="KeyNotFoundException"></exception>
+        Task<UserDto> ChangePassword(UserRole requesterRole, UserChangePasswordDto userChangePasswordDto);
+
+        /// <summary>
         /// Deletes a user by their ID. Only accessible by admin users.
         /// </summary>
         /// <param name="requesterRole"></param>
