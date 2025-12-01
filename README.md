@@ -13,13 +13,13 @@ development practices.
     **Repositories**, **Data**, **Models**, **DTOs**
 -   ✔️ Secure authentication and authorization via **JWT**
 -   ✔️ Full management modules for:
-    -   Patients\
-    -   Doctors\
-    -   Medical Appointments\
-    -   Medical Records\
-    -   Allergies\
-    -   Reports\
-    -   Users & Roles\
+    -   Patients
+    -   Doctors
+    -   Medical Appointments
+    -   Medical Records
+    -   Allergies
+    -   Reports
+    -   Users & Roles
 -   ✔️ Entity mapping with **AutoMapper**
 -   ✔️ Global error-handling middleware
 -   ✔️ SOLID-friendly repository pattern
