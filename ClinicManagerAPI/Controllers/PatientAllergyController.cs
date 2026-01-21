@@ -1,6 +1,7 @@
 ﻿using ClinicManagerAPI.Models.DTOs.PatientAllergy;
 using ClinicManagerAPI.Services.PatientAllergy.Interfaces;
 using ClinicManagerAPI.Services.User.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicManagerAPI.Controllers
@@ -10,6 +11,7 @@ namespace ClinicManagerAPI.Controllers
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class PatientAllergyController : ControllerBase
     {
         private readonly IPatientAllergyService _patientAllergyService;
@@ -56,6 +58,7 @@ namespace ClinicManagerAPI.Controllers
         /// <param name="createDto"></param>
         /// <returns> A task that represents the asynchronous operation. The task result contains the created PatientAllergyDto.</returns>
         [HttpPost]
+        [Authorize(Policy = "canManagePatientAllergies")]
         public async Task<IActionResult> AddPatientAllergy([FromBody] AddPatientAllergyDto createDto)
         {
             var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);
@@ -70,6 +73,7 @@ namespace ClinicManagerAPI.Controllers
         /// <param name="updatePatientAllergyDto"></param>
         /// <returns> A task that represents the asynchronous operation. The task result contains the updated PatientAllergyDto.</returns>
         [HttpPut("{id}")]
+        [Authorize(Policy = "canManagePatientAllergies")]
         public async Task<IActionResult> UpdatePatientAllergy(int id, [FromBody] UpdatePatientAllergyDto updatePatientAllergyDto)
         {
             var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);
@@ -83,6 +87,7 @@ namespace ClinicManagerAPI.Controllers
         /// <param name="id"></param>
         /// <returns> An <see cref="IActionResult"/> indicating the result of the deletion.</returns>
         [HttpDelete("{id}")]
+        [Authorize(Policy = "canManagePatientAllergies")]
         public async Task<IActionResult> DeletePatientAllergy(int id)
         {
             var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);

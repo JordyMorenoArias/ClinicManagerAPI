@@ -181,6 +181,16 @@ builder.Services.AddAuthorization(options =>
     {
         policy.RequireRole(Roles.Doctor);
     });
+
+    options.AddPolicy("canManagePatientAllergies", policy =>
+    {
+        policy.RequireRole(Roles.AdminAndDoctor);
+    });
+
+    options.AddPolicy("canManagePatients", policy =>
+    {
+        policy.RequireRole(Roles.AdminDoctorAndAssistant);
+    });
 });
 
 builder.Services.AddEndpointsApiExplorer();
