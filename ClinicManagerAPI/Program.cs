@@ -166,6 +166,11 @@ builder.Services.AddAuthorization(options =>
     {
         policy.RequireRole(Roles.AdminAndDoctor);
     });
+
+    options.AddPolicy("canManageAppointments", policy =>
+    {
+        policy.RequireRole(Roles.AdminDoctorAndAssistant);
+    });
 });
 
 builder.Services.AddEndpointsApiExplorer();
