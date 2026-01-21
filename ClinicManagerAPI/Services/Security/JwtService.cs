@@ -36,13 +36,13 @@ namespace ClinicManagerAPI.Services.Security
         {
             var claims = new[]
             {
-            new Claim(JwtRegisteredClaimNames.Sub, _jwtOptions!.Subject),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
-            new Claim("Id", user.Id.ToString()),
-            new Claim("Email", user.Email),
-            new Claim("Role", user.Role.ToString())
-        };
+                new Claim(JwtRegisteredClaimNames.Sub, _jwtOptions!.Subject),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
+                new Claim("Id", user.Id.ToString()),
+                new Claim("Email", user.Email),
+                new Claim(ClaimTypes.Role, user.Role.ToString())
+            };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Key));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -51,7 +51,7 @@ namespace ClinicManagerAPI.Services.Security
                 _jwtOptions.Issuer,
                 _jwtOptions.Audience,
                 claims,
-                expires: DateTime.UtcNow.AddHours(3),
+                expires: DateTime.UtcNow.AddHours(1),
                 signingCredentials: credentials
             );
 

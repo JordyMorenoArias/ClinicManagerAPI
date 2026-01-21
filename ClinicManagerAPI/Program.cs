@@ -135,6 +135,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 
     options.Events = new JwtBearerEvents
     {
+        OnMessageReceived = context =>
+        {
+            // Retrieve token from cookie
+            if (context.Request.Cookies.ContainsKey("access_token"))
+            {
+                context.Token = context.Request.Cookies["access_token"];
+            }
+            return Task.CompletedTask;
+        },
         OnAuthenticationFailed = context =>
         {
             var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
@@ -167,7 +176,8 @@ builder.Services.AddCors(options =>
     {
         builder.WithOrigins(permittedOrigins)
                .AllowAnyHeader()
-               .AllowAnyMethod();
+               .AllowAnyMethod()
+               .AllowCredentials();
     });
 });
 
@@ -188,6 +198,8 @@ if (app.Environment.IsDevelopment())
         opciones.EnablePersistAuthorization();
     });
 }
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

@@ -27,8 +27,20 @@ namespace ClinicManagerAPI.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginDto UserLogin)
         {
-            var response = await _authService.Login(UserLogin);
-            return Ok(response);
+            var result = await _authService.Login(UserLogin);
+
+            Response.Cookies.Append("access_token", result.Token, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = result.Expires
+            });
+
+            return Ok(new
+            {
+                user = result.User,
+            });
         }
 
         /// <summary>
@@ -40,7 +52,6 @@ namespace ClinicManagerAPI.Controllers
         public async Task<IActionResult> Register([FromBody] UserRegisterDto userRegister)
         {
             var result = await _authService.Register(userRegister);
-
             return Ok(result);
         }
     }
