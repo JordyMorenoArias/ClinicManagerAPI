@@ -35,7 +35,7 @@ namespace ClinicManagerAPI.Controllers
         /// <param name="id"></param>
         /// <returns> a task that represents the asynchronous operation. The task result contains the IActionResult.</returns>
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAllergyBiId(int id)
+        public async Task<IActionResult> GetAllergyBiId([FromRoute] int id)
         {
             var allergy = await _allergyService.GetAllergyById(id);
             return Ok(allergy);
@@ -75,7 +75,7 @@ namespace ClinicManagerAPI.Controllers
         /// <returns> The updated allergy.</returns>
         [HttpPut("{id}")]
         [Authorize(Policy = "canManageAllergies")]
-        public async Task<IActionResult> UpdateAllergy(int id, [FromBody] UpdateAllergyDto updateAllergyDto)
+        public async Task<IActionResult> UpdateAllergy([FromRoute] int id, [FromBody] UpdateAllergyDto updateAllergyDto)
         {
             var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);
             var updatedAllergy = await _allergyService.UpdateAllergy(userAuthenticated.Role, id, updateAllergyDto);
@@ -89,7 +89,7 @@ namespace ClinicManagerAPI.Controllers
         /// <returns> A success message upon deletion.</returns>
         [HttpDelete("{id}")]
         [Authorize(Policy = "canManageAllergies")]
-        public async Task<IActionResult> DeleteAllergy(int id)
+        public async Task<IActionResult> DeleteAllergy([FromRoute] int id)
         {
             var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);
             var result = await _allergyService.DeleteAllergy(userAuthenticated.Role, id);

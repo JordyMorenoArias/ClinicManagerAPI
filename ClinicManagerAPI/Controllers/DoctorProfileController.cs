@@ -1,6 +1,7 @@
 ﻿using ClinicManagerAPI.Models.DTOs.DoctorProfile;
 using ClinicManagerAPI.Services.DoctorProfile.Interfaces;
 using ClinicManagerAPI.Services.User.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicManagerAPI.Controllers
@@ -10,6 +11,7 @@ namespace ClinicManagerAPI.Controllers
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class DoctorProfileController : ControllerBase
     {
         private readonly IDoctorProfileService _doctorProfileService;
@@ -32,12 +34,12 @@ namespace ClinicManagerAPI.Controllers
         /// <param name="doctorId"></param>
         /// <returns> A <see cref="DoctorProfileDto"/> object representing the doctor profile with the specified ID.</returns>
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetDoctorProfileById(int doctorId)
+        public async Task<IActionResult> GetDoctorProfileById([FromRoute] int doctorId)
         {
             var doctorProfile = await _doctorProfileService.GetDoctorProfileById(doctorId);
             return Ok(doctorProfile);
         }
-
+        
         /// <summary>
         /// Retrieves a paged list of doctor profiles based on the provided query parameters.
         /// </summary>
@@ -56,6 +58,7 @@ namespace ClinicManagerAPI.Controllers
         /// <param name="addDoctorProfileDto"></param>
         /// <returns> The created doctor profile.</returns>
         [HttpPost]
+        [Authorize(Policy = "canManageDoctorProfiles")]
         public async Task<IActionResult> AddDoctorProfile([FromBody] AddDoctorProfileDto addDoctorProfileDto)
         {
             var userAuthenticated = authService.GetAuthenticatedUser(HttpContext);
@@ -69,6 +72,7 @@ namespace ClinicManagerAPI.Controllers
         /// <param name="updateDoctorProfileDto"></param>
         /// <returns> The updated doctor profile.</returns>
         [HttpPut("{id}")]
+        [Authorize(Policy = "canManageDoctorProfiles")]
         public async Task<IActionResult> UpdateDoctorProfile([FromBody] UpdateDoctorProfileDto updateDoctorProfileDto)
         {
             var userAuthenticated = authService.GetAuthenticatedUser(HttpContext);
@@ -82,12 +86,12 @@ namespace ClinicManagerAPI.Controllers
         /// <param name="doctorId"></param>
         /// <returns> A success message upon deletion.</returns>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDoctorProfile([FromQuery] int id)
+        [Authorize(Policy = "canManageDoctorProfiles")]
+        public async Task<IActionResult> DeleteDoctorProfile([FromRoute] int id)
         {
             var userAuthenticated = authService.GetAuthenticatedUser(HttpContext);
             await _doctorProfileService.DeleteDoctorProfile(userAuthenticated.Role, id);
             return Ok("Doctor profile deleted successfully.");
         }
-
     }
 }

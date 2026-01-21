@@ -91,17 +91,17 @@ namespace ClinicManagerAPI.Controllers
         /// <summary>
         /// Deletes an appointment by its unique identifier.
         /// </summary>
-        /// <param name="appointmentId">The ID of the appointment to delete.</param>
+        /// <param name="id">The ID of the appointment to delete.</param>
         /// <returns>
         /// Returns an <see cref="IActionResult"/> indicating the result of the delete operation, 
         /// typically a 200 OK response with a confirmation message.
         /// </returns>
         [HttpDelete("{id}")]
         [Authorize(Policy = "canManageAppointments")]
-        public async Task<IActionResult> DeleteAppointment([FromQuery] int appointmentId)
+        public async Task<IActionResult> DeleteAppointment([FromRoute] int id)
         {
             var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);
-            var result = await _appointmentService.DeleteAppointment(appointmentId);
+            var result = await _appointmentService.DeleteAppointment(id);
             return Ok(result);
         }
     }

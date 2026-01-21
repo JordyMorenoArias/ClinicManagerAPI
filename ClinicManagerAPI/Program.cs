@@ -171,6 +171,11 @@ builder.Services.AddAuthorization(options =>
     {
         policy.RequireRole(Roles.AdminDoctorAndAssistant);
     });
+
+    options.AddPolicy("canManageDoctorProfiles", policy =>
+    {
+        policy.RequireRole(Roles.Admin);
+    });
 });
 
 builder.Services.AddEndpointsApiExplorer();
