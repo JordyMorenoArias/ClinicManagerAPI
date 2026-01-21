@@ -176,6 +176,11 @@ builder.Services.AddAuthorization(options =>
     {
         policy.RequireRole(Roles.Admin);
     });
+
+    options.AddPolicy("canManageMedicalRecord", policy =>
+    {
+        policy.RequireRole(Roles.Doctor);
+    });
 });
 
 builder.Services.AddEndpointsApiExplorer();
