@@ -1,4 +1,5 @@
 using ClinicManagerAPI.AutoMapper;
+using ClinicManagerAPI.Constants;
 using ClinicManagerAPI.Data;
 using ClinicManagerAPI.Middlewares;
 using ClinicManagerAPI.Models.Entities;
@@ -157,6 +158,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
             return Task.CompletedTask;
         }
     };
+});
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("canManageAllergies", policy =>
+    {
+        policy.RequireRole(Roles.AdminAndDoctor);
+    });
 });
 
 builder.Services.AddEndpointsApiExplorer();
