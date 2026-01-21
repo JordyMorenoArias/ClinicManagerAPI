@@ -73,7 +73,8 @@ namespace ClinicManagerAPI.Services.Auth
             }
 
             var userTokenDto = _mapper.Map<UserGenerateTokenDto>(user);
-            var token = _jwtService.GenerateJwtToken(userTokenDto);
+            var expiry = DateTime.UtcNow.AddHours(1);
+            var token = _jwtService.GenerateJwtToken(userTokenDto, expiry);
 
             _logger.LogInformation("User {UserName} logged in successfully", loginDto.UserName);
            
@@ -81,7 +82,8 @@ namespace ClinicManagerAPI.Services.Auth
             return new AuthResultDto
             {
                 Token = token,
-                User = userDto
+                User = userDto,
+                Expires = expiry
             };
         }
 
