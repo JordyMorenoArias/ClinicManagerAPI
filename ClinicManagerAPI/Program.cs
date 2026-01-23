@@ -187,7 +187,7 @@ builder.Services.AddAuthorization(options =>
 
     options.AddPolicy("canManagePatientAllergies", policy =>
     {
-        policy.RequireRole(Roles.AdminAndDoctor);
+        policy.RequireRole(Roles.Doctor);
     });
 
     options.AddPolicy("canManagePatients", policy =>

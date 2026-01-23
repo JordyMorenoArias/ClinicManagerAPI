@@ -51,7 +51,7 @@ namespace ClinicManagerAPI.Services.Report
 
             var appointments = await _appointmentService.GetAppointments(appoinmentQuery);
 
-            var patientQuery = new QueryPatientParameters
+            var patientQuery = new PatientQueryParameters
             {
                 StartDateFilter = parameters.StartDate,
                 EndDateFilter = parameters.EndDate,
