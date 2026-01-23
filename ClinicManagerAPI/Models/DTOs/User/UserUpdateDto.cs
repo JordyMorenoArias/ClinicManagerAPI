@@ -5,8 +5,6 @@ namespace ClinicManagerAPI.Models.DTOs.User
 {
     public class UserUpdateDto
     {
-        [Required]
-        public int Id { get; set; }
 
         [Required, MaxLength(100)]
         public string FullName { get; set; } = string.Empty;
@@ -16,8 +14,6 @@ namespace ClinicManagerAPI.Models.DTOs.User
 
         [Required, MaxLength(50)]
         public string PhoneNumber { get; set; } = string.Empty;
-
-        public UserRole Role { get; set; }
 
         public bool IsActive { get; set; }
     }

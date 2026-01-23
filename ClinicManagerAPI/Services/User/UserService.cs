@@ -97,24 +97,12 @@ namespace ClinicManagerAPI.Services.User
         /// <returns>The updated <see cref="UserDto"/>.</returns>
         /// <exception cref="KeyNotFoundException">Thrown when the user is not found.</exception>
         /// <exception cref="Exception">Thrown when the update operation fails.</exception>
-        public async Task<UserDto> UpdateUser(int requestId, UserRole requesterRole, UserUpdateDto userUpdateDto)
+        public async Task<UserDto> UpdateUser(int id, UserUpdateDto userUpdateDto)
         {
-            var user = await _userRepository.GetUserById(userUpdateDto.Id);
+            var user = await _userRepository.GetUserById(id);
 
             if (user == null)
                 throw new KeyNotFoundException("User not found.");
-
-            bool isUpdatingSelf = requestId == user.Id;
-            bool isAdmin = requesterRole == UserRole.admin;
-
-            if (!isAdmin && !isUpdatingSelf)
-                throw new UnauthorizedAccessException("You can only update your own account.");
-
-            if (!isAdmin && user.Role != userUpdateDto.Role)
-                throw new UnauthorizedAccessException("You cannot change your role.");
-
-            if (!isAdmin && user.IsActive != userUpdateDto.IsActive)
-                throw new UnauthorizedAccessException("You cannot change your active status.");
 
             _mapper.Map(userUpdateDto, user);
 
@@ -125,22 +113,38 @@ namespace ClinicManagerAPI.Services.User
         /// <summary>
         /// Changes a user's password. Only accessible by admin users.
         /// </summary>
-        /// <param name="requesterRole"></param>
+        /// <param name="userId"></param>
         /// <param name="userChangePasswordDto"></param>
         /// <returns> The updated <see cref="UserDto"/>.</returns>
         /// <exception cref="UnauthorizedAccessException"></exception>
         /// <exception cref="KeyNotFoundException"></exception>
-        public async Task<UserDto> ChangePassword(UserRole requesterRole, UserChangePasswordDto userChangePasswordDto)
+        public async Task<UserDto> ChangePassword(int userId, ChangeUserPasswordDto userChangePasswordDto)
         {
-            if (requesterRole != UserRole.admin)
-                throw new UnauthorizedAccessException("Only admins can change user passwords.");
-
-            var user = await _userRepository.GetUserById(userChangePasswordDto.UserId);
+            var user = await _userRepository.GetUserById(userId);
 
             if (user == null)
                 throw new KeyNotFoundException("User not found.");
 
             user.PasswordHash = _passwordHasher.HashPassword(user, userChangePasswordDto.NewPassword);
+            var userUpdated = await _userRepository.UpdateUser(user);
+            return _mapper.Map<UserDto>(userUpdated);
+        }
+
+        /// <summary>
+        /// Assigns a new role to a user. Only accessible by admin users.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="newRole"></param>
+        /// <returns> The updated <see cref="UserDto"/>.</returns>
+        /// <exception cref="KeyNotFoundException"></exception>
+        public async Task<UserDto> ChangeUserRole(int userId, ChangeUserRoleDto newRole)
+        {
+            var user = await _userRepository.GetUserById(userId);
+
+            if (user == null)
+                throw new KeyNotFoundException("User not found.");
+
+            user.Role = newRole.Role;
             var userUpdated = await _userRepository.UpdateUser(user);
             return _mapper.Map<UserDto>(userUpdated);
         }
