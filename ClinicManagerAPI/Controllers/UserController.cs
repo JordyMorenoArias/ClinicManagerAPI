@@ -59,7 +59,6 @@ namespace ClinicManagerAPI.Controllers
             return Ok(user);
         }
 
-
         /// <summary>
         /// Changes the authenticated user's password.
         /// </summary>
