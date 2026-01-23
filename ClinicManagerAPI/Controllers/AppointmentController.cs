@@ -1,8 +1,8 @@
 ﻿using ClinicManagerAPI.Constants;
-using ClinicManagerAPI.Filters;
 using ClinicManagerAPI.Models.DTOs.Appointment;
 using ClinicManagerAPI.Services.Appointment.Interfaces;
 using ClinicManagerAPI.Services.User.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicManagerAPI.Controllers
@@ -12,7 +12,7 @@ namespace ClinicManagerAPI.Controllers
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
-    [AuthorizeRole(UserRole.admin, UserRole.doctor, UserRole.assistant)]
+    [Authorize]
     public class AppointmentController : Controller
     {
         private readonly IAppointmentService _appointmentService;
@@ -27,15 +27,15 @@ namespace ClinicManagerAPI.Controllers
         /// <summary>
         /// Retrieves an appointment by its unique identifier.
         /// </summary>
-        /// <param name="appointmentId">The ID of the appointment to retrieve.</param>
+        /// <param name="id">The ID of the appointment to retrieve.</param>
         /// <returns>
         /// Returns an <see cref="IActionResult"/> containing the appointment details 
         /// if found, or a 404 Not Found response if the appointment does not exist.
         /// </returns>
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAppointmentById(int appointmentId)
+        public async Task<IActionResult> GetAppointmentById([FromRoute] int id)
         {
-            var appointment = await _appointmentService.GetAppointmentById(appointmentId);
+            var appointment = await _appointmentService.GetAppointmentById(id);
             return Ok(appointment);
         }
 
@@ -63,6 +63,7 @@ namespace ClinicManagerAPI.Controllers
         /// and a 201 Created HTTP status code.
         /// </returns>
         [HttpPost]
+        [Authorize(Policy = "canManageAppointments")]
         public async Task<IActionResult> AddAppointment([FromBody] AddAppointmentDto newAppointment)
         {
             var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);
@@ -79,6 +80,7 @@ namespace ClinicManagerAPI.Controllers
         /// if the operation succeeds, or a 404 Not Found response if the appointment does not exist.
         /// </returns>
         [HttpPut("{id}")]
+        [Authorize(Policy = "canManageAppointments")]
         public async Task<IActionResult> UpdateAppointment([FromBody] UpdateAppointmentDto updatedAppointment)
         {
             var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);
@@ -89,16 +91,17 @@ namespace ClinicManagerAPI.Controllers
         /// <summary>
         /// Deletes an appointment by its unique identifier.
         /// </summary>
-        /// <param name="appointmentId">The ID of the appointment to delete.</param>
+        /// <param name="id">The ID of the appointment to delete.</param>
         /// <returns>
         /// Returns an <see cref="IActionResult"/> indicating the result of the delete operation, 
         /// typically a 200 OK response with a confirmation message.
         /// </returns>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAppointment([FromQuery] int appointmentId)
+        [Authorize(Policy = "canManageAppointments")]
+        public async Task<IActionResult> DeleteAppointment([FromRoute] int id)
         {
             var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);
-            var result = await _appointmentService.DeleteAppointment(appointmentId);
+            var result = await _appointmentService.DeleteAppointment(id);
             return Ok(result);
         }
     }

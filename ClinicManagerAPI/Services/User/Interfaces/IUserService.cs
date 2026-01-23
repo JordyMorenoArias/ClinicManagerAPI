@@ -10,14 +10,20 @@ namespace ClinicManagerAPI.Services.User.Interfaces
     public interface IUserService
     {
         /// <summary>
-        /// Changes a user's password. Only accessible by admin users.
+        /// Assigns a new role to a user.
         /// </summary>
-        /// <param name="requesterRole"></param>
+        /// <param name="userId"></param>
+        /// <param name="newRole"></param>
+        /// <returns> The updated <see cref="UserDto"/>.</returns>
+        Task<UserDto> ChangeUserRole(int userId, ChangeUserRoleDto newRole);
+
+        /// <summary>
+        /// Changes a user's password.
+        /// </summary>
+        /// <param name="userId"></param>
         /// <param name="userChangePasswordDto"></param>
         /// <returns> The updated <see cref="UserDto"/>.</returns>
-        /// <exception cref="UnauthorizedAccessException"></exception>
-        /// <exception cref="KeyNotFoundException"></exception>
-        Task<UserDto> ChangePassword(UserRole requesterRole, UserChangePasswordDto userChangePasswordDto);
+        Task<UserDto> ChangePassword(int userId, ChangeUserPasswordDto userChangePasswordDto);
 
         /// <summary>
         /// Deletes a user by their ID. Only accessible by admin users.
@@ -60,6 +66,6 @@ namespace ClinicManagerAPI.Services.User.Interfaces
         /// <returns>The updated <see cref="UserDto"/>.</returns>
         /// <exception cref="KeyNotFoundException">Thrown when the user is not found.</exception>
         /// <exception cref="Exception">Thrown when the update operation fails.</exception>
-        Task<UserDto> UpdateUser(int userId, UserRole role, UserUpdateDto userUpdateDto);
+        Task<UserDto> UpdateUser(int userId, UserRole role, int id, UserUpdateDto userUpdateDto);
     }
 }

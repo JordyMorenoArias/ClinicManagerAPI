@@ -1,11 +1,14 @@
-﻿using ClinicManagerAPI.Models.DTOs.User;
+﻿using ClinicManagerAPI.Constants;
+using ClinicManagerAPI.Models.DTOs.User;
 using ClinicManagerAPI.Services.Auth.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicManagerAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class AuthController : Controller
     {
         private readonly IAuthService _authService;
@@ -25,6 +28,7 @@ namespace ClinicManagerAPI.Controllers
         /// <param name="UserLogin">Login credentials.</param>
         /// <returns>JWT and user info if successful.</returns>
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] UserLoginDto UserLogin)
         {
             var result = await _authService.Login(UserLogin);
@@ -49,6 +53,7 @@ namespace ClinicManagerAPI.Controllers
         /// <param name="userRegister">User registration info.</param>
         /// <returns>Status message indicating success or failure.</returns>
         [HttpPost("register")]
+        [Authorize(Roles = Roles.Admin)]
         public async Task<IActionResult> Register([FromBody] UserRegisterDto userRegister)
         {
             var result = await _authService.Register(userRegister);

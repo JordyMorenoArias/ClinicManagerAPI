@@ -1,10 +1,8 @@
 ﻿using ClinicManagerAPI.Constants;
-using ClinicManagerAPI.Filters;
 using ClinicManagerAPI.Models.DTOs.MedicalRecord;
-using ClinicManagerAPI.Services.MedicalRecord;
 using ClinicManagerAPI.Services.MedicalRecord.Interfaces;
-using ClinicManagerAPI.Services.User;
 using ClinicManagerAPI.Services.User.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicManagerAPI.Controllers
@@ -14,7 +12,7 @@ namespace ClinicManagerAPI.Controllers
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
-    [AuthorizeRole(UserRole.admin, UserRole.doctor, UserRole.assistant)]
+    [Authorize]
     public class MedicalRecordController : Controller
     {
         private readonly IMedicalRecordService _medicalRecordService;
@@ -31,7 +29,7 @@ namespace ClinicManagerAPI.Controllers
         /// </summary>
         /// <param name="id">The unique identifier of the medical record.</param>
         /// <returns>Returns an <see cref="IActionResult"/> containing the medical record if found; otherwise, a NotFound result.</returns>
-        [HttpGet("{Id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetMedicalRecordById([FromRoute] int id)
         {
             var medicalRecord = await _medicalRecordService.GetMedicalRecordById(id);
@@ -56,7 +54,7 @@ namespace ClinicManagerAPI.Controllers
         /// <param name="medicalRecordDto">The data for creating the medical record.</param>
         /// <returns>Returns an <see cref="IActionResult"/> containing the newly created medical record.</returns>
         [HttpPost]
-        [AuthorizeRole(UserRole.admin, UserRole.doctor)]
+        [Authorize(Policy = "canManageMedicalRecord")]
         public async Task<IActionResult> AddMedicalRecord([FromBody] AddMedicalRecordDto medicalRecordDto)
         {
             var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);
@@ -70,7 +68,7 @@ namespace ClinicManagerAPI.Controllers
         /// <param name="medicalRecordDto">The data used to update the medical record.</param>
         /// <returns>Returns an <see cref="IActionResult"/> containing the updated medical record.</returns>
         [HttpPut("{id}")]
-        [AuthorizeRole(UserRole.admin, UserRole.doctor)]
+        [Authorize(Policy = "canManageMedicalRecord")]
         public async Task<IActionResult> UpdateMedicalRecord([FromBody] UpdateMedicalRecordDto medicalRecordDto)
         {
             var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);
@@ -81,14 +79,14 @@ namespace ClinicManagerAPI.Controllers
         /// <summary>
         /// Deletes a medical record by its ID.
         /// </summary>
-        /// <param name="medicalRecordId">The unique identifier of the medical record to delete.</param>
+        /// <param name="id">The unique identifier of the medical record to delete.</param>
         /// <returns>Returns an <see cref="IActionResult"/> indicating success or failure of the deletion operation.</returns>
         [HttpDelete("{id}")]
-        [AuthorizeRole(UserRole.admin, UserRole.doctor)]
-        public async Task<IActionResult> DeleteMedicalRecord([FromRoute] int medicalRecordId)
+        [Authorize(Policy = "canManageMedicalRecord")]
+        public async Task<IActionResult> DeleteMedicalRecord([FromRoute] int id)
         {
             var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);
-            await _medicalRecordService.DeleteMedicalRecord(userAuthenticated.Id, userAuthenticated.Role, medicalRecordId);
+            await _medicalRecordService.DeleteMedicalRecord(userAuthenticated.Id, userAuthenticated.Role, id);
             return Ok(new { Message = "Medical record deleted successfully." });
         }
     }

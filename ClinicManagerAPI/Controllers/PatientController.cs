@@ -1,7 +1,6 @@
-﻿using ClinicManagerAPI.Constants;
-using ClinicManagerAPI.Filters;
-using ClinicManagerAPI.Models.DTOs.Patient;
+﻿using ClinicManagerAPI.Models.DTOs.Patient;
 using ClinicManagerAPI.Services.Patient.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicManagerAPI.Controllers
@@ -11,7 +10,7 @@ namespace ClinicManagerAPI.Controllers
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
-    [AuthorizeRole(UserRole.admin, UserRole.doctor, UserRole.assistant)]
+    [Authorize]
     public class PatientController : Controller
     {
         private readonly IPatientService _patientService;
@@ -76,6 +75,7 @@ namespace ClinicManagerAPI.Controllers
         /// if the operation succeeds, or a <c>400 Bad Request</c> response if validation fails or a duplicate exists.
         /// </returns>
         [HttpPost]
+        [Authorize(Policy = "canManagePatients")]
         public async Task<IActionResult> AddPatient([FromBody] AddPatientDto addPatientDto)
         {
             var patient = await _patientService.AddPatient(addPatientDto);
@@ -91,6 +91,7 @@ namespace ClinicManagerAPI.Controllers
         /// if the update is successful, or a <c>404 Not Found</c> response if the patient does not exist.
         /// </returns>
         [HttpPut("{id}")]
+        [Authorize(Policy = "canManagePatients")]
         public async Task<IActionResult> UpdatePatient([FromBody] UpdatePatientDto updatePatientDto)
         {
             var patient = await _patientService.UpdatePatient(updatePatientDto);

@@ -29,10 +29,11 @@ namespace ClinicManagerAPI.Services.Security
         /// Generates a JSON Web Token (JWT) for the specified user.
         /// </summary>
         /// <param name="user">The user information used to generate claims in the token.</param>
+        /// <param name="expires"> The expiration date and time for the token.</param>
         /// <returns>
         /// A signed JWT token string containing user claims and expiration information.
         /// </returns>
-        public string GenerateJwtToken(UserGenerateTokenDto user)
+        public string GenerateJwtToken(UserGenerateTokenDto user, DateTime expires)
         {
             var claims = new[]
             {
@@ -51,7 +52,7 @@ namespace ClinicManagerAPI.Services.Security
                 _jwtOptions.Issuer,
                 _jwtOptions.Audience,
                 claims,
-                expires: DateTime.UtcNow.AddHours(1),
+                expires: expires,
                 signingCredentials: credentials
             );
 
