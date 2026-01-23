@@ -2,7 +2,7 @@
 
 namespace ClinicManagerAPI.Models.DTOs.MedicalRecord
 {
-    public class QueryMedicalRecordParameters
+    public class MedicalRecordQueryParameters
     {
         public int Page { get; set; } = 1;
 

@@ -16,12 +16,10 @@ namespace ClinicManagerAPI.Controllers
     public class MedicalRecordController : Controller
     {
         private readonly IMedicalRecordService _medicalRecordService;
-        private readonly IUserService _userService;
 
-        public MedicalRecordController(IMedicalRecordService medicalRecordService, IUserService userService)
+        public MedicalRecordController(IMedicalRecordService medicalRecordService)
         {
             this._medicalRecordService = medicalRecordService;
-            this._userService = userService;
         }
 
         /// <summary>
@@ -42,7 +40,7 @@ namespace ClinicManagerAPI.Controllers
         /// <param name="parameters">The filtering and pagination parameters for retrieving medical records.</param>
         /// <returns>Returns an <see cref="IActionResult"/> containing a paginated list of medical records.</returns>
         [HttpGet]
-        public async Task<IActionResult> GetMedicalRecords([FromQuery] QueryMedicalRecordParameters parameters)
+        public async Task<IActionResult> GetMedicalRecords([FromQuery] MedicalRecordQueryParameters parameters)
         {
             var medicalRecords = await _medicalRecordService.GetMedicalRecords(parameters);
             return Ok(medicalRecords);
@@ -57,8 +55,8 @@ namespace ClinicManagerAPI.Controllers
         [Authorize(Policy = "canManageMedicalRecord")]
         public async Task<IActionResult> AddMedicalRecord([FromBody] AddMedicalRecordDto medicalRecordDto)
         {
-            var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);
-            var medicalRecord = await _medicalRecordService.AddMedicalRecord(userAuthenticated.Id, userAuthenticated.Role, medicalRecordDto);
+            var requestId = int.Parse(HttpContext.User.FindFirst("id")!.Value);
+            var medicalRecord = await _medicalRecordService.AddMedicalRecord(requestId, medicalRecordDto);
             return Ok(medicalRecord);
         }
 
@@ -69,10 +67,9 @@ namespace ClinicManagerAPI.Controllers
         /// <returns>Returns an <see cref="IActionResult"/> containing the updated medical record.</returns>
         [HttpPut("{id}")]
         [Authorize(Policy = "canManageMedicalRecord")]
-        public async Task<IActionResult> UpdateMedicalRecord([FromBody] UpdateMedicalRecordDto medicalRecordDto)
+        public async Task<IActionResult> UpdateMedicalRecord([FromRoute] int id, [FromBody] UpdateMedicalRecordDto medicalRecordDto)
         {
-            var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);
-            var medicalRecord = await _medicalRecordService.UpdateMedicalRecord(userAuthenticated.Id, userAuthenticated.Role, medicalRecordDto);
+            var medicalRecord = await _medicalRecordService.UpdateMedicalRecord(id, medicalRecordDto);
             return Ok(medicalRecord);
         }
 
@@ -85,8 +82,7 @@ namespace ClinicManagerAPI.Controllers
         [Authorize(Policy = "canManageMedicalRecord")]
         public async Task<IActionResult> DeleteMedicalRecord([FromRoute] int id)
         {
-            var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);
-            await _medicalRecordService.DeleteMedicalRecord(userAuthenticated.Id, userAuthenticated.Role, id);
+            await _medicalRecordService.DeleteMedicalRecord(id);
             return Ok(new { Message = "Medical record deleted successfully." });
         }
     }

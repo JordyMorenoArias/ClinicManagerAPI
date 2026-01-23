@@ -1,7 +1,4 @@
-﻿using ClinicManagerAPI.Models.DTOs.Patient;
-using ClinicManagerAPI.Models.DTOs.User;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ClinicManagerAPI.Models.DTOs.MedicalRecord
 {

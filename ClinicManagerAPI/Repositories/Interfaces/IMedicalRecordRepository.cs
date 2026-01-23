@@ -36,7 +36,7 @@ namespace ClinicManagerAPI.Repositories.Interfaces
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns>A <see cref="PagedResult{MedicalRecordEntity}"/> containing the paged list of medical records.</returns>
-        Task<PagedResult<MedicalRecordEntity>> GetMedicalRecords(QueryMedicalRecordParameters parameters);
+        Task<PagedResult<MedicalRecordEntity>> GetMedicalRecords(MedicalRecordQueryParameters parameters);
 
         /// <summary>
         /// Updates an existing medical record in the database.
