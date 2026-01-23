@@ -18,7 +18,7 @@ namespace ClinicManagerAPI.AutoMapper
             // user mappings
             CreateMap<UserEntity, UserDto>().ReverseMap();
             CreateMap<UserEntity, UserRegisterDto>().ReverseMap();
-            CreateMap<UserEntity, UserUpdateDto>().ReverseMap();
+            CreateMap<UserEntity, UpdateUserDto>().ReverseMap();
             CreateMap<UserEntity, UserGenerateTokenDto>().ReverseMap();
 
             // Patient mappings

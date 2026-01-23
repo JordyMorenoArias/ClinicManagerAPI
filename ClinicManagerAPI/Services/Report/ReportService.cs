@@ -60,7 +60,7 @@ namespace ClinicManagerAPI.Services.Report
 
             var patients = await _patientService.GetPatients(patientQuery);
 
-            var userQuery = new Models.DTOs.User.QueryUserParameters
+            var userQuery = new Models.DTOs.User.UserQueryParameters
             {
                 StartDateFilter = parameters.StartDate,
                 EndDateFilter = parameters.EndDate,

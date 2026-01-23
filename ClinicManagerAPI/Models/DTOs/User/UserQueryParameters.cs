@@ -2,7 +2,7 @@
 
 namespace ClinicManagerAPI.Models.DTOs.User
 {
-    public class QueryUserParameters
+    public class UserQueryParameters
     {
         public int Page { get; set; } = 1;
 

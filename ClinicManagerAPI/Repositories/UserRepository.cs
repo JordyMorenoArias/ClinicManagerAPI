@@ -66,7 +66,7 @@ namespace ClinicManagerAPI.Repositories
         /// A <see cref="PagedResult{UserEntity}"/> object containing the list of users that match the 
         /// query parameters, along with pagination metadata such as total items, current page, and page size.
         /// </returns>
-        public async Task<PagedResult<UserEntity>> GetUsers(QueryUserParameters parameters)
+        public async Task<PagedResult<UserEntity>> GetUsers(UserQueryParameters parameters)
         {
             var query = _context.Users.AsQueryable();
 

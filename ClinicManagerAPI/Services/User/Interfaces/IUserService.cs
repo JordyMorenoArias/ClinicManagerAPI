@@ -26,16 +26,6 @@ namespace ClinicManagerAPI.Services.User.Interfaces
         Task<UserDto> ChangePassword(int userId, ChangeUserPasswordDto userChangePasswordDto);
 
         /// <summary>
-        /// Deletes a user by their ID. Only accessible by admin users.
-        /// </summary>
-        /// <param name="requesterRole"></param>
-        /// <param name="id"></param>
-        /// <returns><c>true</c> if deletion was successful; otherwise, <c>false</c>.</returns>
-        /// <exception cref="UnauthorizedAccessException"></exception>
-        /// <exception cref="KeyNotFoundException"></exception>
-        Task<bool> DeleteUser(UserRole requesterRole, int id);
-
-        /// <summary>
         /// Retrieves the authenticated user's details from the HTTP context.
         /// </summary>
         /// <param name="httpContext">The HTTP context containing the user's claims.</param>
@@ -51,20 +41,28 @@ namespace ClinicManagerAPI.Services.User.Interfaces
         Task<UserDto> GetUserById(int id);
 
         /// <summary>
-        /// Gets a paginated list of users. Only accessible by admin users.
-        /// </summary>
-        /// <param name="role">The role of the current user. Must be Admin to access this method.</param>
-        /// <param name="parameters">The parameters used to filter and paginate the user list.</param>
-        /// <returns>A paged result containing user data as <see cref="UserDto"/> objects.</returns>
-        /// <exception cref="System.UnauthorizedAccessException">Thrown when the role is not Admin.</exception>
-        Task<PagedResult<UserDto>> GetUsers(UserRole role, QueryUserParameters parameters);
-
-        /// <summary>
         /// Updates a user's information.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="userUpdateDto"></param>
         /// <returns> The updated <see cref="UserDto"/>.</returns>
-        Task<UserDto> UpdateUser(int id, UserUpdateDto userUpdateDto);
+        Task<UserDto> UpdateUser(int id, UpdateUserDto userUpdateDto);
+
+        /// <summary>
+        /// Delete a patient allergy.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>An <see cref="OperationResult"/> indicating the result of the deletion.</returns>
+        /// <exception cref="KeyNotFoundException"></exception>
+        Task<PagedResult<UserDto>> GetUsers(UserQueryParameters parameters);
+
+        /// <summary>
+        /// Deletes a user by their ID. Only accessible by admin users.
+        /// </summary>
+        /// <param name="requesterRole"></param>
+        /// <param name="id"></param>
+        /// <returns><c>true</c> if deletion was successful; otherwise, <c>false</c>.</returns>
+        /// <exception cref="KeyNotFoundException"></exception>
+        Task<bool> DeleteUser(int id);
     }
 }

@@ -71,16 +71,12 @@ namespace ClinicManagerAPI.Services.User
         /// <summary>
         /// Gets a paginated list of users. Only accessible by admin users.
         /// </summary>
-        /// <param name="requesterRole">The role of the current user. Must be Admin to access this method.</param>
         /// <param name="parameters">The parameters used to filter and paginate the user list.</param>
         /// <returns>A paged result containing user data as <see cref="UserDto"/> objects.</returns>
-        /// <exception cref="System.UnauthorizedAccessException">Thrown when the role is not Admin.</exception>
-        public async Task<PagedResult<UserDto>> GetUsers(UserRole requesterRole, QueryUserParameters parameters)
+        public async Task<PagedResult<UserDto>> GetUsers(UserQueryParameters parameters)
         {
             var users = await _userRepository.GetUsers(parameters);
-
             var userDtos = _mapper.Map<List<UserDto>>(users.Items);
-
             return new PagedResult<UserDto>
             {
                 Items = userDtos,
@@ -96,8 +92,7 @@ namespace ClinicManagerAPI.Services.User
         /// <param name="userDto">The updated user data.</param>
         /// <returns>The updated <see cref="UserDto"/>.</returns>
         /// <exception cref="KeyNotFoundException">Thrown when the user is not found.</exception>
-        /// <exception cref="Exception">Thrown when the update operation fails.</exception>
-        public async Task<UserDto> UpdateUser(int id, UserUpdateDto userUpdateDto)
+        public async Task<UserDto> UpdateUser(int id, UpdateUserDto userUpdateDto)
         {
             var user = await _userRepository.GetUserById(id);
 
@@ -154,13 +149,9 @@ namespace ClinicManagerAPI.Services.User
         /// <param name="requesterRole"></param>
         /// <param name="id"></param>
         /// <returns><c>true</c> if deletion was successful; otherwise, <c>false</c>.</returns>
-        /// <exception cref="UnauthorizedAccessException"></exception>
         /// <exception cref="KeyNotFoundException"></exception>
-        public async Task<bool> DeleteUser(UserRole requesterRole, int id)
+        public async Task<bool> DeleteUser(int id)
         {
-            if (requesterRole != UserRole.admin)
-                throw new UnauthorizedAccessException("Only admins can delete users.");
-
             var user = await _userRepository.GetUserById(id);
 
             if (user == null)
