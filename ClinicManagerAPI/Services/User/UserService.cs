@@ -27,31 +27,6 @@ namespace ClinicManagerAPI.Services.User
         }
 
         /// <summary>
-        /// Retrieves the authenticated user's details from the HTTP context.
-        /// </summary>
-        /// <param name="httpContext">The HTTP context containing the user's claims.</param>
-        /// <returns>The authenticated user's ID, email, and role.</returns>
-        /// <exception cref="UnauthorizedAccessException">
-        /// Thrown when required claims are missing or invalid.
-        /// </exception>
-        public UserAuthenticatedDto GetAuthenticatedUser(HttpContext httpContext)
-        {
-            var userIdClaim = httpContext.User.FindFirst("Id")?.Value;
-            var userEmailClaim = httpContext.User.FindFirst("Email")?.Value;
-            var userRoleClaim = httpContext.User.FindFirst("Role")?.Value;
-
-            if (string.IsNullOrEmpty(userIdClaim) || string.IsNullOrEmpty(userEmailClaim) || string.IsNullOrEmpty(userRoleClaim))
-                throw new UnauthorizedAccessException("Invalid token or unauthorized access.");
-
-            return new UserAuthenticatedDto
-            {
-                Id = int.Parse(userIdClaim),
-                Email = userEmailClaim,
-                Role = Enum.Parse<UserRole>(userRoleClaim)
-            };
-        }
-
-        /// <summary>
         /// Retrieves a user by their ID.
         /// </summary>
         /// <param name="id"></param>

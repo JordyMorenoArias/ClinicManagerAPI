@@ -26,13 +26,6 @@ namespace ClinicManagerAPI.Services.User.Interfaces
         Task<UserDto> ChangePassword(int userId, ChangeUserPasswordDto userChangePasswordDto);
 
         /// <summary>
-        /// Retrieves the authenticated user's details from the HTTP context.
-        /// </summary>
-        /// <param name="httpContext">The HTTP context containing the user's claims.</param>
-        /// <returns>The authenticated user's ID, email, and role.</returns>
-        UserAuthenticatedDto GetAuthenticatedUser(HttpContext httpContext);
-
-        /// <summary>
         /// Retrieves a user by their ID.
         /// </summary>
         /// <param name="id"></param>
