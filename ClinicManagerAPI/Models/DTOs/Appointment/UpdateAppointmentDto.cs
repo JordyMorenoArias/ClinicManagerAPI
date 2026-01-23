@@ -6,9 +6,6 @@ namespace ClinicManagerAPI.Models.DTOs.Appointment
     public class UpdateAppointmentDto
     {
         [Required]
-        public int Id { get; set; }
-
-        [Required]
         public int PatientId { get; set; }
 
         [Required]

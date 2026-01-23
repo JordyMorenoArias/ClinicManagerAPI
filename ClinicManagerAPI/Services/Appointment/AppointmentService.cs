@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿ using AutoMapper;
+using ClinicManagerAPI.Constants;
 using ClinicManagerAPI.Models.DTOs.Appointment;
 using ClinicManagerAPI.Models.DTOs.Generic;
 using ClinicManagerAPI.Repositories.Interfaces;
@@ -80,6 +81,9 @@ namespace ClinicManagerAPI.Services.Appointment
             if (doctor == null)
                 throw new KeyNotFoundException($"Doctor with ID {appointmentDto.DoctorId} not found.");
 
+            if (doctor.Role != UserRole.doctor)
+                throw new KeyNotFoundException($"User with ID {appointmentDto.DoctorId} is not a doctor.");
+
             var appointmentEntity = _mapper.Map<Models.Entities.AppointmentEntity>(appointmentDto);
             appointmentEntity.CreatedById = requestId;
             var createdAppointment = await _appointmentRepository.AddAppointment(appointmentEntity);
@@ -89,16 +93,17 @@ namespace ClinicManagerAPI.Services.Appointment
         /// <summary>
         /// Updates an existing appointment.
         /// </summary>
+        /// <param name="id"></param>
         /// <param name="requestId"></param>
         /// <param name="appointmentDto"></param>
         /// <returns>The updated <see cref="AppointmentDto"/>.</returns>
         /// <exception cref="KeyNotFoundException"></exception>
-        public async Task<AppointmentDto> UpdateAppointment(int requestId, UpdateAppointmentDto appointmentDto)
+        public async Task<AppointmentDto> UpdateAppointment(int id, int requestId, UpdateAppointmentDto appointmentDto)
         {
-            var existingAppointment = await _appointmentRepository.GetAppointmentById(appointmentDto.Id);
+            var existingAppointment = await _appointmentRepository.GetAppointmentById(id);
 
             if (existingAppointment == null)
-                throw new KeyNotFoundException($"Appointment with ID {appointmentDto.Id} not found.");
+                throw new KeyNotFoundException($"Appointment with ID {id} not found.");
 
             if (existingAppointment.PatientId != appointmentDto.PatientId)
             {
@@ -114,6 +119,9 @@ namespace ClinicManagerAPI.Services.Appointment
 
                 if (doctor == null)
                     throw new KeyNotFoundException($"Doctor with ID {appointmentDto.DoctorId} not found.");
+
+                if (doctor.Role != UserRole.doctor)
+                    throw new KeyNotFoundException($"User with ID {appointmentDto.DoctorId} is not a doctor.");
             }
 
             _mapper.Map(appointmentDto, existingAppointment);

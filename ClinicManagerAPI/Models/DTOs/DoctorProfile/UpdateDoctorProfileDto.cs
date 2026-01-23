@@ -4,12 +4,6 @@ namespace ClinicManagerAPI.Models.DTOs.DoctorProfile
 {
     public class UpdateDoctorProfileDto
     {
-        [Key]
-        public int Id { get; set; }
-
-        [Required]
-        public int DoctorId { get; set; }
-
         [Required, MaxLength(100)]
         public string Specialty { get; set; } = string.Empty;
 

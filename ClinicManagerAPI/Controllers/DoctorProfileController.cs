@@ -15,17 +15,15 @@ namespace ClinicManagerAPI.Controllers
     public class DoctorProfileController : ControllerBase
     {
         private readonly IDoctorProfileService _doctorProfileService;
-        private readonly IUserService authService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DoctorProfileController"/> class.
         /// </summary>
         /// <param name="doctorProfileService"></param>
         /// <param name="authService"></param>
-        public DoctorProfileController(IDoctorProfileService doctorProfileService, IUserService authService)
+        public DoctorProfileController(IDoctorProfileService doctorProfileService)
         {
             this._doctorProfileService = doctorProfileService;
-            this.authService = authService;
         }
 
         /// <summary>
@@ -72,16 +70,16 @@ namespace ClinicManagerAPI.Controllers
         /// <returns> The updated doctor profile.</returns>
         [HttpPut("{id}")]
         [Authorize(Policy = "canManageDoctorProfiles")]
-        public async Task<IActionResult> UpdateDoctorProfile([FromBody] UpdateDoctorProfileDto updateDoctorProfileDto)
+        public async Task<IActionResult> UpdateDoctorProfile([FromRoute] int id, [FromBody] UpdateDoctorProfileDto updateDoctorProfileDto)
         {
-            var updatedDoctorProfile = await _doctorProfileService.UpdateDoctorProfile(updateDoctorProfileDto);
+            var updatedDoctorProfile = await _doctorProfileService.UpdateDoctorProfile(id, updateDoctorProfileDto);
             return Ok(updatedDoctorProfile);
         }
 
         /// <summary>
         /// Deletes a doctor profile by doctor ID.
         /// </summary>
-        /// <param name="doctorId"></param>
+        /// <param name="id"></param>
         /// <returns> A success message upon deletion.</returns>
         [HttpDelete("{id}")]
         [Authorize(Policy = "canManageDoctorProfiles")]

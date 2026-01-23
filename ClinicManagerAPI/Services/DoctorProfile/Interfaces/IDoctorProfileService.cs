@@ -41,8 +41,10 @@ namespace ClinicManagerAPI.Services.DoctorProfile.Interfaces
         /// <summary>
         /// Updates an existing doctor profile.
         /// </summary>
+        /// <param name="id"></param>
         /// <param name="updateDoctorProfileDto"></param>
         /// <returns> A task representing the asynchronous operation.</returns>
-        Task<DoctorProfileDto> UpdateDoctorProfile(UpdateDoctorProfileDto updateDoctorProfileDto);
+        /// <exception cref="KeyNotFoundException"></exception>
+        Task<DoctorProfileDto> UpdateDoctorProfile(int id, UpdateDoctorProfileDto updateDoctorProfileDto);
     }
 }

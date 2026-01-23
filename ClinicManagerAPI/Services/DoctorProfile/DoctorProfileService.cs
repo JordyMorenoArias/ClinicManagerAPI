@@ -60,10 +60,14 @@ namespace ClinicManagerAPI.Services.DoctorProfile
         /// </summary>
         /// <param name="addDoctorProfileDto"></param>
         /// <returns>> A task representing the asynchronous operation.</returns>
+        /// <exception cref="KeyNotFoundException"></exception>"
         /// <exception cref="UnauthorizedAccessException"></exception>
         public async Task<DoctorProfileDto> AddDoctorProfile(AddDoctorProfileDto addDoctorProfileDto)
         {
             var existingUser = await userService.GetUserById(addDoctorProfileDto.DoctorId);
+
+            if (existingUser == null)
+                throw new KeyNotFoundException($"User with ID {addDoctorProfileDto.DoctorId} not found.");
 
             if (existingUser.Role != UserRole.doctor)
                 throw new UnauthorizedAccessException("The specified user is not a doctor.");
@@ -76,15 +80,16 @@ namespace ClinicManagerAPI.Services.DoctorProfile
         /// <summary>
         /// Updates an existing doctor profile.
         /// </summary>
+        /// <param name="id"></param>
         /// <param name="updateDoctorProfileDto"></param>
         /// <returns> A task representing the asynchronous operation.</returns>
         /// <exception cref="KeyNotFoundException"></exception>
-        public async Task<DoctorProfileDto> UpdateDoctorProfile(UpdateDoctorProfileDto updateDoctorProfileDto)
+        public async Task<DoctorProfileDto> UpdateDoctorProfile(int id, UpdateDoctorProfileDto updateDoctorProfileDto)
         {
-            var existingEntity = await _doctorProfileRepository.GetDoctorProfileById(updateDoctorProfileDto.Id);
+            var existingEntity = await _doctorProfileRepository.GetDoctorProfileById(id);
 
             if (existingEntity == null)
-                throw new KeyNotFoundException($"Doctor profile with ID {updateDoctorProfileDto.DoctorId} not found.");
+                throw new KeyNotFoundException($"Doctor profile with ID {id} not found.");
 
             var updatedEntity = _mapper.Map(updateDoctorProfileDto, existingEntity);
             var resultEntity = await _doctorProfileRepository.UpdateDoctorProfile(updatedEntity);
@@ -94,15 +99,15 @@ namespace ClinicManagerAPI.Services.DoctorProfile
         /// <summary>
         /// Deletes a doctor profile by its unique identifier.
         /// </summary>
-        /// <param name="doctorId"></param>
+        /// <param name="id"></param>
         /// <returns> A task representing the asynchronous operation.</returns>
         /// <exception cref="KeyNotFoundException"></exception>
-        public async Task DeleteDoctorProfile(int doctorId)
+        public async Task DeleteDoctorProfile(int id)
         {
-            var existingEntity = await _doctorProfileRepository.GetDoctorProfileById(doctorId);
+            var existingEntity = await _doctorProfileRepository.GetDoctorProfileById(id);
 
             if (existingEntity == null)
-                throw new KeyNotFoundException($"Doctor profile with ID {doctorId} not found.");
+                throw new KeyNotFoundException($"Doctor profile with ID {id} not found.");
 
             await _doctorProfileRepository.DeleteDoctorProfile(existingEntity);
         }
