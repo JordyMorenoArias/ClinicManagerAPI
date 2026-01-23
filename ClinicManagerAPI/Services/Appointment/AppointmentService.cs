@@ -47,7 +47,7 @@ namespace ClinicManagerAPI.Services.Appointment
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns>A <see cref="PagedResult{AppointmentDto}"/> containing the paged list of appointments.</returns>
-        public async Task<PagedResult<AppointmentDto>> GetAppointments(QueryAppointmentParameters parameters)
+        public async Task<PagedResult<AppointmentDto>> GetAppointments(AppointmentQueryParameters parameters)
         {
             var appointments = await _appointmentRepository.GetAppointments(parameters);
 

@@ -116,7 +116,6 @@ namespace ClinicManagerAPI.Services.User
         /// <param name="userId"></param>
         /// <param name="userChangePasswordDto"></param>
         /// <returns> The updated <see cref="UserDto"/>.</returns>
-        /// <exception cref="UnauthorizedAccessException"></exception>
         /// <exception cref="KeyNotFoundException"></exception>
         public async Task<UserDto> ChangePassword(int userId, ChangeUserPasswordDto userChangePasswordDto)
         {

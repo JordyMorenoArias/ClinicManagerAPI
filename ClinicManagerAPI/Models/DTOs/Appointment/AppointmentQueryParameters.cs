@@ -2,7 +2,7 @@
 
 namespace ClinicManagerAPI.Models.DTOs.Appointment
 {
-    public class QueryAppointmentParameters
+    public class AppointmentQueryParameters
     {
         public int Page { get; set; } = 1;
 

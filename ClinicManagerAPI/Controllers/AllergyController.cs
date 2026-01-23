@@ -16,17 +16,14 @@ namespace ClinicManagerAPI.Controllers
     public class AllergyController : Controller
     {
         private readonly IAllergyService _allergyService;
-        private readonly IUserService _userService;
 
         /// <summary>
         /// Constructor for AllergyController.
         /// </summary>
         /// <param name="allergyService"></param>
-        /// <param name="userService"></param>
-        public AllergyController(IAllergyService allergyService, IUserService userService)
+        public AllergyController(IAllergyService allergyService)
         {
             this._allergyService = allergyService;
-            this._userService = userService;
         }
 
         /// <summary>

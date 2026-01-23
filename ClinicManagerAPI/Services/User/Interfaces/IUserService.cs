@@ -60,12 +60,11 @@ namespace ClinicManagerAPI.Services.User.Interfaces
         Task<PagedResult<UserDto>> GetUsers(UserRole role, QueryUserParameters parameters);
 
         /// <summary>
-        /// Updates the data of an existing user.
+        /// Updates a user's information.
         /// </summary>
-        /// <param name="userDto">The updated user data.</param>
-        /// <returns>The updated <see cref="UserDto"/>.</returns>
-        /// <exception cref="KeyNotFoundException">Thrown when the user is not found.</exception>
-        /// <exception cref="Exception">Thrown when the update operation fails.</exception>
-        Task<UserDto> UpdateUser(int userId, UserRole role, int id, UserUpdateDto userUpdateDto);
+        /// <param name="id"></param>
+        /// <param name="userUpdateDto"></param>
+        /// <returns> The updated <see cref="UserDto"/>.</returns>
+        Task<UserDto> UpdateUser(int id, UserUpdateDto userUpdateDto);
     }
 }

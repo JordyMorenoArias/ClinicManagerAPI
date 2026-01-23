@@ -42,7 +42,7 @@ namespace ClinicManagerAPI.Services.Report
         /// <returns>A <see cref="ReportSummaryDto"/> containing the report summary.</returns>
         public async Task<ReportSummaryDto> GenerateReportAsync(QueryReportParameters parameters)
         {
-            var appoinmentQuery = new QueryAppointmentParameters
+            var appoinmentQuery = new AppointmentQueryParameters
             {
                 StartDateFilter = parameters.StartDate,
                 EndDateFilter = parameters.EndDate,

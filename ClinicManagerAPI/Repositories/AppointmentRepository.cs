@@ -35,7 +35,7 @@ namespace ClinicManagerAPI.Repositories
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns>Paged result of appointment entities.</returns>
-        public async Task<PagedResult<AppointmentEntity>> GetAppointments(QueryAppointmentParameters parameters)
+        public async Task<PagedResult<AppointmentEntity>> GetAppointments(AppointmentQueryParameters parameters)
         {
             var query = _context.Appointments.AsQueryable();
 

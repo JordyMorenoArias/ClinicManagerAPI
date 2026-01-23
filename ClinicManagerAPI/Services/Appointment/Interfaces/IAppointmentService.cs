@@ -32,7 +32,7 @@ namespace ClinicManagerAPI.Services.Appointment.Interfaces
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns>A <see cref="PagedResult{AppointmentDto}"/> containing the paged list of appointments.</returns>
-        Task<PagedResult<AppointmentDto>> GetAppointments(QueryAppointmentParameters parameters);
+        Task<PagedResult<AppointmentDto>> GetAppointments(AppointmentQueryParameters parameters);
 
         /// <summary>
         /// Updates an existing appointment.
