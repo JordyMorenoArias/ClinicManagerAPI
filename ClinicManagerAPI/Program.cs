@@ -1,3 +1,5 @@
+using ClinicManagerAPI.Authorization.Handlers;
+using ClinicManagerAPI.Authorization.Requirements;
 using ClinicManagerAPI.AutoMapper;
 using ClinicManagerAPI.Constants;
 using ClinicManagerAPI.Data;
@@ -26,6 +28,7 @@ using ClinicManagerAPI.Services.Security.Interfaces;
 using ClinicManagerAPI.Services.User;
 using ClinicManagerAPI.Services.User.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -191,7 +194,21 @@ builder.Services.AddAuthorization(options =>
     {
         policy.RequireRole(Roles.AdminDoctorAndAssistant);
     });
+
+    options.AddPolicy("canManageReports", policy =>
+    {
+        policy.RequireRole(Roles.Admin);
+    });
+
+    options.AddPolicy("canUpdateUser", policy =>
+    {
+        policy.Requirements.Add(new UpdateUserRequirement());
+    });
+
 });
+
+builder.Services.AddScoped<IAuthorizationHandler, UpdateUserHandler>();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

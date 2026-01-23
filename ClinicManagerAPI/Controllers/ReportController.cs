@@ -1,5 +1,6 @@
 ﻿using ClinicManagerAPI.Models.DTOs.Report;
 using ClinicManagerAPI.Services.Report.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicManagerAPI.Controllers
@@ -9,6 +10,7 @@ namespace ClinicManagerAPI.Controllers
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class ReportController : ControllerBase
     {
         private readonly IReportService _reportService;
@@ -28,6 +30,7 @@ namespace ClinicManagerAPI.Controllers
         /// <param name="parameters"></param>
         /// <returns>A <see cref="ReportSummaryDto"/> containing the report summary.</returns>
         [HttpGet("summary")]
+        [Authorize(Policy = "canManageReports")]
         public async Task<IActionResult> GetReportSummary([FromQuery] QueryReportParameters parameters)
         {
             var reportSummary = await _reportService.GenerateReportAsync(parameters);
