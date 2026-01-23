@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ClinicManagerAPI.Models.DTOs.User
 {
-    public class UserRegisterDto
+    public class RegisterUserDto
     {
         [Required, MaxLength(100)]
         public string FullName { get; set; } = string.Empty;

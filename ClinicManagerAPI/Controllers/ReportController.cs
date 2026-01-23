@@ -31,7 +31,7 @@ namespace ClinicManagerAPI.Controllers
         /// <returns>A <see cref="ReportSummaryDto"/> containing the report summary.</returns>
         [HttpGet("summary")]
         [Authorize(Policy = "canManageReports")]
-        public async Task<IActionResult> GetReportSummary([FromQuery] QueryReportParameters parameters)
+        public async Task<IActionResult> GetReportSummary([FromQuery] ReportQueryParameters parameters)
         {
             var reportSummary = await _reportService.GenerateReportAsync(parameters);
             return Ok(reportSummary);

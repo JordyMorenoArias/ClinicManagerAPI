@@ -40,7 +40,7 @@ namespace ClinicManagerAPI.Services.Report
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns>A <see cref="ReportSummaryDto"/> containing the report summary.</returns>
-        public async Task<ReportSummaryDto> GenerateReportAsync(QueryReportParameters parameters)
+        public async Task<ReportSummaryDto> GenerateReportAsync(ReportQueryParameters parameters)
         {
             var appoinmentQuery = new AppointmentQueryParameters
             {

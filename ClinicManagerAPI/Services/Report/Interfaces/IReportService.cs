@@ -12,6 +12,6 @@ namespace ClinicManagerAPI.Services.Report.Interfaces
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns>A <see cref="ReportSummaryDto"/> containing the report summary.</returns>
-        Task<ReportSummaryDto> GenerateReportAsync(QueryReportParameters parameters);
+        Task<ReportSummaryDto> GenerateReportAsync(ReportQueryParameters parameters);
     }
 }
