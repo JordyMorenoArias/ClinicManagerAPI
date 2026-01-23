@@ -1,6 +1,8 @@
-﻿namespace ClinicManagerAPI.Models.DTOs.Patient
+﻿using ClinicManagerAPI.Constants;
+
+namespace ClinicManagerAPI.Models.DTOs.User
 {
-    public class QueryPatientParameters
+    public class UserQueryParameters
     {
         public int Page { get; set; } = 1;
 
@@ -10,7 +12,11 @@
 
         public DateTime? EndDateFilter { get; set; }
 
-        public DateTime? DateOfBirth { get; set; }
+        public bool? IsActive { get; set; }
+
+        public string? Role { get; set; }
+
+        public UserRole? UserRole { get; set; }
 
         public string? SearchTerm { get; set; }
     }

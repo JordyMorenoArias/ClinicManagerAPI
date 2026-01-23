@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ClinicManagerAPI.Models.DTOs.User
 {
-    public class UserUpdateDto
+    public class UpdateUserDto
     {
 
         [Required, MaxLength(100)]

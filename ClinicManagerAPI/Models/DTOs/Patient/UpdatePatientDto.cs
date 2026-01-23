@@ -4,9 +4,6 @@ namespace ClinicManagerAPI.Models.DTOs.Patient
 {
     public class UpdatePatientDto
     {
-        [Required]
-        public int Id { get; set; }
-
         [Required, MaxLength(100)]
         public string FullName { get; set; } = string.Empty;
 

@@ -52,7 +52,7 @@ namespace ClinicManagerAPI.Repositories.Interfaces
         /// A <see cref="PagedResult{UserEntity}"/> object containing the list of users that match the 
         /// query parameters, along with pagination metadata such as total items, current page, and page size.
         /// </returns>
-        Task<PagedResult<UserEntity>> GetUsers(QueryUserParameters parameters);
+        Task<PagedResult<UserEntity>> GetUsers(UserQueryParameters parameters);
 
         /// <summary>
         /// Updates an existing user's data in the data store.

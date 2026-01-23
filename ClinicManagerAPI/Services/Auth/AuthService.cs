@@ -49,7 +49,7 @@ namespace ClinicManagerAPI.Services.Auth
         /// <param name="password">User's password.</param>
         /// <returns>An authentication response containing a JWT token and user details.</returns>
         /// <exception cref="UnauthorizedAccessException">Thrown when the email or password is incorrect.</exception>
-        public async Task<AuthResultDto> Login(UserLoginDto loginDto)
+        public async Task<AuthResultDto> Login(LoginUserDto loginDto)
         {
             var user = await _userRepository.GetUserByUsername(loginDto.UserName);
 
@@ -72,7 +72,7 @@ namespace ClinicManagerAPI.Services.Auth
                 throw new UnauthorizedAccessException("Invalid username or password");
             }
 
-            var userTokenDto = _mapper.Map<UserGenerateTokenDto>(user);
+            var userTokenDto = _mapper.Map<GenerateUserTokenDto>(user);
             var expiry = DateTime.UtcNow.AddHours(1);
             var token = _jwtService.GenerateJwtToken(userTokenDto, expiry);
 
@@ -93,7 +93,7 @@ namespace ClinicManagerAPI.Services.Auth
         /// <param name="userRegister">The user register.</param>
         /// <returns>A task representing the asynchronous operation, with an <see cref="OperationResult"/> indicating the result of the registration process.</returns>
         /// <exception cref="InvalidOperationException">User with this email already exists</exception>
-        public async Task<OperationResult> Register(UserRegisterDto userRegister)
+        public async Task<OperationResult> Register(RegisterUserDto userRegister)
         {
             var user = await _userRepository.GetUserByUsername(userRegister.Username);
 

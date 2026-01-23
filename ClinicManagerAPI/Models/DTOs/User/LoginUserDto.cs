@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ClinicManagerAPI.Models.DTOs.User
 {
-    public class UserLoginDto
+    public class LoginUserDto
     {
         [Required(ErrorMessage = "UserName is required")]
         public string UserName { get; set; } = string.Empty;

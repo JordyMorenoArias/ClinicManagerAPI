@@ -1,6 +1,6 @@
 ﻿namespace ClinicManagerAPI.Models.DTOs.DoctorProfile
 {
-    public class QueryDoctorProfileParameters
+    public class DoctorProfileQueryParameters
     {
         public int Page { get; set; } = 1;
 

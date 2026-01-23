@@ -13,27 +13,24 @@ namespace ClinicManagerAPI.Services.PatientAllergy.Interfaces
         /// <summary>
         /// Add a new patient allergy.
         /// </summary>
-        /// <param name="requestRole"></param>
-        /// <param name="addDto"></param>
+        /// <param name="addPatientAllergyDto"></param>
         /// <returns> A task that represents the asynchronous operation. The task result contains the created PatientAllergyDto.</returns>
-        Task<PatientAllergyDto> AddPatientAllergy(UserRole requestRole, AddPatientAllergyDto addDto);
+        Task<PatientAllergyDto> AddPatientAllergy(AddPatientAllergyDto addPatientAllergyDto);
 
         /// <summary>
         /// Delete a patient allergy.
         /// </summary>
-        /// <param name="requestRole"></param>
         /// <param name="id"></param>
         /// <returns>An <see cref="OperationResult"/> indicating the result of the deletion.</returns>
-        /// <exception cref="UnauthorizedAccessException"></exception>
         /// <exception cref="KeyNotFoundException"></exception>
-        Task<OperationResult> DeletePatientAllergy(UserRole requestRole, int id);
+        Task<OperationResult> DeletePatientAllergy(int id);
 
         /// <summary>
         /// Get a paginated list of patient allergies based on query parameters.
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns> A task that represents the asynchronous operation. The task result contains the PagedResult of PatientAllergyDto.</returns>
-        Task<PagedResult<PatientAllergyDto>> GetPatientAllergies(QueryPatientAllergyParameters parameters);
+        Task<PagedResult<PatientAllergyDto>> GetPatientAllergies(PatientAllergyQueryParameters parameters);
 
         /// <summary>
         /// Get a patient allergy by its ID.
@@ -45,10 +42,10 @@ namespace ClinicManagerAPI.Services.PatientAllergy.Interfaces
         /// <summary>
         /// Update an existing patient allergy.
         /// </summary>
-        /// <param name="requestRole"></param>
         /// <param name="id"></param>
         /// <param name="updateDto"></param>
         /// <returns> A task that represents the asynchronous operation. The task result contains the updated PatientAllergyDto.</returns>
-        Task<PatientAllergyDto> UpdatePatientAllergy(UserRole requestRole, int id, UpdatePatientAllergyDto updateDto);
+        /// <exception cref="KeyNotFoundException"></exception>
+        Task<PatientAllergyDto> UpdatePatientAllergy(int id, UpdatePatientAllergyDto updateDto);
     }
 }

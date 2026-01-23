@@ -42,7 +42,7 @@ namespace ClinicManagerAPI.Services.DoctorProfile
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns> A <see cref="PagedResult{DoctorProfileDto}"/> containing the paged list of doctor profiles.</returns>
-        public async Task<PagedResult<DoctorProfileDto>> GetDoctorProfiles(QueryDoctorProfileParameters parameters)
+        public async Task<PagedResult<DoctorProfileDto>> GetDoctorProfiles(DoctorProfileQueryParameters parameters)
         {
             var pagedEntities = await _doctorProfileRepository.GetDoctorProfiles(parameters);
 
@@ -58,19 +58,16 @@ namespace ClinicManagerAPI.Services.DoctorProfile
         /// <summary>
         /// Adds a new doctor profile.
         /// </summary>
-        /// <param name="requesterRole"></param>
         /// <param name="addDoctorProfileDto"></param>
         /// <returns>> A task representing the asynchronous operation.</returns>
+        /// <exception cref="KeyNotFoundException"></exception>"
         /// <exception cref="UnauthorizedAccessException"></exception>
-        public async Task<DoctorProfileDto> AddDoctorProfile(UserRole requesterRole, AddDoctorProfileDto addDoctorProfileDto)
+        public async Task<DoctorProfileDto> AddDoctorProfile(AddDoctorProfileDto addDoctorProfileDto)
         {
-            if (requesterRole != UserRole.admin)
-                throw new UnauthorizedAccessException("Only admin users can add doctor profiles.");
-
             var existingUser = await userService.GetUserById(addDoctorProfileDto.DoctorId);
 
-            if (existingUser.Role != UserRole.doctor)
-                throw new UnauthorizedAccessException("The specified user is not a doctor.");
+            if (existingUser == null)
+                throw new KeyNotFoundException($"User with ID {addDoctorProfileDto.DoctorId} not found.");
 
             if (existingUser.Role != UserRole.doctor)
                 throw new UnauthorizedAccessException("The specified user is not a doctor.");
@@ -83,20 +80,16 @@ namespace ClinicManagerAPI.Services.DoctorProfile
         /// <summary>
         /// Updates an existing doctor profile.
         /// </summary>
-        /// <param name="requesterRole"></param>
+        /// <param name="id"></param>
         /// <param name="updateDoctorProfileDto"></param>
         /// <returns> A task representing the asynchronous operation.</returns>
-        /// <exception cref="UnauthorizedAccessException"></exception>
         /// <exception cref="KeyNotFoundException"></exception>
-        public async Task<DoctorProfileDto> UpdateDoctorProfile(UserRole requesterRole, UpdateDoctorProfileDto updateDoctorProfileDto)
+        public async Task<DoctorProfileDto> UpdateDoctorProfile(int id, UpdateDoctorProfileDto updateDoctorProfileDto)
         {
-            if (requesterRole != UserRole.admin)
-                throw new UnauthorizedAccessException("Only admin users can update doctor profiles.");
-
-            var existingEntity = await _doctorProfileRepository.GetDoctorProfileById(updateDoctorProfileDto.Id);
+            var existingEntity = await _doctorProfileRepository.GetDoctorProfileById(id);
 
             if (existingEntity == null)
-                throw new KeyNotFoundException($"Doctor profile with ID {updateDoctorProfileDto.DoctorId} not found.");
+                throw new KeyNotFoundException($"Doctor profile with ID {id} not found.");
 
             var updatedEntity = _mapper.Map(updateDoctorProfileDto, existingEntity);
             var resultEntity = await _doctorProfileRepository.UpdateDoctorProfile(updatedEntity);
@@ -106,20 +99,15 @@ namespace ClinicManagerAPI.Services.DoctorProfile
         /// <summary>
         /// Deletes a doctor profile by its unique identifier.
         /// </summary>
-        /// <param name="requesterRole"></param>
-        /// <param name="doctorId"></param>
+        /// <param name="id"></param>
         /// <returns> A task representing the asynchronous operation.</returns>
-        /// <exception cref="UnauthorizedAccessException"></exception>
         /// <exception cref="KeyNotFoundException"></exception>
-        public async Task DeleteDoctorProfile(UserRole requesterRole, int doctorId)
+        public async Task DeleteDoctorProfile(int id)
         {
-            if (requesterRole != UserRole.admin)
-                throw new UnauthorizedAccessException("Only admin users can delete doctor profiles.");
-
-            var existingEntity = await _doctorProfileRepository.GetDoctorProfileById(doctorId);
+            var existingEntity = await _doctorProfileRepository.GetDoctorProfileById(id);
 
             if (existingEntity == null)
-                throw new KeyNotFoundException($"Doctor profile with ID {doctorId} not found.");
+                throw new KeyNotFoundException($"Doctor profile with ID {id} not found.");
 
             await _doctorProfileRepository.DeleteDoctorProfile(existingEntity);
         }

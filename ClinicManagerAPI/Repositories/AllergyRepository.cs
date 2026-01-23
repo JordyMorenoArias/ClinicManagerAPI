@@ -34,7 +34,7 @@ namespace ClinicManagerAPI.Repositories
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns> A paginated result of allergy entities.</returns>
-        public async Task<PagedResult<AllergyEntity>> GetAllergies(QueryAllergyParameters parameters)
+        public async Task<PagedResult<AllergyEntity>> GetAllergies(AllergyQueryParameters parameters)
         {
             var query = _context.Allergies.AsQueryable();
 

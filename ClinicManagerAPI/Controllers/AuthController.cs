@@ -29,7 +29,7 @@ namespace ClinicManagerAPI.Controllers
         /// <returns>JWT and user info if successful.</returns>
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody] UserLoginDto UserLogin)
+        public async Task<IActionResult> Login([FromBody] LoginUserDto UserLogin)
         {
             var result = await _authService.Login(UserLogin);
 
@@ -54,7 +54,7 @@ namespace ClinicManagerAPI.Controllers
         /// <returns>Status message indicating success or failure.</returns>
         [HttpPost("register")]
         [Authorize(Roles = Roles.Admin)]
-        public async Task<IActionResult> Register([FromBody] UserRegisterDto userRegister)
+        public async Task<IActionResult> Register([FromBody] RegisterUserDto userRegister)
         {
             var result = await _authService.Register(userRegister);
             return Ok(result);

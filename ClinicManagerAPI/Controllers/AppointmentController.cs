@@ -16,12 +16,10 @@ namespace ClinicManagerAPI.Controllers
     public class AppointmentController : Controller
     {
         private readonly IAppointmentService _appointmentService;
-        private readonly IUserService _userService;
 
-        public AppointmentController(IAppointmentService appointmentService, IUserService userService)
+        public AppointmentController(IAppointmentService appointmentService)
         {
             this._appointmentService = appointmentService;
-            this._userService = userService;
         }
 
         /// <summary>
@@ -48,7 +46,7 @@ namespace ClinicManagerAPI.Controllers
         /// that match the specified query parameters.
         /// </returns>
         [HttpGet]
-        public async Task<IActionResult> GetAppointments([FromQuery] QueryAppointmentParameters parameters)
+        public async Task<IActionResult> GetAppointments([FromQuery] AppointmentQueryParameters parameters)
         {
             var appointments = await _appointmentService.GetAppointments(parameters);
             return Ok(appointments);
@@ -66,8 +64,8 @@ namespace ClinicManagerAPI.Controllers
         [Authorize(Policy = "canManageAppointments")]
         public async Task<IActionResult> AddAppointment([FromBody] AddAppointmentDto newAppointment)
         {
-            var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);
-            var createdAppointment = await _appointmentService.AddAppointment(userAuthenticated.Id, newAppointment);
+            var requestId = int.Parse(HttpContext.User.FindFirst("id")!.Value);
+            var createdAppointment = await _appointmentService.AddAppointment(requestId, newAppointment);
             return CreatedAtAction(nameof(GetAppointmentById), new { id = createdAppointment.Id }, createdAppointment);
         }
 
@@ -81,10 +79,10 @@ namespace ClinicManagerAPI.Controllers
         /// </returns>
         [HttpPut("{id}")]
         [Authorize(Policy = "canManageAppointments")]
-        public async Task<IActionResult> UpdateAppointment([FromBody] UpdateAppointmentDto updatedAppointment)
+        public async Task<IActionResult> UpdateAppointment([FromRoute] int id, [FromBody] UpdateAppointmentDto updatedAppointment)
         {
-            var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);
-            var appointment = await _appointmentService.UpdateAppointment(userAuthenticated.Id, updatedAppointment);
+            var requestId = int.Parse(HttpContext.User.FindFirst("id")!.Value);
+            var appointment = await _appointmentService.UpdateAppointment(id, requestId, updatedAppointment);
             return Ok(appointment);
         }
 
@@ -100,7 +98,6 @@ namespace ClinicManagerAPI.Controllers
         [Authorize(Policy = "canManageAppointments")]
         public async Task<IActionResult> DeleteAppointment([FromRoute] int id)
         {
-            var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);
             var result = await _appointmentService.DeleteAppointment(id);
             return Ok(result);
         }

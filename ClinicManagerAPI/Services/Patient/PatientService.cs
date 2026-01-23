@@ -58,7 +58,7 @@ namespace ClinicManagerAPI.Services.Patient
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns>A <see cref="PagedResult{PatientDto}"/> containing the paged list of patients.</returns>
-        public async Task<PagedResult<PatientDto>> GetPatients(QueryPatientParameters parameters)
+        public async Task<PagedResult<PatientDto>> GetPatients(PatientQueryParameters parameters)
         {
             var pagedPatients = await _patientRepository.GetPatients(parameters);
 
@@ -96,15 +96,16 @@ namespace ClinicManagerAPI.Services.Patient
         /// <summary>
         /// Updates an existing patient's information.
         /// </summary>
+        /// <param name="id"></param>
         /// <param name="updatePatientDto"></param>
         /// <returns>A <see cref="PatientDto"/> representing the updated patient.</returns>
         /// <exception cref="KeyNotFoundException"></exception>
-        public async Task<PatientDto> UpdatePatient(UpdatePatientDto updatePatientDto)
+        public async Task<PatientDto> UpdatePatient(int id, UpdatePatientDto updatePatientDto)
         {
-            var existingPatient = await _patientRepository.GetPatientById(updatePatientDto.Id);
+            var existingPatient = await _patientRepository.GetPatientById(id);
 
             if (existingPatient == null)
-                throw new KeyNotFoundException($"Patient with ID {updatePatientDto.Id} not found.");
+                throw new KeyNotFoundException($"Patient with ID {id} not found.");
 
             _mapper.Map(updatePatientDto, existingPatient);
             var updatedPatient = await _patientRepository.UpdatePatient(existingPatient);

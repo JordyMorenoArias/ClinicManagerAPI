@@ -28,7 +28,6 @@ namespace ClinicManagerAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserById([FromRoute] int id)
         {
-            var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);
             var user = await _userService.GetUserById(id);
             return Ok(user);
         }
@@ -38,10 +37,9 @@ namespace ClinicManagerAPI.Controllers
         /// </summary>
         /// <returns>A list of all users.</returns>
         [HttpGet]
-        public async Task<IActionResult> GetUsers([FromQuery] QueryUserParameters parameters)
+        public async Task<IActionResult> GetUsers([FromQuery] UserQueryParameters parameters)
         {
-            var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);
-            var users = await _userService.GetUsers(userAuthenticated.Role, parameters);
+            var users = await _userService.GetUsers(parameters);
             return Ok(users);
         }
 
@@ -52,13 +50,11 @@ namespace ClinicManagerAPI.Controllers
         /// <returns>The updated user data.</returns>
         [HttpPut("{id}")]
         [Authorize(Policy = "canUpdateUser")]
-        public async Task<IActionResult> UpdateUser([FromRoute] int id, [FromBody] UserUpdateDto userUpdateDto)
+        public async Task<IActionResult> UpdateUser([FromRoute] int id, [FromBody] UpdateUserDto userUpdateDto)
         {
-            var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);
-            var user = await _userService.UpdateUser(userAuthenticated.Id, userAuthenticated.Role, id, userUpdateDto);
+            var user = await _userService.UpdateUser(id, userUpdateDto);
             return Ok(user);
         }
-
 
         /// <summary>
         /// Changes the authenticated user's password.
@@ -91,8 +87,7 @@ namespace ClinicManagerAPI.Controllers
         [Authorize(Roles = Roles.Admin)]
         public async Task<IActionResult> DeleteUser([FromRoute] int id)
         {
-            var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);
-            await _userService.DeleteUser(userAuthenticated.Role, id);
+            await _userService.DeleteUser(id);
             return Ok("User deleted successfully.");
         }
     }

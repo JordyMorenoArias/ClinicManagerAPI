@@ -60,7 +60,7 @@ namespace ClinicManagerAPI.Controllers
         /// Returns an empty list if no patients match the specified filters.
         /// </returns>
         [HttpGet]
-        public async Task<IActionResult> GetPatientsPagedAsync([FromQuery] QueryPatientParameters parameters)
+        public async Task<IActionResult> GetPatientsPagedAsync([FromQuery] PatientQueryParameters parameters)
         {
             var patients = await _patientService.GetPatients(parameters);
             return Ok(patients);
@@ -92,9 +92,9 @@ namespace ClinicManagerAPI.Controllers
         /// </returns>
         [HttpPut("{id}")]
         [Authorize(Policy = "canManagePatients")]
-        public async Task<IActionResult> UpdatePatient([FromBody] UpdatePatientDto updatePatientDto)
+        public async Task<IActionResult> UpdatePatient([FromRoute] int id, [FromBody] UpdatePatientDto updatePatientDto)
         {
-            var patient = await _patientService.UpdatePatient(updatePatientDto);
+            var patient = await _patientService.UpdatePatient(id, updatePatientDto);
             return Ok(patient);
         }
     }
