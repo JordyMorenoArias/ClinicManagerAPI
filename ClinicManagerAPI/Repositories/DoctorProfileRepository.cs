@@ -38,7 +38,7 @@ namespace ClinicManagerAPI.Repositories
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns> A <see cref="PagedResult{DoctorProfileEntity}"/> containing the paged list of doctor profiles.</returns>
-        public async Task<PagedResult<DoctorProfileEntity>> GetDoctorProfiles(QueryDoctorProfileParameters parameters)
+        public async Task<PagedResult<DoctorProfileEntity>> GetDoctorProfiles(DoctorProfileQueryParameters parameters)
         {
             var query = context.DoctorProfiles.AsQueryable();
 

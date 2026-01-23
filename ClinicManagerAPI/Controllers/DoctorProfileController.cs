@@ -31,12 +31,12 @@ namespace ClinicManagerAPI.Controllers
         /// <summary>
         /// Retrieves a doctor profile by the doctor's unique identifier.
         /// </summary>
-        /// <param name="doctorId"></param>
+        /// <param name="id"></param>
         /// <returns> A <see cref="DoctorProfileDto"/> object representing the doctor profile with the specified ID.</returns>
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetDoctorProfileById([FromRoute] int doctorId)
+        public async Task<IActionResult> GetDoctorProfileById([FromRoute] int id)
         {
-            var doctorProfile = await _doctorProfileService.GetDoctorProfileById(doctorId);
+            var doctorProfile = await _doctorProfileService.GetDoctorProfileById(id);
             return Ok(doctorProfile);
         }
         
@@ -46,7 +46,7 @@ namespace ClinicManagerAPI.Controllers
         /// <param name="parameters"></param>
         /// <returns> A <see cref="PagedResult{DoctorProfileDto}"/> containing the paged list of doctor profiles.</returns>
         [HttpGet]
-        public async Task<IActionResult> GetDoctorProfiles([FromQuery] QueryDoctorProfileParameters parameters)
+        public async Task<IActionResult> GetDoctorProfiles([FromQuery] DoctorProfileQueryParameters parameters)
         {
             var pagedDoctorProfiles = await _doctorProfileService.GetDoctorProfiles(parameters);
             return Ok(pagedDoctorProfiles);
@@ -61,8 +61,7 @@ namespace ClinicManagerAPI.Controllers
         [Authorize(Policy = "canManageDoctorProfiles")]
         public async Task<IActionResult> AddDoctorProfile([FromBody] AddDoctorProfileDto addDoctorProfileDto)
         {
-            var userAuthenticated = authService.GetAuthenticatedUser(HttpContext);
-            var createdDoctorProfile = await _doctorProfileService.AddDoctorProfile(userAuthenticated.Role, addDoctorProfileDto);
+            var createdDoctorProfile = await _doctorProfileService.AddDoctorProfile(addDoctorProfileDto);
             return Ok(createdDoctorProfile);
         }
 
@@ -75,8 +74,7 @@ namespace ClinicManagerAPI.Controllers
         [Authorize(Policy = "canManageDoctorProfiles")]
         public async Task<IActionResult> UpdateDoctorProfile([FromBody] UpdateDoctorProfileDto updateDoctorProfileDto)
         {
-            var userAuthenticated = authService.GetAuthenticatedUser(HttpContext);
-            var updatedDoctorProfile = await _doctorProfileService.UpdateDoctorProfile(userAuthenticated.Role, updateDoctorProfileDto);
+            var updatedDoctorProfile = await _doctorProfileService.UpdateDoctorProfile(updateDoctorProfileDto);
             return Ok(updatedDoctorProfile);
         }
 
@@ -89,8 +87,7 @@ namespace ClinicManagerAPI.Controllers
         [Authorize(Policy = "canManageDoctorProfiles")]
         public async Task<IActionResult> DeleteDoctorProfile([FromRoute] int id)
         {
-            var userAuthenticated = authService.GetAuthenticatedUser(HttpContext);
-            await _doctorProfileService.DeleteDoctorProfile(userAuthenticated.Role, id);
+            await _doctorProfileService.DeleteDoctorProfile(id);
             return Ok("Doctor profile deleted successfully.");
         }
     }
