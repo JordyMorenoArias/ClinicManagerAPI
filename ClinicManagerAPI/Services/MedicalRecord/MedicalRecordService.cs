@@ -81,36 +81,25 @@ namespace ClinicManagerAPI.Services.MedicalRecord
         /// <summary>
         /// Updates an existing medical record.
         /// </summary>
+        /// <param name="requestId"></param>
         /// <param name="id"></param>
         /// <param name="medicalRecordDto"></param>
         /// <returns>The updated <see cref="MedicalRecordDto"/>.</returns>
         /// <exception cref="KeyNotFoundException"></exception>
-        public async Task<MedicalRecordDto> UpdateMedicalRecord(int id, UpdateMedicalRecordDto medicalRecordDto)
+        /// <exception cref="UnauthorizedAccessException"></exception>"
+        public async Task<MedicalRecordDto> UpdateMedicalRecord(int requestId, int id, UpdateMedicalRecordDto medicalRecordDto)
         {
             var existingRecord = await _medicalRecordRepository.GetMedicalRecordById(id);
 
             if (existingRecord == null)
                 throw new KeyNotFoundException($"Medical record with ID {id} not found.");
 
+            if (existingRecord.DoctorId != requestId)
+                throw new UnauthorizedAccessException("You are not authorized to update this medical record.");
+
             _mapper.Map(medicalRecordDto, existingRecord);
             await _medicalRecordRepository.UpdateMedicalRecord(existingRecord);
             return _mapper.Map<MedicalRecordDto>(existingRecord);
-        }
-
-        /// <summary>
-        /// Deletes a medical record.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns>A task representing the asynchronous operation.</returns>
-        /// <exception cref="KeyNotFoundException"></exception>
-        public async Task DeleteMedicalRecord(int id)
-        {
-            var existingMedicalRecord = await _medicalRecordRepository.GetMedicalRecordById(id);
-
-            if (existingMedicalRecord == null)
-                throw new KeyNotFoundException($"Medical record with ID {id} not found.");
-
-            await _medicalRecordRepository.DeleteMedicalRecord(existingMedicalRecord);
         }
     }
 }

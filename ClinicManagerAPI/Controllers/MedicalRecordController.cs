@@ -69,21 +69,9 @@ namespace ClinicManagerAPI.Controllers
         [Authorize(Policy = "canManageMedicalRecord")]
         public async Task<IActionResult> UpdateMedicalRecord([FromRoute] int id, [FromBody] UpdateMedicalRecordDto medicalRecordDto)
         {
-            var medicalRecord = await _medicalRecordService.UpdateMedicalRecord(id, medicalRecordDto);
+            var requestId = int.Parse(HttpContext.User.FindFirst("id")!.Value);
+            var medicalRecord = await _medicalRecordService.UpdateMedicalRecord(requestId, id, medicalRecordDto);
             return Ok(medicalRecord);
-        }
-
-        /// <summary>
-        /// Deletes a medical record by its ID.
-        /// </summary>
-        /// <param name="id">The unique identifier of the medical record to delete.</param>
-        /// <returns>Returns an <see cref="IActionResult"/> indicating success or failure of the deletion operation.</returns>
-        [HttpDelete("{id}")]
-        [Authorize(Policy = "canManageMedicalRecord")]
-        public async Task<IActionResult> DeleteMedicalRecord([FromRoute] int id)
-        {
-            await _medicalRecordService.DeleteMedicalRecord(id);
-            return Ok(new { Message = "Medical record deleted successfully." });
         }
     }
 }

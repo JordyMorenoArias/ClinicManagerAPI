@@ -19,14 +19,6 @@ namespace ClinicManagerAPI.Services.MedicalRecord.Interfaces
         Task<MedicalRecordDto> AddMedicalRecord(int requestId, AddMedicalRecordDto medicalRecordDto);
 
         /// <summary>
-        /// Deletes a medical record.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns>A task representing the asynchronous operation.</returns>
-        /// <exception cref="KeyNotFoundException"></exception>
-        Task DeleteMedicalRecord(int id);
-
-        /// <summary>
         /// Retrieves a medical record by its unique identifier.
         /// </summary>
         /// <param name="id"></param>
@@ -43,10 +35,12 @@ namespace ClinicManagerAPI.Services.MedicalRecord.Interfaces
         /// <summary>
         /// Updates an existing medical record.
         /// </summary>
+        /// <param name="requestId"></param>
         /// <param name="id"></param>
         /// <param name="medicalRecordDto"></param>
         /// <returns>The updated <see cref="MedicalRecordDto"/>.</returns>
         /// <exception cref="KeyNotFoundException"></exception>
-        Task<MedicalRecordDto> UpdateMedicalRecord(int id, UpdateMedicalRecordDto medicalRecordDto);
+        /// <exception cref="UnauthorizedAccessException"></exception>"
+        Task<MedicalRecordDto> UpdateMedicalRecord(int requestId, int id, UpdateMedicalRecordDto medicalRecordDto);
     }
 }
