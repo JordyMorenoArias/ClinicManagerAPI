@@ -63,7 +63,7 @@ namespace ClinicManagerAPI.Controllers
         /// <returns> The user data after password change.</returns>
         [HttpPut("{id}/change-password")]
         [Authorize(Policy = "canUpdateUser")]
-        public async Task<IActionResult> ChangePassword([FromBody] int id, [FromBody] ChangeUserPasswordDto userChangePasswordDto)
+        public async Task<IActionResult> ChangePassword([FromRoute] int id, [FromBody] ChangeUserPasswordDto userChangePasswordDto)
         {
             var user = await _userService.ChangePassword(id, userChangePasswordDto);
             return Ok(user);
