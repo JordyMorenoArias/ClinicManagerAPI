@@ -3,7 +3,6 @@ using ClinicManagerAPI.Models.DTOs.Appointment;
 using ClinicManagerAPI.Models.DTOs.DoctorProfile;
 using ClinicManagerAPI.Models.DTOs.MedicalRecord;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClinicManagerAPI.Models.DTOs.User
 {
@@ -29,7 +28,6 @@ namespace ClinicManagerAPI.Models.DTOs.User
         public bool IsActive { get; set; }
 
         public DateTime CreatedAt { get; set; }
-
 
         public ICollection<AppointmentDto> CreatedAppointments { get; set; } = new List<AppointmentDto>();
 

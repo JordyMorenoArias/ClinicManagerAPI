@@ -219,7 +219,10 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
     });
 
-var permittedOrigins = builder.Configuration.GetValue<string>("PermittedOrigins")!.Split(";");
+var permittedOrigins = builder.Configuration
+    .GetValue<string>("PermittedOrigins")!
+    .Split(";", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
 
 builder.Services.AddCors(options =>
 {
@@ -250,6 +253,8 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseCors();
+
 app.UseAuthentication();
 
 app.UseAuthorization();
@@ -257,7 +262,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.UseMiddleware<ErrorHandlerMiddleware>();
-
-app.UseCors();
 
 app.Run();
