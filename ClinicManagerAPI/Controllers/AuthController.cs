@@ -3,6 +3,7 @@ using ClinicManagerAPI.Models.DTOs.User;
 using ClinicManagerAPI.Services.Auth.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace ClinicManagerAPI.Controllers
 {
@@ -37,7 +38,7 @@ namespace ClinicManagerAPI.Controllers
             {
                 HttpOnly = true,
                 Secure = true,
-                SameSite = SameSiteMode.Strict,
+                SameSite = SameSiteMode.None,
                 Expires = result.Expires
             });
 
@@ -58,6 +59,30 @@ namespace ClinicManagerAPI.Controllers
         {
             var result = await _authService.Register(userRegister);
             return Ok(result);
+        }
+
+        /// <summary>
+        /// Logs out the current user by deleting the authentication cookie.
+        /// </summary>
+        /// <returns> Status message indicating successful logout.</returns>
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            Response.Cookies.Delete("access_token", new CookieOptions
+            {
+                Secure = true,
+                SameSite = SameSiteMode.None,
+            });
+            return Ok(new { message = "Logged out successfully" });
+        }
+
+        [HttpGet("me")]
+        public IActionResult Me()
+        {
+            return Ok(new
+            {
+                userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+            });
         }
     }
 }

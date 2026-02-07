@@ -64,7 +64,7 @@ namespace ClinicManagerAPI.Controllers
         [Authorize(Policy = "canManageAppointments")]
         public async Task<IActionResult> AddAppointment([FromBody] AddAppointmentDto newAppointment)
         {
-            var requestId = int.Parse(HttpContext.User.FindFirst("id")!.Value);
+            var requestId = int.Parse(HttpContext.User.FindFirst("Id")!.Value);
             var createdAppointment = await _appointmentService.AddAppointment(requestId, newAppointment);
             return CreatedAtAction(nameof(GetAppointmentById), new { id = createdAppointment.Id }, createdAppointment);
         }
