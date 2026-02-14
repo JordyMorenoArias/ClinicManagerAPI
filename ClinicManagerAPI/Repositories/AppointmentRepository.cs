@@ -37,13 +37,13 @@ namespace ClinicManagerAPI.Repositories
         /// <returns>Paged result of appointment entities.</returns>
         public async Task<PagedResult<AppointmentEntity>> GetAppointments(AppointmentQueryParameters parameters)
         {
-            var query = _context.Appointments.AsQueryable();
+            var query = _context.Appointments.AsNoTracking().AsQueryable();
 
             if (parameters.StartDateFilter.HasValue)
-                query = query.Where(a => a.AppointmentDate >= parameters.StartDateFilter.Value);
+                query = query.Where(a => a.Date >= parameters.StartDateFilter.Value);
 
             if (parameters.EndDateFilter.HasValue)
-                query = query.Where(a => a.AppointmentDate <= parameters.EndDateFilter.Value);
+                query = query.Where(a => a.Date <= parameters.EndDateFilter.Value);
 
             if (parameters.DoctorId.HasValue)
                 query = query.Where(a => a.DoctorId == parameters.DoctorId.Value);
@@ -56,8 +56,8 @@ namespace ClinicManagerAPI.Repositories
 
             query = parameters.SortBy switch
             {
-                AppointmentSortBy.AppointmentDateAsc => query.OrderBy(a => a.AppointmentDate),
-                AppointmentSortBy.AppointmentDateDesc => query.OrderByDescending(a => a.AppointmentDate),
+                AppointmentSortBy.AppointmentDateAsc => query.OrderBy(a => a.Date),
+                AppointmentSortBy.AppointmentDateDesc => query.OrderByDescending(a => a.Date),
                 AppointmentSortBy.CreatedAtAsc => query.OrderBy(a => a.CreatedAt),
                 AppointmentSortBy.CreatedAtDesc => query.OrderByDescending(a => a.CreatedAt),
                 _ => query
@@ -67,8 +67,37 @@ namespace ClinicManagerAPI.Repositories
             var items = await query
                 .Skip((parameters.Page - 1) * parameters.PageSize)
                 .Take(parameters.PageSize)
-                .Include(a => a.Patient)
-                .Include(a => a.Doctor)
+                .Select(a => new AppointmentEntity
+                {
+                    Id = a.Id,
+                    PatientId = a.PatientId,
+                    Patient = new PatientEntity
+                    {
+                        Id = a.Patient.Id,
+                        FullName = a.Patient.FullName,
+                        Identification = a.Patient.Identification,
+                        Phone = a.Patient.Phone,
+                        Email = a.Patient.Email,
+                        Address = a.Patient.Address,
+                        DateOfBirth = a.Patient.DateOfBirth,
+                        CreatedAt = a.Patient.CreatedAt
+                    },
+                    DoctorId = a.DoctorId,
+                    Doctor = new UserEntity
+                    {
+                        Id = a.Doctor.Id,
+                        FullName = a.Doctor.FullName,
+                        Username = a.Doctor.Username,
+                        Email = a.Doctor.Email,
+                        PhoneNumber = a.Doctor.PhoneNumber,
+                        Role = a.Doctor.Role,       
+                        CreatedAt = a.Doctor.CreatedAt
+                    },
+                    Date = a.Date,
+                    Reason = a.Reason,
+                    Status = a.Status,
+                    CreatedAt = a.CreatedAt
+                })
                 .ToListAsync();
 
             return new PagedResult<AppointmentEntity>
