@@ -18,7 +18,7 @@ namespace ClinicManagerAPI.Models.Entities
         public AllergyEntity? Allergy { get; set; }
 
         public SeverityAllergy Severity { get; set; } = SeverityAllergy.Mild;
-        public DateTime DiagnosedAt { get; set; } = DateTime.UtcNow;
+        public DateTimeOffset DiagnosedAt { get; set; } = DateTimeOffset.UtcNow;
         public string Notes { get; set; } = string.Empty;
     }
 }

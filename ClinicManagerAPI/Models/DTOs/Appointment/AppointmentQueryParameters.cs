@@ -8,9 +8,9 @@ namespace ClinicManagerAPI.Models.DTOs.Appointment
 
         public int PageSize { get; set; } = 10;
 
-        public DateTime? StartDateFilter { get; set; }
+        public DateTimeOffset? StartDateFilter { get; set; }
 
-        public DateTime? EndDateFilter { get; set; }
+        public DateTimeOffset? EndDateFilter { get; set; }
 
         public int? DoctorId { get; set; }
 

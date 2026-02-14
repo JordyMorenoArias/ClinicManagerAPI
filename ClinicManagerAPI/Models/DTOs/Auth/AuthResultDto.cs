@@ -8,7 +8,7 @@ namespace ClinicManagerAPI.Models.DTOs.Auth
 
         public string? RefreshToken { get; set; }
 
-        public DateTime Expires { get; set; }
+        public DateTimeOffset Expires { get; set; }
 
         public UserDto? User { get; set; }
     }

@@ -115,7 +115,7 @@ namespace ClinicManagerAPI.Services.Report
                 .ToList();
 
             var timeSlotStats = appointments.Items
-                .GroupBy(a => a.AppointmentDate.Hour)
+                .GroupBy(a => a.Date.Hour)
                 .Select(g => new TimeSlotReportDto
                 {
                     TimeRange = $"{g.Key:00}:00 - {g.Key + 1:00}:00",

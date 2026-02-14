@@ -12,7 +12,7 @@ namespace ClinicManagerAPI.Models.DTOs.Appointment
         public int DoctorId { get; set; }
 
         [Required]
-        public DateTime AppointmentDate { get; set; }
+        public DateTimeOffset AppointmentDate { get; set; }
 
         [MaxLength(300)]
         public string Reason { get; set; } = string.Empty;

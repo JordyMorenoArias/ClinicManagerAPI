@@ -20,6 +20,6 @@ namespace ClinicManagerAPI.Models.DTOs.Patient
         public string Address { get; set; } = string.Empty;
 
         [Required]
-        public DateTime DateOfBirth { get; set; }
+        public DateTimeOffset DateOfBirth { get; set; }
     }
 }

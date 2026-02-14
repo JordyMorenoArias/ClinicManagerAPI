@@ -22,9 +22,9 @@ namespace ClinicManagerAPI.Models.Entities
         [MaxLength(200)]
         public string Address { get; set; } = string.Empty;
 
-        public DateTime DateOfBirth { get; set; }
+        public DateTimeOffset DateOfBirth { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 
         public ICollection<AppointmentEntity> Appointments { get; set; } = new List<AppointmentEntity>();
         public ICollection<MedicalRecordEntity> MedicalRecords { get; set; } = new List<MedicalRecordEntity>();

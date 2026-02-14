@@ -25,9 +25,9 @@ namespace ClinicManagerAPI.Models.DTOs.Patient
         [MaxLength(200)]
         public string Address { get; set; } = string.Empty;
 
-        public DateTime DateOfBirth { get; set; }
+        public DateTimeOffset DateOfBirth { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 
         public ICollection<AppointmentDto> Appointments { get; set; } = new List<AppointmentDto>();
         public ICollection<MedicalRecordDto> MedicalRecords { get; set; } = new List<MedicalRecordDto>();

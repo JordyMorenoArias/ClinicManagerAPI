@@ -27,7 +27,7 @@ namespace ClinicManagerAPI.Models.DTOs.User
 
         public bool IsActive { get; set; }
 
-        public DateTime CreatedAt { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
 
         public ICollection<AppointmentDto> CreatedAppointments { get; set; } = new List<AppointmentDto>();
 
