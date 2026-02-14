@@ -26,13 +26,13 @@ namespace ClinicManagerAPI.Controllers
         /// <summary>
         /// Authenticates a user and returns a token.
         /// </summary>
-        /// <param name="UserLogin">Login credentials.</param>
+        /// <param name="userLogin">Login credentials.</param>
         /// <returns>JWT and user info if successful.</returns>
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody] LoginUserDto UserLogin)
+        public async Task<IActionResult> Login([FromBody] LoginUserDto userLogin)
         {
-            var result = await _authService.Login(UserLogin);
+            var result = await _authService.Login(userLogin);
 
             Response.Cookies.Append("access_token", result.Token, new CookieOptions
             {
@@ -66,13 +66,14 @@ namespace ClinicManagerAPI.Controllers
         /// </summary>
         /// <returns> Status message indicating successful logout.</returns>
         [HttpPost("logout")]
-        public async Task<IActionResult> Logout()
+        public IActionResult Logout()
         {
             Response.Cookies.Delete("access_token", new CookieOptions
             {
                 Secure = true,
                 SameSite = SameSiteMode.None,
             });
+
             return Ok(new { message = "Logged out successfully" });
         }
 
