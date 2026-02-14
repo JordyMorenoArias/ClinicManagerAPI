@@ -2,15 +2,15 @@
 
 namespace ClinicManagerAPI.Models.DTOs.User
 {
-    public class QueryUserParameters
+    public class UserQueryParameters
     {
         public int Page { get; set; } = 1;
 
         public int PageSize { get; set; } = 10;
 
-        public DateTime? StartDateFilter { get; set; }
+        public DateTimeOffset? StartDateFilter { get; set; }
 
-        public DateTime? EndDateFilter { get; set; }
+        public DateTimeOffset? EndDateFilter { get; set; }
 
         public bool? IsActive { get; set; }
 

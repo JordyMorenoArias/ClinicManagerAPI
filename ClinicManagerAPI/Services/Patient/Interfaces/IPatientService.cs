@@ -31,13 +31,15 @@ namespace ClinicManagerAPI.Services.Patient.Interfaces
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns>A <see cref="PagedResult{PatientDto}"/> containing the paged list of patients.</returns>
-        Task<PagedResult<PatientDto>> GetPatients(QueryPatientParameters parameters);
+        Task<PagedResult<PatientDto>> GetPatients(PatientQueryParameters parameters);
 
         /// <summary>
         /// Updates an existing patient's information.
         /// </summary>
+        /// <param name="id"></param>
         /// <param name="updatePatientDto"></param>
         /// <returns>A <see cref="PatientDto"/> representing the updated patient.</returns>
-        Task<PatientDto> UpdatePatient(UpdatePatientDto updatePatientDto);
+        /// <exception cref="KeyNotFoundException"></exception>
+        Task<PatientDto> UpdatePatient(int id, UpdatePatientDto updatePatientDto);
     }
 }

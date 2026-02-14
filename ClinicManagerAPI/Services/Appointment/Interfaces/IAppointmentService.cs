@@ -32,14 +32,16 @@ namespace ClinicManagerAPI.Services.Appointment.Interfaces
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns>A <see cref="PagedResult{AppointmentDto}"/> containing the paged list of appointments.</returns>
-        Task<PagedResult<AppointmentDto>> GetAppointments(QueryAppointmentParameters parameters);
+        Task<PagedResult<AppointmentDto>> GetAppointments(AppointmentQueryParameters parameters);
 
         /// <summary>
         /// Updates an existing appointment.
         /// </summary>
+        /// <param name="id"></param>
         /// <param name="requestId"></param>
         /// <param name="appointmentDto"></param>
         /// <returns>The updated <see cref="AppointmentDto"/>.</returns>
-        Task<AppointmentDto> UpdateAppointment(int requestId, UpdateAppointmentDto appointmentDto);
+        /// <exception cref="KeyNotFoundException"></exception>
+        Task<AppointmentDto> UpdateAppointment(int id, int requestId, UpdateAppointmentDto appointmentDto);
     }
 }

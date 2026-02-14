@@ -10,31 +10,20 @@ namespace ClinicManagerAPI.Services.User.Interfaces
     public interface IUserService
     {
         /// <summary>
-        /// Changes a user's password. Only accessible by admin users.
+        /// Assigns a new role to a user.
         /// </summary>
-        /// <param name="requesterRole"></param>
+        /// <param name="userId"></param>
+        /// <param name="newRole"></param>
+        /// <returns> The updated <see cref="UserDto"/>.</returns>
+        Task<UserDto> ChangeUserRole(int userId, ChangeUserRoleDto newRole);
+
+        /// <summary>
+        /// Changes a user's password.
+        /// </summary>
+        /// <param name="userId"></param>
         /// <param name="userChangePasswordDto"></param>
         /// <returns> The updated <see cref="UserDto"/>.</returns>
-        /// <exception cref="UnauthorizedAccessException"></exception>
-        /// <exception cref="KeyNotFoundException"></exception>
-        Task<UserDto> ChangePassword(UserRole requesterRole, UserChangePasswordDto userChangePasswordDto);
-
-        /// <summary>
-        /// Deletes a user by their ID. Only accessible by admin users.
-        /// </summary>
-        /// <param name="requesterRole"></param>
-        /// <param name="id"></param>
-        /// <returns><c>true</c> if deletion was successful; otherwise, <c>false</c>.</returns>
-        /// <exception cref="UnauthorizedAccessException"></exception>
-        /// <exception cref="KeyNotFoundException"></exception>
-        Task<bool> DeleteUser(UserRole requesterRole, int id);
-
-        /// <summary>
-        /// Retrieves the authenticated user's details from the HTTP context.
-        /// </summary>
-        /// <param name="httpContext">The HTTP context containing the user's claims.</param>
-        /// <returns>The authenticated user's ID, email, and role.</returns>
-        UserAuthenticatedDto GetAuthenticatedUser(HttpContext httpContext);
+        Task<UserDto> ChangePassword(int userId, ChangeUserPasswordDto userChangePasswordDto);
 
         /// <summary>
         /// Retrieves a user by their ID.
@@ -45,21 +34,28 @@ namespace ClinicManagerAPI.Services.User.Interfaces
         Task<UserDto> GetUserById(int id);
 
         /// <summary>
-        /// Gets a paginated list of users. Only accessible by admin users.
+        /// Updates a user's information.
         /// </summary>
-        /// <param name="role">The role of the current user. Must be Admin to access this method.</param>
-        /// <param name="parameters">The parameters used to filter and paginate the user list.</param>
-        /// <returns>A paged result containing user data as <see cref="UserDto"/> objects.</returns>
-        /// <exception cref="System.UnauthorizedAccessException">Thrown when the role is not Admin.</exception>
-        Task<PagedResult<UserDto>> GetUsers(UserRole role, QueryUserParameters parameters);
+        /// <param name="id"></param>
+        /// <param name="userUpdateDto"></param>
+        /// <returns> The updated <see cref="UserDto"/>.</returns>
+        Task<UserDto> UpdateUser(int id, UpdateUserDto userUpdateDto);
 
         /// <summary>
-        /// Updates the data of an existing user.
+        /// Delete a patient allergy.
         /// </summary>
-        /// <param name="userDto">The updated user data.</param>
-        /// <returns>The updated <see cref="UserDto"/>.</returns>
-        /// <exception cref="KeyNotFoundException">Thrown when the user is not found.</exception>
-        /// <exception cref="Exception">Thrown when the update operation fails.</exception>
-        Task<UserDto> UpdateUser(int userId, UserRole role, UserUpdateDto userUpdateDto);
+        /// <param name="id"></param>
+        /// <returns>An <see cref="OperationResult"/> indicating the result of the deletion.</returns>
+        /// <exception cref="KeyNotFoundException"></exception>
+        Task<PagedResult<UserDto>> GetUsers(UserQueryParameters parameters);
+
+        /// <summary>
+        /// Deletes a user by their ID. Only accessible by admin users.
+        /// </summary>
+        /// <param name="requesterRole"></param>
+        /// <param name="id"></param>
+        /// <returns><c>true</c> if deletion was successful; otherwise, <c>false</c>.</returns>
+        /// <exception cref="KeyNotFoundException"></exception>
+        Task<bool> DeleteUser(int id);
     }
 }

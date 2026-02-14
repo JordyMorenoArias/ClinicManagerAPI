@@ -35,7 +35,7 @@ namespace ClinicManagerAPI.Repositories.Interfaces
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns> A <see cref="PagedResult{DoctorProfileEntity}"/> containing the paged list of doctor profiles.</returns>
-        Task<PagedResult<DoctorProfileEntity>> GetDoctorProfiles(QueryDoctorProfileParameters parameters);
+        Task<PagedResult<DoctorProfileEntity>> GetDoctorProfiles(DoctorProfileQueryParameters parameters);
 
         /// <summary>
         /// Updates an existing doctor profile in the database.

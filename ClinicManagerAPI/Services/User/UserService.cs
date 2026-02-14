@@ -27,31 +27,6 @@ namespace ClinicManagerAPI.Services.User
         }
 
         /// <summary>
-        /// Retrieves the authenticated user's details from the HTTP context.
-        /// </summary>
-        /// <param name="httpContext">The HTTP context containing the user's claims.</param>
-        /// <returns>The authenticated user's ID, email, and role.</returns>
-        /// <exception cref="UnauthorizedAccessException">
-        /// Thrown when required claims are missing or invalid.
-        /// </exception>
-        public UserAuthenticatedDto GetAuthenticatedUser(HttpContext httpContext)
-        {
-            var userIdClaim = httpContext.User.FindFirst("Id")?.Value;
-            var userEmailClaim = httpContext.User.FindFirst("Email")?.Value;
-            var userRoleClaim = httpContext.User.FindFirst("Role")?.Value;
-
-            if (string.IsNullOrEmpty(userIdClaim) || string.IsNullOrEmpty(userEmailClaim) || string.IsNullOrEmpty(userRoleClaim))
-                throw new UnauthorizedAccessException("Invalid token or unauthorized access.");
-
-            return new UserAuthenticatedDto
-            {
-                Id = int.Parse(userIdClaim),
-                Email = userEmailClaim,
-                Role = Enum.Parse<UserRole>(userRoleClaim)
-            };
-        }
-
-        /// <summary>
         /// Retrieves a user by their ID.
         /// </summary>
         /// <param name="id"></param>
@@ -71,16 +46,12 @@ namespace ClinicManagerAPI.Services.User
         /// <summary>
         /// Gets a paginated list of users. Only accessible by admin users.
         /// </summary>
-        /// <param name="requesterRole">The role of the current user. Must be Admin to access this method.</param>
         /// <param name="parameters">The parameters used to filter and paginate the user list.</param>
         /// <returns>A paged result containing user data as <see cref="UserDto"/> objects.</returns>
-        /// <exception cref="System.UnauthorizedAccessException">Thrown when the role is not Admin.</exception>
-        public async Task<PagedResult<UserDto>> GetUsers(UserRole requesterRole, QueryUserParameters parameters)
+        public async Task<PagedResult<UserDto>> GetUsers(UserQueryParameters parameters)
         {
             var users = await _userRepository.GetUsers(parameters);
-
             var userDtos = _mapper.Map<List<UserDto>>(users.Items);
-
             return new PagedResult<UserDto>
             {
                 Items = userDtos,
@@ -96,25 +67,12 @@ namespace ClinicManagerAPI.Services.User
         /// <param name="userDto">The updated user data.</param>
         /// <returns>The updated <see cref="UserDto"/>.</returns>
         /// <exception cref="KeyNotFoundException">Thrown when the user is not found.</exception>
-        /// <exception cref="Exception">Thrown when the update operation fails.</exception>
-        public async Task<UserDto> UpdateUser(int requestId, UserRole requesterRole, UserUpdateDto userUpdateDto)
+        public async Task<UserDto> UpdateUser(int id, UpdateUserDto userUpdateDto)
         {
-            var user = await _userRepository.GetUserById(userUpdateDto.Id);
+            var user = await _userRepository.GetUserById(id);
 
             if (user == null)
                 throw new KeyNotFoundException("User not found.");
-
-            bool isUpdatingSelf = requestId == user.Id;
-            bool isAdmin = requesterRole == UserRole.admin;
-
-            if (!isAdmin && !isUpdatingSelf)
-                throw new UnauthorizedAccessException("You can only update your own account.");
-
-            if (!isAdmin && user.Role != userUpdateDto.Role)
-                throw new UnauthorizedAccessException("You cannot change your role.");
-
-            if (!isAdmin && user.IsActive != userUpdateDto.IsActive)
-                throw new UnauthorizedAccessException("You cannot change your active status.");
 
             _mapper.Map(userUpdateDto, user);
 
@@ -125,17 +83,13 @@ namespace ClinicManagerAPI.Services.User
         /// <summary>
         /// Changes a user's password. Only accessible by admin users.
         /// </summary>
-        /// <param name="requesterRole"></param>
+        /// <param name="userId"></param>
         /// <param name="userChangePasswordDto"></param>
         /// <returns> The updated <see cref="UserDto"/>.</returns>
-        /// <exception cref="UnauthorizedAccessException"></exception>
         /// <exception cref="KeyNotFoundException"></exception>
-        public async Task<UserDto> ChangePassword(UserRole requesterRole, UserChangePasswordDto userChangePasswordDto)
+        public async Task<UserDto> ChangePassword(int userId, ChangeUserPasswordDto userChangePasswordDto)
         {
-            if (requesterRole != UserRole.admin)
-                throw new UnauthorizedAccessException("Only admins can change user passwords.");
-
-            var user = await _userRepository.GetUserById(userChangePasswordDto.UserId);
+            var user = await _userRepository.GetUserById(userId);
 
             if (user == null)
                 throw new KeyNotFoundException("User not found.");
@@ -146,18 +100,33 @@ namespace ClinicManagerAPI.Services.User
         }
 
         /// <summary>
+        /// Assigns a new role to a user. Only accessible by admin users.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="newRole"></param>
+        /// <returns> The updated <see cref="UserDto"/>.</returns>
+        /// <exception cref="KeyNotFoundException"></exception>
+        public async Task<UserDto> ChangeUserRole(int userId, ChangeUserRoleDto newRole)
+        {
+            var user = await _userRepository.GetUserById(userId);
+
+            if (user == null)
+                throw new KeyNotFoundException("User not found.");
+
+            user.Role = newRole.Role;
+            var userUpdated = await _userRepository.UpdateUser(user);
+            return _mapper.Map<UserDto>(userUpdated);
+        }
+
+        /// <summary>
         /// Deletes a user by their ID. Only accessible by admin users.
         /// </summary>
         /// <param name="requesterRole"></param>
         /// <param name="id"></param>
         /// <returns><c>true</c> if deletion was successful; otherwise, <c>false</c>.</returns>
-        /// <exception cref="UnauthorizedAccessException"></exception>
         /// <exception cref="KeyNotFoundException"></exception>
-        public async Task<bool> DeleteUser(UserRole requesterRole, int id)
+        public async Task<bool> DeleteUser(int id)
         {
-            if (requesterRole != UserRole.admin)
-                throw new UnauthorizedAccessException("Only admins can delete users.");
-
             var user = await _userRepository.GetUserById(id);
 
             if (user == null)

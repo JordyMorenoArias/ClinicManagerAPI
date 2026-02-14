@@ -35,7 +35,7 @@ namespace ClinicManagerAPI.Repositories.Interfaces
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns>Paged result of appointment entities.</returns>
-        Task<PagedResult<AppointmentEntity>> GetAppointments(QueryAppointmentParameters parameters);
+        Task<PagedResult<AppointmentEntity>> GetAppointments(AppointmentQueryParameters parameters);
 
         /// <summary>
         /// Updates an existing appointment.

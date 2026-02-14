@@ -13,19 +13,10 @@ namespace ClinicManagerAPI.Services.MedicalRecord.Interfaces
         /// Adds a new medical record.
         /// </summary>
         /// <param name="requestId"></param>
-        /// <param name="requestRole"></param>
         /// <param name="medicalRecordDto"></param>
         /// <returns>The added <see cref="MedicalRecordDto"/>.</returns>
-        Task<MedicalRecordDto> AddMedicalRecord(int requestId, UserRole requestRole, AddMedicalRecordDto medicalRecordDto);
-
-        /// <summary>
-        /// Deletes a medical record.
-        /// </summary>
-        /// <param name="requestId"></param>
-        /// <param name="requestRole"></param>
-        /// <param name="medicalRecordId"></param>
-        /// <returns>A task representing the asynchronous operation.</returns>
-        Task DeleteMedicalRecord(int requestId, UserRole requestRole, int medicalRecordId);
+        /// <exception cref="KeyNotFoundException"></exception>"
+        Task<MedicalRecordDto> AddMedicalRecord(int requestId, AddMedicalRecordDto medicalRecordDto);
 
         /// <summary>
         /// Retrieves a medical record by its unique identifier.
@@ -39,15 +30,17 @@ namespace ClinicManagerAPI.Services.MedicalRecord.Interfaces
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns>A <see cref="PagedResult{MedicalRecordDto}"/> containing the paged list of medical records.</returns>
-        Task<PagedResult<MedicalRecordDto>> GetMedicalRecords(QueryMedicalRecordParameters parameters);
+        Task<PagedResult<MedicalRecordDto>> GetMedicalRecords(MedicalRecordQueryParameters parameters);
 
         /// <summary>
         /// Updates an existing medical record.
         /// </summary>
         /// <param name="requestId"></param>
-        /// <param name="requestRole"></param>
+        /// <param name="id"></param>
         /// <param name="medicalRecordDto"></param>
         /// <returns>The updated <see cref="MedicalRecordDto"/>.</returns>
-        Task<MedicalRecordDto> UpdateMedicalRecord(int requestId, UserRole requestRole, UpdateMedicalRecordDto medicalRecordDto);
+        /// <exception cref="KeyNotFoundException"></exception>
+        /// <exception cref="UnauthorizedAccessException"></exception>"
+        Task<MedicalRecordDto> UpdateMedicalRecord(int requestId, int id, UpdateMedicalRecordDto medicalRecordDto);
     }
 }

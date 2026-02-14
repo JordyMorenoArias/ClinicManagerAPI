@@ -1,6 +1,6 @@
 ﻿namespace ClinicManagerAPI.Models.DTOs.PatientAllergy
 {
-    public class QueryPatientAllergyParameters
+    public class PatientAllergyQueryParameters
     {
         public int Page { get; set; } = 1;
 

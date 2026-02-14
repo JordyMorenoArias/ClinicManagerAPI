@@ -26,7 +26,7 @@ namespace ClinicManagerAPI.Models.Entities
         public UserEntity Doctor { get; set; } = null!;
 
         [Required]
-        public DateTime AppointmentDate { get; set; }
+        public DateTimeOffset Date { get; set; }
 
         [MaxLength(300)]
         public string Reason { get; set; } = string.Empty;
@@ -34,6 +34,6 @@ namespace ClinicManagerAPI.Models.Entities
         [MaxLength(50)]
         public AppointmentStatus Status { get; set; } = AppointmentStatus.Pending;
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
     }
 }

@@ -29,7 +29,7 @@ namespace ClinicManagerAPI.Repositories.Interfaces
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns> A paginated result of allergy entities.</returns>
-        Task<PagedResult<AllergyEntity>> GetAllergies(QueryAllergyParameters parameters);
+        Task<PagedResult<AllergyEntity>> GetAllergies(AllergyQueryParameters parameters);
 
         /// <summary>
         /// Get an allergy by its ID.

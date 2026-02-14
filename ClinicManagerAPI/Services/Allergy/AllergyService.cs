@@ -43,7 +43,7 @@ namespace ClinicManagerAPI.Services.Allergy
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns> a task that represents the asynchronous operation. The task result contains the PagedResult of AllergyDto.</returns>
-        public async Task<PagedResult<AllergyDto>> GetAllergies(QueryAllergyParameters parameters)
+        public async Task<PagedResult<AllergyDto>> GetAllergies(AllergyQueryParameters parameters)
         {
             var pagedAllergies = await _allergyRepository.GetAllergies(parameters);
             var mappedAllergies = _mapper.Map<IEnumerable<AllergyDto>>(pagedAllergies.Items);
@@ -59,15 +59,11 @@ namespace ClinicManagerAPI.Services.Allergy
         /// <summary>
         /// Create a new allergy.
         /// </summary>
-        /// <param name="requestRole"></param>
         /// <param name="createAllergyDto"></param>
         /// <returns> a task that represents the asynchronous operation. The task result contains the created AllergyDto.</returns>
         /// <exception cref="UnauthorizedAccessException"></exception>
-        public async Task<AllergyDto> CreateAllergy(UserRole requestRole, CreateAllergyDto createAllergyDto)
+        public async Task<AllergyDto> CreateAllergy(CreateAllergyDto createAllergyDto)
         {
-            if (requestRole != UserRole.doctor && requestRole != UserRole.admin)
-                throw new UnauthorizedAccessException("Only doctors and admins can create allergies.");
-
             var allergyEntity = _mapper.Map<AllergyEntity>(createAllergyDto);
             var createdAllergy = await _allergyRepository.CreateAllergy(allergyEntity);
             return _mapper.Map<AllergyDto>(createdAllergy);
@@ -76,17 +72,13 @@ namespace ClinicManagerAPI.Services.Allergy
         /// <summary>
         /// Update an existing allergy.
         /// </summary>
-        /// <param name="requestRole"></param>
         /// <param name="id"></param>
         /// <param name="updateAllergyDto"></param>
         /// <returns> a task that represents the asynchronous operation. The task result contains the updated AllergyDto.</returns>
         /// <exception cref="UnauthorizedAccessException"></exception>
         /// <exception cref="KeyNotFoundException"></exception>
-        public async Task<AllergyDto> UpdateAllergy(UserRole requestRole, int id, UpdateAllergyDto updateAllergyDto)
+        public async Task<AllergyDto> UpdateAllergy(int id, UpdateAllergyDto updateAllergyDto)
         {
-            if (requestRole != UserRole.doctor && requestRole != UserRole.admin)
-                throw new UnauthorizedAccessException("Only doctors and admins can update allergies.");
-
             var existingAllergy = await _allergyRepository.GetAllergyById(id);
 
             if (existingAllergy == null)
@@ -100,16 +92,12 @@ namespace ClinicManagerAPI.Services.Allergy
         /// <summary>
         /// Delete an allergy.
         /// </summary>
-        /// <param name="requestRole"></param>
         /// <param name="id"></param>
         /// <returns>An <see cref="OperationResult"/> indicating the result of the deletion.</returns>
         /// <exception cref="UnauthorizedAccessException"></exception>
         /// <exception cref="KeyNotFoundException"></exception>
-        public async Task<OperationResult> DeleteAllergy(UserRole requestRole, int id)
+        public async Task<OperationResult> DeleteAllergy(int id)
         {
-            if (requestRole != UserRole.admin)
-                throw new UnauthorizedAccessException("Only admins can delete allergies.");
-
             var existingAllergy = await _allergyRepository.GetAllergyById(id);
 
             if (existingAllergy == null)

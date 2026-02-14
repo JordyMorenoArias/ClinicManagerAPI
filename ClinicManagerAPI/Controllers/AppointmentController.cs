@@ -1,8 +1,8 @@
 ﻿using ClinicManagerAPI.Constants;
-using ClinicManagerAPI.Filters;
 using ClinicManagerAPI.Models.DTOs.Appointment;
 using ClinicManagerAPI.Services.Appointment.Interfaces;
 using ClinicManagerAPI.Services.User.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicManagerAPI.Controllers
@@ -12,30 +12,28 @@ namespace ClinicManagerAPI.Controllers
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
-    [AuthorizeRole(UserRole.admin, UserRole.doctor, UserRole.assistant)]
+    [Authorize]
     public class AppointmentController : Controller
     {
         private readonly IAppointmentService _appointmentService;
-        private readonly IUserService _userService;
 
-        public AppointmentController(IAppointmentService appointmentService, IUserService userService)
+        public AppointmentController(IAppointmentService appointmentService)
         {
             this._appointmentService = appointmentService;
-            this._userService = userService;
         }
 
         /// <summary>
         /// Retrieves an appointment by its unique identifier.
         /// </summary>
-        /// <param name="appointmentId">The ID of the appointment to retrieve.</param>
+        /// <param name="id">The ID of the appointment to retrieve.</param>
         /// <returns>
         /// Returns an <see cref="IActionResult"/> containing the appointment details 
         /// if found, or a 404 Not Found response if the appointment does not exist.
         /// </returns>
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAppointmentById(int appointmentId)
+        public async Task<IActionResult> GetAppointmentById([FromRoute] int id)
         {
-            var appointment = await _appointmentService.GetAppointmentById(appointmentId);
+            var appointment = await _appointmentService.GetAppointmentById(id);
             return Ok(appointment);
         }
 
@@ -48,7 +46,7 @@ namespace ClinicManagerAPI.Controllers
         /// that match the specified query parameters.
         /// </returns>
         [HttpGet]
-        public async Task<IActionResult> GetAppointments([FromQuery] QueryAppointmentParameters parameters)
+        public async Task<IActionResult> GetAppointments([FromQuery] AppointmentQueryParameters parameters)
         {
             var appointments = await _appointmentService.GetAppointments(parameters);
             return Ok(appointments);
@@ -63,10 +61,11 @@ namespace ClinicManagerAPI.Controllers
         /// and a 201 Created HTTP status code.
         /// </returns>
         [HttpPost]
+        [Authorize(Policy = "canManageAppointments")]
         public async Task<IActionResult> AddAppointment([FromBody] AddAppointmentDto newAppointment)
         {
-            var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);
-            var createdAppointment = await _appointmentService.AddAppointment(userAuthenticated.Id, newAppointment);
+            var requestId = int.Parse(HttpContext.User.FindFirst("Id")!.Value);
+            var createdAppointment = await _appointmentService.AddAppointment(requestId, newAppointment);
             return CreatedAtAction(nameof(GetAppointmentById), new { id = createdAppointment.Id }, createdAppointment);
         }
 
@@ -79,26 +78,27 @@ namespace ClinicManagerAPI.Controllers
         /// if the operation succeeds, or a 404 Not Found response if the appointment does not exist.
         /// </returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAppointment([FromBody] UpdateAppointmentDto updatedAppointment)
+        [Authorize(Policy = "canManageAppointments")]
+        public async Task<IActionResult> UpdateAppointment([FromRoute] int id, [FromBody] UpdateAppointmentDto updatedAppointment)
         {
-            var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);
-            var appointment = await _appointmentService.UpdateAppointment(userAuthenticated.Id, updatedAppointment);
+            var requestId = int.Parse(HttpContext.User.FindFirst("id")!.Value);
+            var appointment = await _appointmentService.UpdateAppointment(id, requestId, updatedAppointment);
             return Ok(appointment);
         }
 
         /// <summary>
         /// Deletes an appointment by its unique identifier.
         /// </summary>
-        /// <param name="appointmentId">The ID of the appointment to delete.</param>
+        /// <param name="id">The ID of the appointment to delete.</param>
         /// <returns>
         /// Returns an <see cref="IActionResult"/> indicating the result of the delete operation, 
         /// typically a 200 OK response with a confirmation message.
         /// </returns>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAppointment([FromQuery] int appointmentId)
+        [Authorize(Policy = "canManageAppointments")]
+        public async Task<IActionResult> DeleteAppointment([FromRoute] int id)
         {
-            var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);
-            var result = await _appointmentService.DeleteAppointment(appointmentId);
+            var result = await _appointmentService.DeleteAppointment(id);
             return Ok(result);
         }
     }

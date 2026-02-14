@@ -28,7 +28,7 @@ namespace ClinicManagerAPI.Repositories.Interfaces
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns> A paginated result of PatientAllergy entities </returns>
-        Task<PagedResult<PatientAllergyEntity>> GetPatientAllergies(QueryPatientAllergyParameters parameters);
+        Task<PagedResult<PatientAllergyEntity>> GetPatientAllergies(PatientAllergyQueryParameters parameters);
 
         /// <summary>
         /// Get a PatientAllergy by its ID

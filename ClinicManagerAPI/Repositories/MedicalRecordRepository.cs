@@ -35,7 +35,7 @@ namespace ClinicManagerAPI.Repositories
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns>A <see cref="PagedResult{MedicalRecordEntity}"/> containing the paged list of medical records.</returns>
-        public async Task<PagedResult<MedicalRecordEntity>> GetMedicalRecords(QueryMedicalRecordParameters parameters)
+        public async Task<PagedResult<MedicalRecordEntity>> GetMedicalRecords(MedicalRecordQueryParameters parameters)
         {
             var query = _context.MedicalRecords.AsNoTracking();
 

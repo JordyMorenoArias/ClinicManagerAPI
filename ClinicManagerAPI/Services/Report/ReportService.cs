@@ -40,9 +40,9 @@ namespace ClinicManagerAPI.Services.Report
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns>A <see cref="ReportSummaryDto"/> containing the report summary.</returns>
-        public async Task<ReportSummaryDto> GenerateReportAsync(QueryReportParameters parameters)
+        public async Task<ReportSummaryDto> GenerateReportAsync(ReportQueryParameters parameters)
         {
-            var appoinmentQuery = new QueryAppointmentParameters
+            var appoinmentQuery = new AppointmentQueryParameters
             {
                 StartDateFilter = parameters.StartDate,
                 EndDateFilter = parameters.EndDate,
@@ -51,7 +51,7 @@ namespace ClinicManagerAPI.Services.Report
 
             var appointments = await _appointmentService.GetAppointments(appoinmentQuery);
 
-            var patientQuery = new QueryPatientParameters
+            var patientQuery = new PatientQueryParameters
             {
                 StartDateFilter = parameters.StartDate,
                 EndDateFilter = parameters.EndDate,
@@ -60,7 +60,7 @@ namespace ClinicManagerAPI.Services.Report
 
             var patients = await _patientService.GetPatients(patientQuery);
 
-            var userQuery = new Models.DTOs.User.QueryUserParameters
+            var userQuery = new Models.DTOs.User.UserQueryParameters
             {
                 StartDateFilter = parameters.StartDate,
                 EndDateFilter = parameters.EndDate,
@@ -115,7 +115,7 @@ namespace ClinicManagerAPI.Services.Report
                 .ToList();
 
             var timeSlotStats = appointments.Items
-                .GroupBy(a => a.AppointmentDate.Hour)
+                .GroupBy(a => a.Date.Hour)
                 .Select(g => new TimeSlotReportDto
                 {
                     TimeRange = $"{g.Key:00}:00 - {g.Key + 1:00}:00",

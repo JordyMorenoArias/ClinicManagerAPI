@@ -21,7 +21,7 @@ namespace ClinicManagerAPI.Models.DTOs.DoctorProfile
 
         public string? LicenseNumber { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 
         public UserDto Doctor { get; set; } = null!;
     }

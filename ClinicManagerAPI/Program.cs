@@ -1,4 +1,7 @@
+using ClinicManagerAPI.Authorization.Handlers;
+using ClinicManagerAPI.Authorization.Requirements;
 using ClinicManagerAPI.AutoMapper;
+using ClinicManagerAPI.Constants;
 using ClinicManagerAPI.Data;
 using ClinicManagerAPI.Middlewares;
 using ClinicManagerAPI.Models.Entities;
@@ -25,6 +28,7 @@ using ClinicManagerAPI.Services.Security.Interfaces;
 using ClinicManagerAPI.Services.User;
 using ClinicManagerAPI.Services.User.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -69,7 +73,33 @@ builder.Services.AddScoped<IPasswordHasher<UserEntity>, PasswordHasher<UserEntit
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Description = "Enter your JWT in the format: Bearer {token}"
+    });
+
+    c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 
 // JWT Authentication
 var jwtKey = builder.Configuration["JWT:KEY"];
@@ -109,6 +139,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 
     options.Events = new JwtBearerEvents
     {
+        OnMessageReceived = context =>
+        {
+            // Retrieve token from cookie
+            if (context.Request.Cookies.ContainsKey("access_token"))
+            {
+                context.Token = context.Request.Cookies["access_token"];
+            }
+            return Task.CompletedTask;
+        },
         OnAuthenticationFailed = context =>
         {
             var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
@@ -124,6 +163,53 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("canManageAllergies", policy =>
+    {
+        policy.RequireRole(Roles.AdminAndDoctor);
+    });
+
+    options.AddPolicy("canManageAppointments", policy =>
+    {
+        policy.RequireRole(Roles.AdminDoctorAndAssistant);
+    });
+
+    options.AddPolicy("canManageDoctorProfiles", policy =>
+    {
+        policy.RequireRole(Roles.Admin);
+    });
+
+    options.AddPolicy("canManageMedicalRecord", policy =>
+    {
+        policy.RequireRole(Roles.Doctor);
+    });
+
+    options.AddPolicy("canManagePatientAllergies", policy =>
+    {
+        policy.RequireRole(Roles.Doctor);
+    });
+
+    options.AddPolicy("canManagePatients", policy =>
+    {
+        policy.RequireRole(Roles.AdminDoctorAndAssistant);
+    });
+
+    options.AddPolicy("canManageReports", policy =>
+    {
+        policy.RequireRole(Roles.Admin);
+    });
+
+    options.AddPolicy("canUpdateUser", policy =>
+    {
+        policy.Requirements.Add(new UpdateUserRequirement());
+    });
+
+});
+
+builder.Services.AddScoped<IAuthorizationHandler, UpdateUserHandler>();
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -132,6 +218,22 @@ builder.Services.AddControllers()
     {
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
     });
+
+var permittedOrigins = builder.Configuration
+    .GetValue<string>("PermittedOrigins")!
+    .Split(";", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.WithOrigins(permittedOrigins)
+               .AllowAnyHeader()
+               .AllowAnyMethod()
+               .AllowCredentials();
+    });
+});
 
 var app = builder.Build();
 
@@ -145,8 +247,15 @@ using (var scope = app.Services.CreateScope())
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(opciones =>
+    {
+        opciones.EnablePersistAuthorization();
+    });
 }
+
+app.UseCors();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

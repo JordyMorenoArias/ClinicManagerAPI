@@ -1,7 +1,7 @@
 ﻿using ClinicManagerAPI.Constants;
-using ClinicManagerAPI.Filters;
 using ClinicManagerAPI.Models.DTOs.User;
 using ClinicManagerAPI.Services.User.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicManagerAPI.Controllers
@@ -28,7 +28,6 @@ namespace ClinicManagerAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserById([FromRoute] int id)
         {
-            var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);
             var user = await _userService.GetUserById(id);
             return Ok(user);
         }
@@ -38,10 +37,9 @@ namespace ClinicManagerAPI.Controllers
         /// </summary>
         /// <returns>A list of all users.</returns>
         [HttpGet]
-        public async Task<IActionResult> GetUsers([FromQuery] QueryUserParameters parameters)
+        public async Task<IActionResult> GetUsers([FromQuery] UserQueryParameters parameters)
         {
-            var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);
-            var users = await _userService.GetUsers(userAuthenticated.Role, parameters);
+            var users = await _userService.GetUsers(parameters);
             return Ok(users);
         }
 
@@ -50,21 +48,32 @@ namespace ClinicManagerAPI.Controllers
         /// </summary>
         /// <param name="userUpdateDto">The user data to update.</param>
         /// <returns>The updated user data.</returns>
-        [AuthorizeRole(UserRole.admin, UserRole.doctor, UserRole.assistant)]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser([FromBody] UserUpdateDto userUpdateDto)
+        [Authorize(Policy = "canUpdateUser")]
+        public async Task<IActionResult> UpdateUser([FromRoute] int id, [FromBody] UpdateUserDto userUpdateDto)
         {
-            var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);
-            var user = await _userService.UpdateUser(userAuthenticated.Id, userAuthenticated.Role, userUpdateDto);
+            var user = await _userService.UpdateUser(id, userUpdateDto);
             return Ok(user);
         }
 
-        [AuthorizeRole(UserRole.admin)]
-        [HttpPut("change-password")]
-        public async Task<IActionResult> ChangePassword([FromBody] UserChangePasswordDto userChangePasswordDto)
+        /// <summary>
+        /// Changes the authenticated user's password.
+        /// </summary>
+        /// <param name="userChangePasswordDto"></param>
+        /// <returns> The user data after password change.</returns>
+        [HttpPut("{id}/change-password")]
+        [Authorize(Policy = "canUpdateUser")]
+        public async Task<IActionResult> ChangePassword([FromRoute] int id, [FromBody] ChangeUserPasswordDto userChangePasswordDto)
         {
-            var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);
-            var user = await _userService.ChangePassword(userAuthenticated.Role, userChangePasswordDto);
+            var user = await _userService.ChangePassword(id, userChangePasswordDto);
+            return Ok(user);
+        }
+
+        [HttpPut("{id}/role")]
+        [Authorize(Roles = Roles.Admin)]
+        public async Task<IActionResult> ChangeUserRole([FromRoute] int id, [FromBody] ChangeUserRoleDto userChangeRoleDto)
+        {
+            var user = await _userService.ChangeUserRole(id, userChangeRoleDto);
             return Ok(user);
         }
 
@@ -74,12 +83,11 @@ namespace ClinicManagerAPI.Controllers
         /// </summary>
         /// <param name="id">The ID of the user to delete.</param>
         /// <returns>A success message upon deletion.</returns>
-        [AuthorizeRole(UserRole.admin)]
         [HttpDelete("{id}")]
+        [Authorize(Roles = Roles.Admin)]
         public async Task<IActionResult> DeleteUser([FromRoute] int id)
         {
-            var userAuthenticated = _userService.GetAuthenticatedUser(HttpContext);
-            await _userService.DeleteUser(userAuthenticated.Role, id);
+            await _userService.DeleteUser(id);
             return Ok("User deleted successfully.");
         }
     }

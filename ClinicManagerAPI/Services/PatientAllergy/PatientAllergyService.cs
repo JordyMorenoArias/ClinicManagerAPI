@@ -48,7 +48,7 @@ namespace ClinicManagerAPI.Services.PatientAllergy
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns> A task that represents the asynchronous operation. The task result contains the PagedResult of PatientAllergyDto.</returns>
-        public async Task<PagedResult<PatientAllergyDto>> GetPatientAllergies(QueryPatientAllergyParameters parameters)
+        public async Task<PagedResult<PatientAllergyDto>> GetPatientAllergies(PatientAllergyQueryParameters parameters)
         {
             var pagedPatientAllergies = await _patientAllergyRepository.GetPatientAllergies(parameters);
 
@@ -68,16 +68,11 @@ namespace ClinicManagerAPI.Services.PatientAllergy
         /// <summary>
         /// Add a new patient allergy.
         /// </summary>
-        /// <param name="requestRole"></param>
-        /// <param name="addDto"></param>
+        /// <param name="addPatientAllergyDto"></param>
         /// <returns> A task that represents the asynchronous operation. The task result contains the created PatientAllergyDto.</returns>
-        /// <exception cref="UnauthorizedAccessException"></exception>
-        public async Task<PatientAllergyDto> AddPatientAllergy(UserRole requestRole, AddPatientAllergyDto addDto)
+        public async Task<PatientAllergyDto> AddPatientAllergy(AddPatientAllergyDto addPatientAllergyDto)
         {
-            if (requestRole != UserRole.admin && requestRole != UserRole.doctor)
-                throw new UnauthorizedAccessException("Only Admins and Doctors can add patient allergies.");
-
-            var patientAllergyEntity = _mapper.Map<PatientAllergyEntity>(addDto);
+            var patientAllergyEntity = _mapper.Map<PatientAllergyEntity>(addPatientAllergyDto);
             var createdEntity = await _patientAllergyRepository.AddPatientAllergy(patientAllergyEntity);
             return _mapper.Map<PatientAllergyDto>(createdEntity);
         }
@@ -85,17 +80,12 @@ namespace ClinicManagerAPI.Services.PatientAllergy
         /// <summary>
         /// Update an existing patient allergy.
         /// </summary>
-        /// <param name="requestRole"></param>
         /// <param name="id"></param>
         /// <param name="updateDto"></param>
         /// <returns> A task that represents the asynchronous operation. The task result contains the updated PatientAllergyDto.</returns>
-        /// <exception cref="UnauthorizedAccessException"></exception>
         /// <exception cref="KeyNotFoundException"></exception>
-        public async Task<PatientAllergyDto> UpdatePatientAllergy(UserRole requestRole, int id, UpdatePatientAllergyDto updateDto)
+        public async Task<PatientAllergyDto> UpdatePatientAllergy(int id, UpdatePatientAllergyDto updateDto)
         {
-            if (requestRole != UserRole.admin && requestRole != UserRole.doctor)
-                throw new UnauthorizedAccessException("Only Admins and Doctors can update patient allergies.");
-
             var existingEntity = await _patientAllergyRepository.GetPatientAllergyById(id);
 
             if (existingEntity == null)
@@ -109,16 +99,11 @@ namespace ClinicManagerAPI.Services.PatientAllergy
         /// <summary>
         /// Delete a patient allergy.
         /// </summary>
-        /// <param name="requestRole"></param>
         /// <param name="id"></param>
         /// <returns>An <see cref="OperationResult"/> indicating the result of the deletion.</returns>
-        /// <exception cref="UnauthorizedAccessException"></exception>
         /// <exception cref="KeyNotFoundException"></exception>
-        public async Task<OperationResult> DeletePatientAllergy(UserRole requestRole, int id)
+        public async Task<OperationResult> DeletePatientAllergy(int id)
         {
-            if (requestRole != UserRole.admin && requestRole != UserRole.doctor)
-                throw new UnauthorizedAccessException("Only Admins and Doctors can delete patient allergies.");
-
             var existingEntity = await _patientAllergyRepository.GetPatientAllergyById(id);
 
             if (existingEntity == null)

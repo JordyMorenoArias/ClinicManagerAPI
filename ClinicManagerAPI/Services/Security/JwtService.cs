@@ -29,20 +29,21 @@ namespace ClinicManagerAPI.Services.Security
         /// Generates a JSON Web Token (JWT) for the specified user.
         /// </summary>
         /// <param name="user">The user information used to generate claims in the token.</param>
+        /// <param name="expires"> The expiration date and time for the token.</param>
         /// <returns>
         /// A signed JWT token string containing user claims and expiration information.
         /// </returns>
-        public string GenerateJwtToken(UserGenerateTokenDto user)
+        public string GenerateJwtToken(GenerateUserTokenDto user, DateTimeOffset expires)
         {
             var claims = new[]
             {
-            new Claim(JwtRegisteredClaimNames.Sub, _jwtOptions!.Subject),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
-            new Claim("Id", user.Id.ToString()),
-            new Claim("Email", user.Email),
-            new Claim("Role", user.Role.ToString())
-        };
+                new Claim(JwtRegisteredClaimNames.Sub, _jwtOptions!.Subject),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
+                new Claim("Id", user.Id.ToString()),
+                new Claim("Email", user.Email),
+                new Claim(ClaimTypes.Role, user.Role.ToString())
+            };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Key));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -51,7 +52,7 @@ namespace ClinicManagerAPI.Services.Security
                 _jwtOptions.Issuer,
                 _jwtOptions.Audience,
                 claims,
-                expires: DateTime.UtcNow.AddHours(3),
+                expires: expires.UtcDateTime,
                 signingCredentials: credentials
             );
 
