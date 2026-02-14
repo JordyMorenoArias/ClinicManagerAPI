@@ -13,6 +13,6 @@ namespace ClinicManagerAPI.Services.Security.Interfaces
         /// <param name="user">The user information used to generate the token.</param>
         /// <param name="expires">The expiration date and time for the token.</param>
         /// <returns>A string representing the generated JWT token.</returns>
-        string GenerateJwtToken(GenerateUserTokenDto user, DateTime expires);
+        string GenerateJwtToken(GenerateUserTokenDto user, DateTimeOffset expires);
     }
 }

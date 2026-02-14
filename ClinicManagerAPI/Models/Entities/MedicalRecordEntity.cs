@@ -22,6 +22,6 @@ namespace ClinicManagerAPI.Models.Entities
         [MaxLength(500)]
         public string Treatment { get; set; } = string.Empty;
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
     }
 }

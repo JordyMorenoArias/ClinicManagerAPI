@@ -1,8 +1,4 @@
-﻿using ClinicManagerAPI.Constants;
-using ClinicManagerAPI.Models.DTOs.Patient;
-using ClinicManagerAPI.Models.DTOs.User;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ClinicManagerAPI.Models.DTOs.Appointment
 {
@@ -15,7 +11,7 @@ namespace ClinicManagerAPI.Models.DTOs.Appointment
         public int DoctorId { get; set; }
 
         [Required]
-        public DateTime AppointmentDate { get; set; }
+        public DateTimeOffset Date { get; set; }
 
         [MaxLength(300)]
         public string Reason { get; set; } = string.Empty;

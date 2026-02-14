@@ -33,7 +33,7 @@ namespace ClinicManagerAPI.Services.Security
         /// <returns>
         /// A signed JWT token string containing user claims and expiration information.
         /// </returns>
-        public string GenerateJwtToken(GenerateUserTokenDto user, DateTime expires)
+        public string GenerateJwtToken(GenerateUserTokenDto user, DateTimeOffset expires)
         {
             var claims = new[]
             {
@@ -52,7 +52,7 @@ namespace ClinicManagerAPI.Services.Security
                 _jwtOptions.Issuer,
                 _jwtOptions.Audience,
                 claims,
-                expires: expires,
+                expires: expires.UtcDateTime,
                 signingCredentials: credentials
             );
 

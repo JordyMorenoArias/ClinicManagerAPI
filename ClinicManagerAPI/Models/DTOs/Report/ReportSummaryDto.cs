@@ -6,8 +6,8 @@ namespace ClinicManagerAPI.Models.DTOs.Report
     public class ReportSummaryDto
     {
         // Date range for the report
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTimeOffset StartDate { get; set; }
+        public DateTimeOffset EndDate { get; set; }
 
         // Appointment statistics
         public int TotalAppointments { get; set; }
