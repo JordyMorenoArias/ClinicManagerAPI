@@ -14,8 +14,6 @@ namespace ClinicManagerAPI.Models.DTOs.User
 
         public bool? IsActive { get; set; }
 
-        public string? Role { get; set; }
-
         public UserRole? UserRole { get; set; }
 
         public string? SearchTerm { get; set; }

@@ -73,9 +73,6 @@ namespace ClinicManagerAPI.Repositories
             if (parameters.IsActive.HasValue)
                 query = query.Where(u => u.IsActive == parameters.IsActive.Value);
 
-            if (!string.IsNullOrEmpty(parameters.Role))
-                query = query.Where(u => u.Role.ToString() == parameters.Role);
-
             if (parameters.UserRole.HasValue)
                 query = query.Where(u => u.Role == parameters.UserRole.Value);
 
@@ -91,7 +88,7 @@ namespace ClinicManagerAPI.Repositories
                 query = query.Where(u => u.FullName.ToLower().Contains(filter));
             }
 
-                var totalItems = await query.CountAsync();
+            var totalItems = await query.CountAsync();
             var users = await query
                 .Skip((parameters.Page - 1) * parameters.PageSize)
                 .Take(parameters.PageSize)

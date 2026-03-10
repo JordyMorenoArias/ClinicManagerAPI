@@ -29,6 +29,7 @@ using ClinicManagerAPI.Services.User;
 using ClinicManagerAPI.Services.User.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -235,6 +236,76 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddProblemDetails(options =>
+{
+    options.CustomizeProblemDetails = context =>
+    {
+        var exception = context.HttpContext.Features
+            .Get<IExceptionHandlerFeature>()?.Error;
+
+        if (exception == null)
+            return;
+
+        var problem = context.ProblemDetails;
+
+        problem.Extensions["traceId"] = context.HttpContext.TraceIdentifier;
+        problem.Extensions["timestamp"] = DateTime.UtcNow;
+
+        switch (exception)
+        {
+            case KeyNotFoundException:
+                problem.Status = StatusCodes.Status404NotFound;
+                problem.Title = "Resource not found";
+                problem.Type = "https://httpstatuses.com/404";
+                break;
+
+            case ArgumentException:
+                problem.Status = StatusCodes.Status400BadRequest;
+                problem.Title = "Invalid request";
+                problem.Type = "https://httpstatuses.com/400";
+                break;
+
+            case FormatException:
+                problem.Status = StatusCodes.Status400BadRequest;
+                problem.Title = "Invalid format";
+                problem.Type = "https://httpstatuses.com/400";
+                break;
+
+            case UnauthorizedAccessException:
+                problem.Status = StatusCodes.Status401Unauthorized;
+                problem.Title = "Unauthorized";
+                problem.Type = "https://httpstatuses.com/401";
+                break;
+
+            case InvalidOperationException:
+                problem.Status = StatusCodes.Status409Conflict;
+                problem.Title = "Invalid operation";
+                problem.Type = "https://httpstatuses.com/409";
+                break;
+
+            case TimeoutException:
+                problem.Status = StatusCodes.Status408RequestTimeout;
+                problem.Title = "Request timeout";
+                problem.Type = "https://httpstatuses.com/408";
+                break;
+
+            case NotImplementedException:
+                problem.Status = StatusCodes.Status501NotImplemented;
+                problem.Title = "Feature not implemented";
+                problem.Type = "https://httpstatuses.com/501";
+                break;
+
+            default:
+                problem.Status = StatusCodes.Status500InternalServerError;
+                problem.Title = "An unexpected error occurred";
+                problem.Type = "https://httpstatuses.com/500";
+                break;
+        }
+
+        problem.Detail = exception.Message;
+    };
+});
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -261,6 +332,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.UseMiddleware<ErrorHandlerMiddleware>();
+//app.UseMiddleware<ErrorHandlerMiddleware>();
+
+app.UseExceptionHandler();
 
 app.Run();

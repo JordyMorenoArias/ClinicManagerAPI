@@ -81,7 +81,7 @@ namespace ClinicManagerAPI.Controllers
         [Authorize(Policy = "canManageAppointments")]
         public async Task<IActionResult> UpdateAppointment([FromRoute] int id, [FromBody] UpdateAppointmentDto updatedAppointment)
         {
-            var requestId = int.Parse(HttpContext.User.FindFirst("id")!.Value);
+            var requestId = int.Parse(HttpContext.User.FindFirst("Id")!.Value);
             var appointment = await _appointmentService.UpdateAppointment(id, requestId, updatedAppointment);
             return Ok(appointment);
         }

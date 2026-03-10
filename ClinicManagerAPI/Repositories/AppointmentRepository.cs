@@ -27,7 +27,41 @@ namespace ClinicManagerAPI.Repositories
         /// <returns> The appointment entity if found; otherwise, null.</returns>
         public async Task<AppointmentEntity?> GetAppointmentById(int appointmentId)
         {
-            return await _context.Appointments.FindAsync(appointmentId);
+            return await _context.Appointments
+                .AsNoTracking()
+                .Where(a => a.Id == appointmentId)
+                .Select(a => new AppointmentEntity
+                {
+                    Id = a.Id,
+                    PatientId = a.PatientId,
+                    Patient = new PatientEntity
+                    {
+                        Id = a.Patient.Id,
+                        FullName = a.Patient.FullName,
+                        Identification = a.Patient.Identification,
+                        Phone = a.Patient.Phone,
+                        Email = a.Patient.Email,
+                        Address = a.Patient.Address,
+                        DateOfBirth = a.Patient.DateOfBirth,
+                        CreatedAt = a.Patient.CreatedAt
+                    },
+                    DoctorId = a.DoctorId,
+                    Doctor = new UserEntity
+                    {
+                        Id = a.Doctor.Id,
+                        FullName = a.Doctor.FullName,
+                        Username = a.Doctor.Username,
+                        Email = a.Doctor.Email,
+                        PhoneNumber = a.Doctor.PhoneNumber,
+                        Role = a.Doctor.Role,
+                        CreatedAt = a.Doctor.CreatedAt
+                    },
+                    Date = a.Date,
+                    Reason = a.Reason,
+                    Status = a.Status,
+                    CreatedAt = a.CreatedAt
+                })
+                .FirstOrDefaultAsync();
         }
 
         /// <summary>

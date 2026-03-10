@@ -11,6 +11,7 @@ namespace ClinicManagerAPI.Models.Entities
         [Required]
         [ForeignKey("Doctor")]
         public int DoctorId { get; set; }
+        public UserEntity Doctor { get; set; } = null!;
 
         [Required, MaxLength(100)]
         public string Specialty { get; set; } = string.Empty;
@@ -23,7 +24,5 @@ namespace ClinicManagerAPI.Models.Entities
         public string? LicenseNumber { get; set; }
 
         public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
-
-        public UserEntity Doctor { get; set; } = null!;
     }
 }
